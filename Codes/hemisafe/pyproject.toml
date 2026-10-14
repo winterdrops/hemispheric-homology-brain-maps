@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hemisafe"
+version = "0.2.0"
+description = "Homology-aware cross-validation and symmetry-preserving spatial nulls for parcellated brain maps"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Yavuz Selim İşler" }]
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.22", "scipy>=1.8", "scikit-learn>=1.1"]
+keywords = ["neuroimaging", "brain maps", "spin test", "cross-validation", "data leakage", "spatial autocorrelation"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

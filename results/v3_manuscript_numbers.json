@@ -1,0 +1,652 @@
+{
+ "MIS_FSA_DK": "13.7",
+ "MIS_FSA_GL": "13.5",
+ "MIS_FSLR_DK": "1.6",
+ "MIS_FSLR_GL": "0.0",
+ "KABSCH_ROT": "17.2",
+ "MIS_ALIGNED": "1.7",
+ "BIL_T_MIN": "0.71",
+ "BIL_T_MAX": "1.00",
+ "BIL_T_MED": "0.91",
+ "BIL_P_MIN": "0.83",
+ "BIL_P_MAX": "1.00",
+ "BIL_P_MED": "0.97",
+ "BIL_STD_MED": "0.43",
+ "BIL_ENIGMA_MED": "0.26",
+ "BIL_FSLR_MED": "0.88",
+ "BIL_ALI_MED": "0.88",
+ "BIL_SYM_MED": "0.91",
+ "LAM_EMP": "51.5",
+ "LAM_CAL": "77",
+ "BIV_SHUF": "28.2%",
+ "BIV_SHUF_CI": "28.2% (95% CI 27.3–29.2)",
+ "BIV_ENIGMA": "12.0%",
+ "BIV_ENIGMA_CI": "12.0% (95% CI 11.4–12.6)",
+ "BIV_STD": "8.8%",
+ "BIV_STD_CI": "8.8% (95% CI 8.3–9.3)",
+ "BIV_FSLR": "6.7%",
+ "BIV_FSLR_CI": "6.7% (95% CI 6.3–7.2)",
+ "BIV_ALI": "6.3%",
+ "BIV_ALI_CI": "6.3% (95% CI 5.9–6.8)",
+ "BIV_SYM": "5.8%",
+ "BIV_SYM_CI": "5.8% (95% CI 5.4–6.2)",
+ "BIV_TB": "18.7%",
+ "BIV_STD_RHO0": "6.3%",
+ "BIV_STD_RHO1": "9.0%",
+ "ABS_BIV_STD": "9",
+ "ABS_BIV_TB": "19%",
+ "BIV_STD_NUM": "8.8",
+ "ABS_BIV_ENIGMA": "12%",
+ "BIV_TB_DOUBLED": "11.6%",
+ "BIV_CONTRAST_MAXP": "0.001",
+ "BIV_RHO0_STD_P": "0.07",
+ "BIV_RHO0_ALI_P": "0.07",
+ "BIV_RHO0_CLAUSE": "Holm-corrected P = 0.07 for both",
+ "RB_SHUF_Q": "111",
+ "RB_ENIGMA_Q": "21",
+ "RB_TB_Q": "31",
+ "RB_SYM_P05": "41",
+ "RB_NONZERO_OTHERS": "",
+ "JN_SYM_MED": "16",
+ "JN_SYM_Q95": "31",
+ "JN_SYM_P": "0.009",
+ "APPROX_STD": "10.3%",
+ "APPROX_ENIGMA": "13.9%",
+ "APPROX_SYMRANGE": "7.8–8.2%",
+ "APPROX_BIL": "0.74",
+ "DDOLS_R_DD": "0.22",
+ "DDOLS_R_DDH": "0.06",
+ "DDOLS_FPR_SHUF_DD": "44.0%",
+ "DDOLS_FPR_SHUF_DDH": "18.2%",
+ "DDOLS_FPR_STD_DD": "13.6%",
+ "DDOLS_FPR_STD_DDH": "5.2%",
+ "DDOLS_FPR_SYM_DD": "6.6%",
+ "DDOLS_FPR_SYM_DDH": "4.6%",
+ "DDOLS_REAL_DD": "0.41",
+ "DDOLS_REAL_DDH": "0.24",
+ "EST_REP_RIDGE_03": "−0.05",
+ "EST_REP_RIDGE_05": "0.24",
+ "HL_R": "91%",
+ "HL_S": "59%",
+ "HL_DD": "48%",
+ "N_MAPS_77": "500",
+ "N_MAPS_50": "500",
+ "N77_R_RIDGE": "0.21",
+ "N77_R_KNN": "0.19",
+ "N77_SW_RIDGE": "0.26",
+ "N77_SW_KNN": "0.22",
+ "N77_SH_RIDGE": "−0.17",
+ "N77_SH_KNN": "−0.27",
+ "N77_DD_RIDGE": "0.28",
+ "N77_DD_KNN": "0.27",
+ "N77_DDH_RIDGE": "0.10",
+ "N77_DDH_KNN": "0.11",
+ "N77_H_RIDGE": "−0.08",
+ "N77_H_KNN": "−0.09",
+ "N77_S_RIDGE": "−0.15",
+ "N77_S_KNN": "0.02",
+ "DEC_RH_RIDGE": "0.28",
+ "DEC_RH_KNN": "0.28",
+ "DEC_RH_CLAUSE": "by 0.28 for both ridge and kNN",
+ "F77_SHUF_R": "85–91%",
+ "F77_SHUF_SW": "88–95%",
+ "F77_SHUF_DD": "60–69%",
+ "F77_STD_LEAKY": "16–42%",
+ "F77_SAFE_RANGE": "3.6–5.8%",
+ "F77_LEAKY_SYMRANGE": "7.2–16.6%",
+ "N_CELLS": "70",
+ "N_NOMINAL": "32",
+ "N_BRADLEY_ACCEPT": "27",
+ "N_BRADLEY_LIBERAL": "37",
+ "N_BRADLEY_BORDER": "6",
+ "N_BRADLEY_CONSERV": "0",
+ "CAT_LEAKY_SHUF": "60–95%",
+ "CAT_LEAKY_STD": "16–42%",
+ "CAT_LEAKY_SYMNULL": "6.6–16.6%",
+ "CAT_S_SHUF": "36–59%",
+ "CAT_S_STD": "12–14%",
+ "CAT_S_SYMNULL": "5.4–6.8%",
+ "ABS_CV_STD_MAX": "42%",
+ "CAT_HAB_SYMNULL": "3.6–5.8%",
+ "CAT_HAB_STD": "2.8–7.6%",
+ "CAT_H_SYMNULL": "11.0–14.6%",
+ "CAT_H_SYMNULL_RIDGE": "7.4–10.6%",
+ "CAT_H_SYMNULL_ABOVE": "five of the six",
+ "ABS_CV_MAX": "95%",
+ "F50_HAB_SYMNULL": "2.4–6.4%",
+ "APPROXCV_HAB_SYMNULL": "4.0–9.0%",
+ "APPROXCV_LEAKY_SHUF": "92–99%",
+ "APPROXCV_LEAKY_SYMNULL": "16.0–28.5%",
+ "N_MAPS_APPROXCV": "200",
+ "NOMINAL_CELLS": "knn DD spin_fslr; knn DD spin_aligned; knn DD spin_sym; knn DD-H spin_std; knn DD-H spin_fslr; knn DD-H spin_aligned; knn DD-H spin_sym; knn S spin_fslr; knn S spin_aligned; knn S spin_sym; knn SH spin_std; knn SH spin_fslr; knn SH spin_aligned; knn SH spin_sym; ridge DD spin_fslr; ridge DD spin_aligned; ridge DD spin_sym; ridge DD-H spin_std; ridge DD-H spin_fslr; ridge DD-H spin_aligned; ridge DD-H spin_sym; ridge H spin_std; ridge H spin_aligned; ridge R spin_sym; ridge S spin_fslr; ridge S spin_aligned; ridge S spin_sym; ridge SH spin_std; ridge SH spin_fslr; ridge SH spin_aligned; ridge SH spin_sym; ridge Sw spin_sym",
+ "NT_PRE_SH": "−1.11",
+ "NT_POST_SH": "−0.18",
+ "NT_ALPHA_PRE": "3.2",
+ "NT_ALPHA_POST": "3.2 × 10³",
+ "NT_ALPHA_ATMAX": "48%",
+ "ALPHA_REAL_ATMAX_MAIN": "16%",
+ "ALPHA_REAL_ATMAX_WIDE": "17%",
+ "N_MAPS_POWER": "150",
+ "AUC_RIDGE_03": "0.61–0.76",
+ "AUC_KNN_03": "0.63–0.69",
+ "POWER_SENTENCE": "the power of ridge with the symmetric spin at s = 0.3 was 25% under R, 28% under Sw, 17% under DD, 25% under H, 19% under SH and 27% under DD-H",
+ "SENS_COST_CLAUSE": "; the cost in sensitivity depended on the scheme (size-adjusted power of ridge at s = 0.3: 27% under DD-H and 19% under SH, against 25% under random folds)",
+ "PPV_STD_R": "0.18",
+ "PPV_STD_SH": "0.45",
+ "EST_SKILL_R_03": "0.43",
+ "EST_SKILL_R_05": "0.62",
+ "EST_SKILL_SH_03": "0.03",
+ "EST_SKILL_SH_05": "0.24",
+ "EST_SH_WORD": "close to it",
+ "REAL_RIDGE_MAX": "12",
+ "REAL_RIDGE_MIN": "0",
+ "REAL_RIDGE_R_SHUF": "12",
+ "REAL_RIDGE_SH_SYM": "0",
+ "REAL_KNN_MAX": "12",
+ "REAL_KNN_MIN": "0",
+ "REAL_KNN_R_SHUF": "12",
+ "REAL_KNN_SH_SYM": "1",
+ "REAL_RANGE_CLAUSE": "the counts ranged from 0 to 12 for both models",
+ "ABS_RANGE_LO": "0",
+ "ABS_RANGE_HI": "12",
+ "ABS_RANGE_PHRASE": "none to all 12",
+ "REAL_R_MED": "0.54",
+ "REAL_R_MIN": "0.08",
+ "REAL_R_MAX": "0.75",
+ "REAL_SH_MED": "0.11",
+ "REAL_WILC_P": "0.0005",
+ "HOLM_DIFF_MAX": "6",
+ "HOLM_RANGE": "0–12",
+ "REAL_DETAIL_SENTENCE": "Under the distance-dependent scheme, 5 (ridge) and 9 (kNN) maps were significant with the conventional spin and 5 and 3 with the symmetric spin; under its homologue-aware variant with the symmetric spin, 0 and 4.",
+ "PRE_SH_SYM_N": "four",
+ "PRE_SH_SYM_MAPS": "AN, MDD, PD and SCZ",
+ "PRE_SH_SYM_Q": "0.035",
+ "REAL_SH_SYM_NOTE": "none passed FDR correction, although five (AN, BD, MDD, PD and SCZ) had uncorrected P ≤ 0.025 (q = 0.055)",
+ "REAL_COUNTS_TABLE": "{\"ridge|R|shuffle\": 12, \"ridge|R|spin_std\": 11, \"ridge|R|spin_enigma\": 11, \"ridge|R|spin_fslr\": 7, \"ridge|R|spin_aligned\": 7, \"ridge|R|spin_sym\": 6, \"ridge|H|shuffle\": 9, \"ridge|H|spin_std\": 6, \"ridge|H|spin_enigma\": 7, \"ridge|H|spin_fslr\": 7, \"ridge|H|spin_aligned\": 7, \"ridge|H|spin_sym\": 7, \"ridge|S|shuffle\": 10, \"ridge|S|spin_std\": 4, \"ridge|S|spin_enigma\": 8, \"ridge|S|spin_fslr\": 3, \"ridge|S|spin_aligned\": 3, \"ridge|S|spin_sym\": 3, \"ridge|SH|shuffle\": 7, \"ridge|SH|spin_std\": 4, \"ridge|SH|spin_enigma\": 5, \"ridge|SH|spin_fslr\": 4, \"ridge|SH|spin_aligned\": 4, \"ridge|SH|spin_sym\": 0, \"ridge|Sw|shuffle\": 11, \"ridge|Sw|spin_std\": 10, \"ridge|Sw|spin_enigma\": 12, \"ridge|Sw|spin_fslr\": 9, \"ridge|Sw|spin_aligned\": 9, \"ridge|Sw|spin_sym\": 8, \"ridge|DD|shuffle\": 11, \"ridge|DD|spin_std\": 5, \"ridge|DD|spin_enigma\": 8, \"ridge|DD|spin_fslr\": 5, \"ridge|DD|spin_aligned\": 5, \"ridge|DD|spin_sym\": 5, \"ridge|DD-H|shuffle\": 9, \"ridge|DD-H|spin_std\": 0, \"ridge|DD-H|spin_enigma\": 2, \"ridge|DD-H|spin_fslr\": 0, \"ridge|DD-H|spin_aligned\": 0, \"ridge|DD-H|spin_sym\": 0, \"knn|R|shuffle\": 12, \"knn|R|spin_std\": 11, \"knn|R|spin_enigma\": 12, \"knn|R|spin_fslr\": 9, \"knn|R|spin_aligned\": 9, \"knn|R|spin_sym\": 9, \"knn|H|shuffle\": 10, \"knn|H|spin_std\": 9, \"knn|H|spin_enigma\": 10, \"knn|H|spin_fslr\": 9, \"knn|H|spin_aligned\": 9, \"knn|H|spin_sym\": 9, \"knn|S|shuffle\": 12, \"knn|S|spin_std\": 10, \"knn|S|spin_enigma\": 10, \"knn|S|spin_fslr\": 4, \"knn|S|spin_aligned\": 4, \"knn|S|spin_sym\": 3, \"knn|SH|shuffle\": 9, \"knn|SH|spin_std\": 1, \"knn|SH|spin_enigma\": 3, \"knn|SH|spin_fslr\": 1, \"knn|SH|spin_aligned\": 0, \"knn|SH|spin_sym\": 1, \"knn|Sw|shuffle\": 12, \"knn|Sw|spin_std\": 11, \"knn|Sw|spin_enigma\": 12, \"knn|Sw|spin_fslr\": 8, \"knn|Sw|spin_aligned\": 8, \"knn|Sw|spin_sym\": 8, \"knn|DD|shuffle\": 12, \"knn|DD|spin_std\": 9, \"knn|DD|spin_enigma\": 11, \"knn|DD|spin_fslr\": 3, \"knn|DD|spin_aligned\": 3, \"knn|DD|spin_sym\": 3, \"knn|DD-H|shuffle\": 10, \"knn|DD-H|spin_std\": 4, \"knn|DD-H|spin_enigma\": 5, \"knn|DD-H|spin_fslr\": 4, \"knn|DD-H|spin_aligned\": 4, \"knn|DD-H|spin_sym\": 4}",
+ "RECEPTOR_SENTENCE": "among the nine combinations of homologue-aware schemes (H, SH, DD-H) and symmetry-preserving nulls, ridge significantly predicted MDD in 4, ASD in 1 and epilepsy in 1, and no other map (FDR q < 0.05).",
+ "MEFF": "10",
+ "SENS_HYPER_SAFE": "0–5",
+ "SENS_HYPER_R": "5–9",
+ "SENS_HYPER_SAFE_LE_R": true,
+ "SENS_MEAS_NREP": "100",
+ "SENS_MEAS_SD": "0.11",
+ "SENS_MEAS_R2_PERT": "0.31",
+ "SENS_MEAS_SH_MED": "1 for both models (range 0–5)",
+ "SENS_MEAS_R_MED": "5 (ridge; range 1–8) and 6 (kNN; range 2–9)",
+ "SENS_MEAS_SH_LT_R": "96% (ridge) and 99% (kNN)",
+ "SENS_MEAS_CHECK": {
+  "lt": {
+   "knn": 0.99,
+   "ridge": 0.96
+  },
+  "sh_med": {
+   "knn": 1.0,
+   "ridge": 1.0
+  },
+  "r_med": {
+   "knn": 6.0,
+   "ridge": 5.0
+  },
+  "r2_pert": 0.3105006202290707
+ },
+ "RF_SENTENCE": "with the symmetric spin, 8 of 12 maps were significant under R, 1 under SH and 3 under SH with alternative settings",
+ "RF_COUNTS": {
+  "alt|SH": 3,
+  "main|R": 8,
+  "main|SH": 1
+ },
+ "GEN_BIL_INDEP": "0.00",
+ "GEN_BIL_SHARED": "0.49–0.77",
+ "GEN_BIL_BS_WHOLE": "0.30",
+ "GEN_BIL_SYM": "0.89–0.91",
+ "GEN_N_BIV": "500",
+ "GEN_N_BIV0": "250",
+ "GEN_BIV_INDEP_RANGE": "13.8–16.3%",
+ "GEN_BIV_SHARED_RANGE": "5.6–8.7%",
+ "GEN_BIV_BS_WHOLE": "8.5%",
+ "GEN_BIV_SYM_RANGE": "4.4–5.4%",
+ "GEN_BIV_REF_STD": "8.7%",
+ "GEN_BIV_REF_SYM": "5.7%",
+ "GEN_BIV_REF_ENIGMA": "11.7%",
+ "GEN_BIV0_RANGE": "2.5–5.3%",
+ "GEN_BIV0_INDEP_RANGE": "4.0–5.1%",
+ "GEN_BIV0_SYM_RANGE": "4.1–5.3%",
+ "GEN_REAL_INDEP_Q": "46 and 41",
+ "GEN_REAL_SHARED_Q": "12 for both",
+ "GEN_REAL_SYM_Q": "11 and 3",
+ "GEN_REAL_BS_WHOLE_Q": "33",
+ "GEN_REAL_SENTENCE": "BrainSMASH and Moran spectral randomization with independent hemispheres declared 46 and 41 of the 336 disorder–annotation correlations significant after FDR correction, and their symmetric variants 11 and 3, against none with the symmetry-preserving spins",
+ "GEN_REAL_SYM_MAX": "11",
+ "GEN_N_CV": "200",
+ "GEN_CV_LEAKY_INDEP": "48.5–82.0%",
+ "GEN_CV_LEAKY_SYM": "0.0–4.5%",
+ "GEN_CV_HAB_INDEP": "3.0–13.5%",
+ "GEN_CV_HAB_SYM": "0.5–6.0%",
+ "GEN_CV_REF_LEAKY_SPINSYM": "6.0–12.0%",
+ "GEN_CV_REF_HAB_SPINSYM": "4.5–6.0%",
+ "GEN_CV_REF_LEAKY_STD": "39.0–41.0%",
+ "GEN_CV_DDH_INDEP": "11.5–13.5%",
+ "GEN_CV_SH_INDEP": "3.0–7.5%",
+ "GEN_CV_BS_SYM_ALL": "0.0–1.5%",
+ "GEN_CV_MSR_SYM_ALL": "4.0–6.0%",
+ "GEN_CHECK": {
+  "bil": {
+   "bs_indep": -0.0027971067814002,
+   "bs_shared": 0.7657671781625658,
+   "bs_sym": 0.8887906418628346,
+   "bs_whole": 0.2977960747608218,
+   "msr_indep": -0.0006726489308553,
+   "msr_shared": 0.4857455250744862,
+   "msr_sym": 0.910301885351515
+  },
+  "bil_obs": 0.9138372508773656,
+  "biv": {
+   "lam77_rho0.0|bs_indep": [
+    0.0401428571428571,
+    0.0335714285714285,
+    0.0471428571428571
+   ],
+   "lam77_rho0.0|bs_shared": [
+    0.0245714285714285,
+    0.0197142857142857,
+    0.0294285714285714
+   ],
+   "lam77_rho0.0|bs_sym": [
+    0.0408571428571428,
+    0.0342857142857142,
+    0.0474285714285714
+   ],
+   "lam77_rho0.0|bs_whole": [
+    0.033,
+    0.0271392857142857,
+    0.0391464285714285
+   ],
+   "lam77_rho0.0|msr_indep": [
+    0.0507142857142857,
+    0.0427142857142857,
+    0.0597142857142857
+   ],
+   "lam77_rho0.0|msr_shared": [
+    0.0501428571428571,
+    0.0425714285714285,
+    0.0577178571428571
+   ],
+   "lam77_rho0.0|msr_sym": [
+    0.0532857142857142,
+    0.046,
+    0.0607142857142857
+   ],
+   "lam77_rho0.0|shuffle": [
+    0.1272857142857142,
+    0.1128571428571428,
+    0.1418571428571428
+   ],
+   "lam77_rho0.0|spin_enigma": [
+    0.0712857142857142,
+    0.0621392857142857,
+    0.0804321428571428
+   ],
+   "lam77_rho0.0|spin_std": [
+    0.064,
+    0.0552821428571428,
+    0.0727178571428571
+   ],
+   "lam77_rho0.0|spin_sym": [
+    0.06,
+    0.052,
+    0.0682857142857142
+   ],
+   "lam77_rho0.9|bs_indep": [
+    0.1377857142857143,
+    0.1285,
+    0.1476446428571428
+   ],
+   "lam77_rho0.9|bs_shared": [
+    0.0558571428571428,
+    0.0504285714285714,
+    0.0614321428571428
+   ],
+   "lam77_rho0.9|bs_sym": [
+    0.0438571428571428,
+    0.0389999999999999,
+    0.0487142857142857
+   ],
+   "lam77_rho0.9|bs_whole": [
+    0.0852857142857142,
+    0.0788571428571428,
+    0.0921428571428571
+   ],
+   "lam77_rho0.9|msr_indep": [
+    0.1627857142857142,
+    0.1517142857142857,
+    0.1736428571428571
+   ],
+   "lam77_rho0.9|msr_shared": [
+    0.0871428571428571,
+    0.0799285714285714,
+    0.0948571428571428
+   ],
+   "lam77_rho0.9|msr_sym": [
+    0.0538571428571428,
+    0.0484267857142857,
+    0.0593589285714285
+   ],
+   "lam77_rho0.9|shuffle": [
+    0.2762857142857143,
+    0.2623571428571429,
+    0.2895767857142856
+   ],
+   "lam77_rho0.9|spin_enigma": [
+    0.1166428571428571,
+    0.1082142857142857,
+    0.1254285714285714
+   ],
+   "lam77_rho0.9|spin_std": [
+    0.0869285714285714,
+    0.0797857142857142,
+    0.0943571428571428
+   ],
+   "lam77_rho0.9|spin_sym": [
+    0.0574285714285714,
+    0.0512142857142857,
+    0.0632857142857142
+   ]
+  },
+  "real_q": {
+   "bs_indep": 46,
+   "bs_shared": 12,
+   "bs_sym": 11,
+   "bs_whole": 33,
+   "msr_indep": 41,
+   "msr_shared": 12,
+   "msr_sym": 3
+  },
+  "cv": {
+   "knn|DD-H|bs_indep": [
+    0.125,
+    0.0861197447571264,
+    0.1780142500258235
+   ],
+   "knn|DD-H|bs_sym": [
+    0.015,
+    0.0051142377932583,
+    0.0431657287926902
+   ],
+   "knn|DD-H|msr_indep": [
+    0.135,
+    0.094465704547879,
+    0.1892913837075255
+   ],
+   "knn|DD-H|msr_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "knn|DD-H|shuffle": [
+    0.32,
+    0.2592653331546805,
+    0.3875189843411355
+   ],
+   "knn|DD-H|spin_std": [
+    0.055,
+    0.0309853417034588,
+    0.0957869987723084
+   ],
+   "knn|DD-H|spin_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "knn|R|bs_indep": [
+    0.545,
+    0.475786113724881,
+    0.6125178069011651
+   ],
+   "knn|R|bs_sym": [
+    0.0,
+    0.0,
+    0.0188453263772665
+   ],
+   "knn|R|msr_indep": [
+    0.73,
+    0.6645656480133157,
+    0.7867655018531416
+   ],
+   "knn|R|msr_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "knn|R|shuffle": [
+    0.915,
+    0.8681041292843443,
+    0.9462542498225244
+   ],
+   "knn|R|spin_std": [
+    0.41,
+    0.3441567490848288,
+    0.4792354096630791
+   ],
+   "knn|R|spin_sym": [
+    0.12,
+    0.0819799270637551,
+    0.1723425209829674
+   ],
+   "knn|SH|bs_indep": [
+    0.04,
+    0.0204056320661523,
+    0.0769320682009329
+   ],
+   "knn|SH|bs_sym": [
+    0.005,
+    0.0008831687156009,
+    0.0277737043978929
+   ],
+   "knn|SH|msr_indep": [
+    0.075,
+    0.0459749171843819,
+    0.1200436102362945
+   ],
+   "knn|SH|msr_sym": [
+    0.05,
+    0.0273826456007639,
+    0.089578148138776
+   ],
+   "knn|SH|shuffle": [
+    0.185,
+    0.1373019280061604,
+    0.2445706276115175
+   ],
+   "knn|SH|spin_std": [
+    0.05,
+    0.0273826456007639,
+    0.089578148138776
+   ],
+   "knn|SH|spin_sym": [
+    0.055,
+    0.0309853417034588,
+    0.0957869987723084
+   ],
+   "knn|Sw|bs_indep": [
+    0.665,
+    0.5970219120796653,
+    0.7267591302158368
+   ],
+   "knn|Sw|bs_sym": [
+    0.005,
+    0.0008831687156009,
+    0.0277737043978929
+   ],
+   "knn|Sw|msr_indep": [
+    0.82,
+    0.7608852497127511,
+    0.8670537414057983
+   ],
+   "knn|Sw|msr_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "knn|Sw|shuffle": [
+    0.95,
+    0.910421851861224,
+    0.972617354399236
+   ],
+   "knn|Sw|spin_std": [
+    0.39,
+    0.3250834313746962,
+    0.4590625404283025
+   ],
+   "knn|Sw|spin_sym": [
+    0.1,
+    0.0656704486690958,
+    0.1494058124327174
+   ],
+   "ridge|DD-H|bs_indep": [
+    0.115,
+    0.0778637323256195,
+    0.1666471689848757
+   ],
+   "ridge|DD-H|bs_sym": [
+    0.015,
+    0.0051142377932583,
+    0.0431657287926902
+   ],
+   "ridge|DD-H|msr_indep": [
+    0.13,
+    0.0902820227966932,
+    0.1836635187224841
+   ],
+   "ridge|DD-H|msr_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "ridge|DD-H|shuffle": [
+    0.28,
+    0.2223688977394902,
+    0.3459230458665071
+   ],
+   "ridge|DD-H|spin_std": [
+    0.085,
+    0.0537457501774756,
+    0.1318958707156556
+   ],
+   "ridge|DD-H|spin_sym": [
+    0.06,
+    0.0346521942543318,
+    0.1019316929576627
+   ],
+   "ridge|R|bs_indep": [
+    0.485,
+    0.4166738517187751,
+    0.5538915080725428
+   ],
+   "ridge|R|bs_sym": [
+    0.005,
+    0.0008831687156009,
+    0.0277737043978929
+   ],
+   "ridge|R|msr_indep": [
+    0.66,
+    0.5918849552683626,
+    0.7220845402909121
+   ],
+   "ridge|R|msr_sym": [
+    0.04,
+    0.0204056320661523,
+    0.0769320682009329
+   ],
+   "ridge|R|shuffle": [
+    0.855,
+    0.7995133246921847,
+    0.8971064935799559
+   ],
+   "ridge|R|spin_std": [
+    0.395,
+    0.3298410101320796,
+    0.4641165084071463
+   ],
+   "ridge|R|spin_sym": [
+    0.06,
+    0.0346521942543318,
+    0.1019316929576627
+   ],
+   "ridge|SH|bs_indep": [
+    0.03,
+    0.0138203143401113,
+    0.0638942924545192
+   ],
+   "ridge|SH|bs_sym": [
+    0.005,
+    0.0008831687156009,
+    0.0277737043978929
+   ],
+   "ridge|SH|msr_indep": [
+    0.075,
+    0.0459749171843819,
+    0.1200436102362945
+   ],
+   "ridge|SH|msr_sym": [
+    0.06,
+    0.0346521942543318,
+    0.1019316929576627
+   ],
+   "ridge|SH|shuffle": [
+    0.145,
+    0.102893506420044,
+    0.2004866753078152
+   ],
+   "ridge|SH|spin_std": [
+    0.025,
+    0.0107247196517612,
+    0.0571783404066419
+   ],
+   "ridge|SH|spin_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "ridge|Sw|bs_indep": [
+    0.66,
+    0.5918849552683626,
+    0.7220845402909121
+   ],
+   "ridge|Sw|bs_sym": [
+    0.005,
+    0.0008831687156009,
+    0.0277737043978929
+   ],
+   "ridge|Sw|msr_indep": [
+    0.775,
+    0.7122587676433947,
+    0.8273763028491088
+   ],
+   "ridge|Sw|msr_sym": [
+    0.045,
+    0.0238525430014929,
+    0.0832967040018196
+   ],
+   "ridge|Sw|shuffle": [
+    0.875,
+    0.8219857499741765,
+    0.9138802552428736
+   ],
+   "ridge|Sw|spin_std": [
+    0.395,
+    0.3298410101320796,
+    0.4641165084071463
+   ],
+   "ridge|Sw|spin_sym": [
+    0.065,
+    0.0383763546491529,
+    0.1080190792990689
+   ]
+  }
+ },
+ "ABS_GEN_INDEP": "14–16%",
+ "H6A_VERDICT": "Supported (median bilateral r of null maps: BrainSMASH 0.00, Moran 0.00)",
+ "H6B_VERDICT": "Supported (13.8% and 16.3%; conventional spin 8.7%)",
+ "H6C_VERDICT": "Supported (4.4% and 5.4%; symmetric spin 5.7%)",
+ "H6D_VERDICT": "Supported (independent: 48.5–82.0% under R and Sw; symmetric: 0.5–6.0% under SH and DD-H)"
+}

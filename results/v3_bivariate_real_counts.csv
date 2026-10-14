@@ -1,0 +1,8 @@
+null,pvalue,n_p05,n_q05,n_holm05
+shuffle,two_sided,139,111,30
+spin_aligned,two_sided,42,0,0
+spin_enigma,enigma_toolbox,95,31,8
+spin_enigma,two_sided,69,21,0
+spin_fslr,two_sided,43,0,0
+spin_std,two_sided,55,0,0
+spin_sym,two_sided,41,0,0

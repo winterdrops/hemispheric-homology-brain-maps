@@ -1,0 +1,13 @@
+map,file,n_patients_max,n_controls_max,mean_d,min_d,max_d,bilateral_r
+22q11.2DS,22q_case-controls_CortThick,,,0.29897058823529415,-0.59,0.87,0.9083234824124038
+ADHD,adhdallages_case-controls_CortThick,2245.0,1934.0,-0.02382352941176471,-0.12,0.03,1.0
+ASD,asd_meta-analysis_case-controls_CortThick,1060.0,977.0,-0.039999999999999994,-0.24,0.11,1.0
+Epilepsy,allepi_case-controls_CortThick,2061.0,1654.0,-0.15548529411764705,-0.399,0.093,0.9193510193423272
+MDD,mddadult_case-controls_CortThick,1902.0,7657.0,-0.04314705882352941,-0.134,0.094,0.8537943106310031
+OCD,ocdadults_case-controls_CortThick,1497.0,1435.0,-0.05044117647058823,-0.14,0.036,0.7448716260999553
+SCZ,scz_case-controls_CortThick,4430.0,5057.0,-0.3094411764705882,-0.536,-0.077,0.9534733252225196
+BD,bd_case-controls_CortThick_adult,1837.0,2581.0,-0.17113235294117649,-0.293,0.02,0.8842597879536136
+PD,parkinsons_case-controls_CortThick_PDvsCN,2319.0,1175.0,-0.10163235294117647,-0.198,0.043,0.7307370179126833
+AN,anorexia_case-controls_CortThick,684.0,962.0,-0.5032212058823531,-0.9246,0.110112,0.9413227447010306
+CD,Antisocial_case-controls_CortThick,1170.0,1236.0,-0.023529411764705885,-0.13,0.16,1.0
+CHR,psychosis_case-controls_CortThick_postComBatmegaanalysis_ICVex,,,-0.09426470588235296,-0.18,0.04,0.705599460854039

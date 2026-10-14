@@ -1,0 +1,14 @@
+numpy==2.4.4
+scipy==1.17.1
+pandas==3.0.2
+scikit-learn==1.8.0
+statsmodels==0.15.0
+brainsmash==0.11.0
+brainspace==0.2.1          # Moran spectral randomization (generative nulls); installs vtk
+nibabel==5.4.2
+nilearn==0.14.1
+matplotlib==3.10.9
+joblib==1.5.3
+openpyxl==3.1.5
+pillow==12.2.0
+pytest

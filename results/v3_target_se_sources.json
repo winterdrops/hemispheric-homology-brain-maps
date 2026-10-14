@@ -1,0 +1,14 @@
+{
+ "22q11.2DS": "confidence interval; median SE 0.077; p-implied 0.077",
+ "ADHD": "sample-size formula; median SE 0.031; p-implied 0.030",
+ "ASD": "sample-size formula; median SE 0.044; no p-values",
+ "Epilepsy": "confidence interval; median SE 0.054; p-implied 0.057",
+ "MDD": "confidence interval; median SE 0.035; p-implied 0.034",
+ "OCD": "sample-size formula; median SE 0.037; p-implied 0.037",
+ "SCZ": "reported SE (agrees with p-values); median SE 0.044; p-implied 0.040",
+ "BD": "reported SE (agrees with p-values); median SE 0.031; p-implied 0.031",
+ "PD": "sample-size formula; median SE 0.036; p-implied 0.029",
+ "AN": "confidence interval; median SE 0.090; p-implied 0.088",
+ "CD": "confidence interval; median SE 0.041; p-implied 0.041",
+ "CHR": "confidence interval; median SE 0.036; p-implied 0.036"
+}

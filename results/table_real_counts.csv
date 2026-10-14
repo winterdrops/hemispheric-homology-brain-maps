@@ -1,0 +1,17 @@
+set,model,scheme,mean_r2,n_sig_shuffle,sig_shuffle,n_sig_spin_std,sig_spin_std,n_sig_spin_sym,sig_spin_sym
+multimodal,knn,H,0.28077290802022725,11.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CD,CHR",8.0,"22q11.2DS,ASD,Epilepsy,MDD,SCZ,BD,AN,CHR",8.0,"22q11.2DS,ASD,Epilepsy,MDD,SCZ,BD,AN,CHR"
+multimodal,knn,R,0.4272697216326799,12.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",11.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CHR",7.0,"22q11.2DS,Epilepsy,MDD,BD,PD,AN,CHR"
+multimodal,knn,S,0.3045688495490557,12.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",10.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN",4.0,"Epilepsy,OCD,BD,AN"
+multimodal,knn,SH,0.08761842194134721,9.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN",2.0,"Epilepsy,BD",0.0,
+multimodal,ridge,H,-0.06260639737985604,8.0,"ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",4.0,"MDD,SCZ,PD,AN",4.0,"MDD,SCZ,PD,AN"
+multimodal,ridge,R,0.36783736126600663,10.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",8.0,"22q11.2DS,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",6.0,"MDD,SCZ,BD,PD,AN,CHR"
+multimodal,ridge,S,0.16118122249642222,8.0,"22q11.2DS,ADHD,Epilepsy,MDD,SCZ,BD,PD,AN",6.0,"22q11.2DS,Epilepsy,MDD,SCZ,PD,AN",4.0,"Epilepsy,MDD,SCZ,AN"
+multimodal,ridge,SH,-0.27107634999531227,4.0,"MDD,SCZ,PD,AN",4.0,"MDD,SCZ,PD,AN",4.0,"MDD,SCZ,PD,AN"
+receptor_only,ridge,H,-0.08088343324510835,6.0,"ASD,Epilepsy,MDD,PD,AN,CHR",0.0,,0.0,
+receptor_only,ridge,R,0.22816416118110083,10.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",7.0,"ADHD,ASD,Epilepsy,MDD,SCZ,BD,AN",0.0,
+receptor_only,ridge,S,0.11071955075844914,9.0,"ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",2.0,"Epilepsy,MDD",2.0,"Epilepsy,MDD"
+receptor_only,ridge,SH,-0.29206212192861664,4.0,"ASD,Epilepsy,MDD,AN",1.0,MDD,1.0,MDD
+multimodal,rf,R,0.5060839608695046,12.0,"22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",,,7.0,"MDD,OCD,SCZ,BD,PD,AN,CHR"
+multimodal,rf,H,0.28863220933020073,,,,,,
+multimodal,rf,S,0.3496874660450151,,,,,,
+multimodal,rf,SH,0.14115529331390572,,,,,0.0,

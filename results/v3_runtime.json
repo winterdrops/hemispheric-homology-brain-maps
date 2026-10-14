@@ -1,0 +1,5 @@
+{
+ "en": "about 11 hours",
+ "tr": "11 saat",
+ "note": "measured with code/run_all_v3.py --workers 2 on 2 CPU cores (Linux) on 2 October 2026: stages 0-2 about 1.6 h; stage 3 up to the CV simulations about 0.4 h; CV simulations (two in parallel) 2.5 h; the 20 independent jobs (random forests, real-data CV, positive control, approximate coupling, sensitivity, generative nulls) 6.2 h on two workers; statistics, figures and documents about 0.2 h. Total about 11 h."
+}

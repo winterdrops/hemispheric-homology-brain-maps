@@ -1,0 +1,26 @@
+# Public deposit allowlist.
+# Everything is excluded by default; only the entries un-ignored below are
+# published. This is deliberate: the manuscript, the Supplementary Information
+# document, the reporting checklists, the journal shortlist, the run logs and
+# the pre-submission review material stay local.
+
+/*
+
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+!/CITATION.cff
+!/Codes/
+!/plan/
+!/data/
+!/results/
+!/figures/
+
+# Build and editor noise anywhere inside the allowed trees
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,5 @@
+# Reproducibility archive: store every file byte-for-byte.
+# No end-of-line conversion anywhere — the SHA-256 manifests in
+# data/raw/SHA256SUMS.txt and plan/SHA256SUMS.txt must keep verifying
+# on every platform after a clone.
+* -text

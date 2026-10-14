@@ -1,0 +1,58 @@
+{
+  "n_regions": 68,
+  "n_targets_primary": 12,
+  "n_predictors": 28,
+  "targets_nan": 0,
+  "parity_vs_hansen2022": {
+    "22q": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "adhd": {
+      "pearson_r": 0.3989197868384052,
+      "max_abs_diff": 0.16
+    },
+    "asd": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "epilepsy_gge": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "epilepsy_rtle": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "epilepsy_ltle": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "depression": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "ocd": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "schizophrenia": {
+      "pearson_r": 0.9999999999999999,
+      "max_abs_diff": 0.0
+    },
+    "bipolar": {
+      "pearson_r": 1.0,
+      "max_abs_diff": 0.0
+    },
+    "schizotypy": {
+      "pearson_r": 0.9976778062553402,
+      "max_abs_diff": 0.013000000000000001
+    },
+    "park": {
+      "pearson_r": 0.9999999999999999,
+      "max_abs_diff": 0.0
+    }
+  },
+  "vertices_per_region_min": 18,
+  "vertices_per_region_max": 759
+}

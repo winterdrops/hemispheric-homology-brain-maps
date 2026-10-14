@@ -1,0 +1,1800 @@
+{
+ "bivariate": {
+  "lam100_rho0.9|shuffle|two_sided": [
+   0.30528571428571427,
+   0.29278571428571426,
+   0.31771428571428567
+  ],
+  "lam100_rho0.9|spin_aligned|two_sided": [
+   0.067,
+   0.06121428571428571,
+   0.07343035714285712
+  ],
+  "lam100_rho0.9|spin_enigma|two_sided": [
+   0.12164285714285715,
+   0.11335714285714286,
+   0.13
+  ],
+  "lam100_rho0.9|spin_fslr|two_sided": [
+   0.07042857142857142,
+   0.0644267857142857,
+   0.0765
+  ],
+  "lam100_rho0.9|spin_std|two_sided": [
+   0.08814285714285715,
+   0.08106964285714284,
+   0.0957142857142857
+  ],
+  "lam100_rho0.9|spin_sym|two_sided": [
+   0.062285714285714285,
+   0.05635535714285714,
+   0.06843214285714284
+  ],
+  "lam25_rho0.9|shuffle|two_sided": [
+   0.1765,
+   0.16485535714285712,
+   0.18778571428571428
+  ],
+  "lam25_rho0.9|spin_aligned|two_sided": [
+   0.04964285714285714,
+   0.044214285714285706,
+   0.05528571428571428
+  ],
+  "lam25_rho0.9|spin_enigma|two_sided": [
+   0.10128571428571428,
+   0.09328571428571428,
+   0.10921607142857143
+  ],
+  "lam25_rho0.9|spin_fslr|two_sided": [
+   0.053142857142857144,
+   0.04749821428571428,
+   0.059
+  ],
+  "lam25_rho0.9|spin_std|two_sided": [
+   0.07728571428571429,
+   0.0705,
+   0.08428749999999999
+  ],
+  "lam25_rho0.9|spin_sym|two_sided": [
+   0.0455,
+   0.04028392857142857,
+   0.050714285714285705
+  ],
+  "lam50_rho0.9|shuffle|two_sided": [
+   0.2317142857142857,
+   0.21871428571428572,
+   0.24493035714285713
+  ],
+  "lam50_rho0.9|spin_aligned|two_sided": [
+   0.06021428571428571,
+   0.0542125,
+   0.06664285714285714
+  ],
+  "lam50_rho0.9|spin_enigma|two_sided": [
+   0.11457142857142857,
+   0.10578571428571427,
+   0.12321607142857142
+  ],
+  "lam50_rho0.9|spin_fslr|two_sided": [
+   0.061642857142857145,
+   0.055428571428571424,
+   0.068
+  ],
+  "lam50_rho0.9|spin_std|two_sided": [
+   0.08578571428571428,
+   0.07864285714285714,
+   0.09342857142857143
+  ],
+  "lam50_rho0.9|spin_sym|two_sided": [
+   0.05335714285714286,
+   0.04785357142857142,
+   0.05921607142857141
+  ],
+  "lam77_rho0.0|shuffle|two_sided": [
+   0.13635714285714284,
+   0.1255,
+   0.14743035714285713
+  ],
+  "lam77_rho0.0|spin_aligned|two_sided": [
+   0.06192857142857143,
+   0.05606964285714285,
+   0.06828571428571428
+  ],
+  "lam77_rho0.0|spin_enigma|two_sided": [
+   0.07135714285714286,
+   0.0645,
+   0.07821428571428571
+  ],
+  "lam77_rho0.0|spin_fslr|two_sided": [
+   0.06507142857142857,
+   0.05892857142857142,
+   0.07107142857142855
+  ],
+  "lam77_rho0.0|spin_std|two_sided": [
+   0.06335714285714286,
+   0.0575,
+   0.06935714285714287
+  ],
+  "lam77_rho0.0|spin_sym|two_sided": [
+   0.060142857142857144,
+   0.05449999999999999,
+   0.0665
+  ],
+  "lam77_rho0.5|shuffle|two_sided": [
+   0.2215,
+   0.20899642857142856,
+   0.23486249999999995
+  ],
+  "lam77_rho0.5|spin_aligned|two_sided": [
+   0.06557142857142857,
+   0.05899821428571428,
+   0.07192857142857141
+  ],
+  "lam77_rho0.5|spin_enigma|two_sided": [
+   0.10392857142857143,
+   0.09564107142857142,
+   0.11192857142857142
+  ],
+  "lam77_rho0.5|spin_fslr|two_sided": [
+   0.0695,
+   0.06285714285714285,
+   0.07635892857142856
+  ],
+  "lam77_rho0.5|spin_std|two_sided": [
+   0.08042857142857143,
+   0.0727142857142857,
+   0.08778571428571427
+  ],
+  "lam77_rho0.5|spin_sym|two_sided": [
+   0.06085714285714286,
+   0.05478571428571428,
+   0.06735714285714285
+  ],
+  "lam77_rho0.9|shuffle|two_sided": [
+   0.28210714285714283,
+   0.2726071428571429,
+   0.29160892857142856
+  ],
+  "lam77_rho0.9|spin_aligned|two_sided": [
+   0.06335714285714286,
+   0.058927678571428554,
+   0.06771607142857142
+  ],
+  "lam77_rho0.9|spin_enigma|enigma_toolbox": [
+   0.18675,
+   0.17956964285714283,
+   0.19389375000000003
+  ],
+  "lam77_rho0.9|spin_enigma|enigma_toolbox_doubled": [
+   0.11592857142857142,
+   0.10992857142857143,
+   0.122
+  ],
+  "lam77_rho0.9|spin_enigma|two_sided": [
+   0.12003571428571429,
+   0.11417767857142856,
+   0.12610803571428572
+  ],
+  "lam77_rho0.9|spin_fslr|two_sided": [
+   0.06721428571428571,
+   0.06278392857142856,
+   0.07171517857142856
+  ],
+  "lam77_rho0.9|spin_std|two_sided": [
+   0.08807142857142858,
+   0.08289196428571428,
+   0.09346428571428572
+  ],
+  "lam77_rho0.9|spin_sym|two_sided": [
+   0.05807142857142857,
+   0.053857142857142846,
+   0.06232142857142857
+  ],
+  "lam77_rho0.9_synthX|shuffle|two_sided": [
+   0.23225,
+   0.2264642857142857,
+   0.2381794642857143
+  ],
+  "lam77_rho0.9_synthX|spin_aligned|two_sided": [
+   0.06953571428571428,
+   0.06689196428571427,
+   0.0723223214285714
+  ],
+  "lam77_rho0.9_synthX|spin_enigma|two_sided": [
+   0.12539285714285714,
+   0.12175,
+   0.12907142857142856
+  ],
+  "lam77_rho0.9_synthX|spin_fslr|two_sided": [
+   0.07225,
+   0.06935714285714285,
+   0.07521428571428569
+  ],
+  "lam77_rho0.9_synthX|spin_std|two_sided": [
+   0.09796428571428571,
+   0.09474910714285714,
+   0.10142946428571428
+  ],
+  "lam77_rho0.9_synthX|spin_sym|two_sided": [
+   0.06303571428571429,
+   0.060428571428571415,
+   0.06574999999999999
+  ],
+  "lam77_rho1.0|shuffle|two_sided": [
+   0.28885714285714287,
+   0.2761410714285714,
+   0.3019285714285714
+  ],
+  "lam77_rho1.0|spin_aligned|two_sided": [
+   0.06314285714285714,
+   0.05728392857142857,
+   0.06900178571428571
+  ],
+  "lam77_rho1.0|spin_enigma|two_sided": [
+   0.12578571428571428,
+   0.11764285714285713,
+   0.13435892857142856
+  ],
+  "lam77_rho1.0|spin_fslr|two_sided": [
+   0.06571428571428571,
+   0.059785714285714275,
+   0.07207321428571425
+  ],
+  "lam77_rho1.0|spin_std|two_sided": [
+   0.09028571428571429,
+   0.08357142857142857,
+   0.09757142857142856
+  ],
+  "lam77_rho1.0|spin_sym|two_sided": [
+   0.05714285714285714,
+   0.05178571428571428,
+   0.06285714285714285
+  ]
+ },
+ "cv_maps_per_cell": {
+  "('lam50', 'knn', 'DD')": 500,
+  "('lam50', 'knn', 'DD-H')": 500,
+  "('lam50', 'knn', 'H')": 500,
+  "('lam50', 'knn', 'R')": 500,
+  "('lam50', 'knn', 'S')": 500,
+  "('lam50', 'knn', 'SH')": 500,
+  "('lam50', 'knn', 'Sw')": 500,
+  "('lam50', 'ridge', 'DD')": 500,
+  "('lam50', 'ridge', 'DD-H')": 500,
+  "('lam50', 'ridge', 'H')": 500,
+  "('lam50', 'ridge', 'R')": 500,
+  "('lam50', 'ridge', 'S')": 500,
+  "('lam50', 'ridge', 'SH')": 500,
+  "('lam50', 'ridge', 'Sw')": 500,
+  "('lam77', 'knn', 'DD')": 500,
+  "('lam77', 'knn', 'DD-H')": 500,
+  "('lam77', 'knn', 'H')": 500,
+  "('lam77', 'knn', 'R')": 500,
+  "('lam77', 'knn', 'S')": 500,
+  "('lam77', 'knn', 'SH')": 500,
+  "('lam77', 'knn', 'Sw')": 500,
+  "('lam77', 'ridge', 'DD')": 500,
+  "('lam77', 'ridge', 'DD-H')": 500,
+  "('lam77', 'ridge', 'H')": 500,
+  "('lam77', 'ridge', 'R')": 500,
+  "('lam77', 'ridge', 'S')": 500,
+  "('lam77', 'ridge', 'SH')": 500,
+  "('lam77', 'ridge', 'Sw')": 500
+ },
+ "cv_fpr": {
+  "lam50|knn|DD|shuffle": [
+   0.566,
+   0.5222171596922527,
+   0.6087764273668224,
+   "liberal"
+  ],
+  "lam50|knn|DD|spin_std": [
+   0.158,
+   0.12865269786443548,
+   0.19256235101126626,
+   "liberal"
+  ],
+  "lam50|knn|DD|spin_fslr": [
+   0.068,
+   0.04906650742490686,
+   0.0935209227338743,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD|spin_aligned": [
+   0.064,
+   0.04569601604478942,
+   0.08895240883768415,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD|spin_sym": [
+   0.064,
+   0.04569601604478942,
+   0.08895240883768415,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD-H|shuffle": [
+   0.218,
+   0.1840337264359884,
+   0.25626640158432706,
+   "liberal"
+  ],
+  "lam50|knn|DD-H|spin_std": [
+   0.078,
+   0.057581393476161584,
+   0.10485354987338852,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD-H|spin_fslr": [
+   0.064,
+   0.04569601604478942,
+   0.08895240883768415,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD-H|spin_aligned": [
+   0.054,
+   0.03737435018105752,
+   0.0774265615106471,
+   "not different from 5%"
+  ],
+  "lam50|knn|DD-H|spin_sym": [
+   0.058,
+   0.0406837291117572,
+   0.082056187856255,
+   "not different from 5%"
+  ],
+  "lam50|knn|H|shuffle": [
+   0.23,
+   0.1952549251744704,
+   0.26886221867476784,
+   "liberal"
+  ],
+  "lam50|knn|H|spin_std": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam50|knn|H|spin_fslr": [
+   0.066,
+   0.04737852635977387,
+   0.09123940116085351,
+   "not different from 5%"
+  ],
+  "lam50|knn|H|spin_aligned": [
+   0.056,
+   0.03902562068315149,
+   0.07974479364670692,
+   "not different from 5%"
+  ],
+  "lam50|knn|H|spin_sym": [
+   0.092,
+   0.06968272368045206,
+   0.12053873813617458,
+   "liberal"
+  ],
+  "lam50|knn|R|shuffle": [
+   0.848,
+   0.8138858517125612,
+   0.8768076073261984,
+   "liberal"
+  ],
+  "lam50|knn|R|spin_std": [
+   0.332,
+   0.2921404418575132,
+   0.3744213365375685,
+   "liberal"
+  ],
+  "lam50|knn|R|spin_fslr": [
+   0.124,
+   0.09794609113930344,
+   0.15578741288778383,
+   "liberal"
+  ],
+  "lam50|knn|R|spin_aligned": [
+   0.104,
+   0.08019420676989106,
+   0.13384427087565834,
+   "liberal"
+  ],
+  "lam50|knn|R|spin_sym": [
+   0.094,
+   0.0714264085922213,
+   0.12276455586255913,
+   "liberal"
+  ],
+  "lam50|knn|S|shuffle": [
+   0.476,
+   0.43257418943321424,
+   0.5197917789089403,
+   "liberal"
+  ],
+  "lam50|knn|S|spin_std": [
+   0.126,
+   0.09973528894537705,
+   0.15796771771986406,
+   "liberal"
+  ],
+  "lam50|knn|S|spin_fslr": [
+   0.062,
+   0.044019209142681565,
+   0.08665971310163822,
+   "not different from 5%"
+  ],
+  "lam50|knn|S|spin_aligned": [
+   0.048,
+   0.03246520694135317,
+   0.07042719683589008,
+   "not different from 5%"
+  ],
+  "lam50|knn|S|spin_sym": [
+   0.05,
+   0.034093745243849435,
+   0.07276816117154761,
+   "not different from 5%"
+  ],
+  "lam50|knn|SH|shuffle": [
+   0.102,
+   0.07843435210316953,
+   0.13163462290422606,
+   "liberal"
+  ],
+  "lam50|knn|SH|spin_std": [
+   0.028,
+   0.016750974720756446,
+   0.046446402674948886,
+   "not different from 5%"
+  ],
+  "lam50|knn|SH|spin_fslr": [
+   0.032,
+   0.01979151362657112,
+   0.05134486904544179,
+   "not different from 5%"
+  ],
+  "lam50|knn|SH|spin_aligned": [
+   0.028,
+   0.016750974720756446,
+   0.046446402674948886,
+   "not different from 5%"
+  ],
+  "lam50|knn|SH|spin_sym": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam50|knn|Sw|shuffle": [
+   0.912,
+   0.8839235279346099,
+   0.9337940155250711,
+   "liberal"
+  ],
+  "lam50|knn|Sw|spin_std": [
+   0.334,
+   0.2940638124558771,
+   0.37646746857735836,
+   "liberal"
+  ],
+  "lam50|knn|Sw|spin_fslr": [
+   0.094,
+   0.0714264085922213,
+   0.12276455586255913,
+   "liberal"
+  ],
+  "lam50|knn|Sw|spin_aligned": [
+   0.086,
+   0.06447314240360771,
+   0.11383981149855754,
+   "liberal"
+  ],
+  "lam50|knn|Sw|spin_sym": [
+   0.07,
+   0.050759742945018095,
+   0.09579718985191688,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD|shuffle": [
+   0.512,
+   0.46826225284987066,
+   0.5555547629790522,
+   "liberal"
+  ],
+  "lam50|ridge|DD|spin_std": [
+   0.16,
+   0.13047637235016407,
+   0.19470817916369149,
+   "liberal"
+  ],
+  "lam50|ridge|DD|spin_fslr": [
+   0.064,
+   0.04569601604478942,
+   0.08895240883768415,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD|spin_aligned": [
+   0.056,
+   0.03902562068315149,
+   0.07974479364670692,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD|spin_sym": [
+   0.054,
+   0.03737435018105752,
+   0.0774265615106471,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD-H|shuffle": [
+   0.182,
+   0.1506464452041556,
+   0.2182026353293916,
+   "liberal"
+  ],
+  "lam50|ridge|DD-H|spin_std": [
+   0.068,
+   0.04906650742490686,
+   0.0935209227338743,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD-H|spin_fslr": [
+   0.048,
+   0.03246520694135317,
+   0.07042719683589008,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD-H|spin_aligned": [
+   0.038,
+   0.02446011805583039,
+   0.0585847725306439,
+   "not different from 5%"
+  ],
+  "lam50|ridge|DD-H|spin_sym": [
+   0.046,
+   0.030845108370816207,
+   0.06807779276827325,
+   "not different from 5%"
+  ],
+  "lam50|ridge|H|shuffle": [
+   0.15,
+   0.12137595769138818,
+   0.1839610806316984,
+   "liberal"
+  ],
+  "lam50|ridge|H|spin_std": [
+   0.036,
+   0.022891060980292723,
+   0.05618432696802776,
+   "not different from 5%"
+  ],
+  "lam50|ridge|H|spin_fslr": [
+   0.044,
+   0.02923395562860718,
+   0.06571944287232848,
+   "not different from 5%"
+  ],
+  "lam50|ridge|H|spin_aligned": [
+   0.046,
+   0.030845108370816207,
+   0.06807779276827325,
+   "not different from 5%"
+  ],
+  "lam50|ridge|H|spin_sym": [
+   0.05,
+   0.034093745243849435,
+   0.07276816117154761,
+   "not different from 5%"
+  ],
+  "lam50|ridge|R|shuffle": [
+   0.778,
+   0.739530218085007,
+   0.8122306486183701,
+   "liberal"
+  ],
+  "lam50|ridge|R|spin_std": [
+   0.33,
+   0.2902178997291812,
+   0.3723743760277467,
+   "liberal"
+  ],
+  "lam50|ridge|R|spin_fslr": [
+   0.096,
+   0.07317350466541903,
+   0.12498696242751522,
+   "liberal"
+  ],
+  "lam50|ridge|R|spin_aligned": [
+   0.076,
+   0.05586902703742782,
+   0.10259641367396849,
+   "not different from 5%"
+  ],
+  "lam50|ridge|R|spin_sym": [
+   0.068,
+   0.04906650742490686,
+   0.0935209227338743,
+   "not different from 5%"
+  ],
+  "lam50|ridge|S|shuffle": [
+   0.264,
+   0.22726783141305193,
+   0.30433085728480086,
+   "liberal"
+  ],
+  "lam50|ridge|S|spin_std": [
+   0.074,
+   0.05416118475101196,
+   0.10033475332223056,
+   "not different from 5%"
+  ],
+  "lam50|ridge|S|spin_fslr": [
+   0.038,
+   0.02446011805583039,
+   0.0585847725306439,
+   "not different from 5%"
+  ],
+  "lam50|ridge|S|spin_aligned": [
+   0.038,
+   0.02446011805583039,
+   0.0585847725306439,
+   "not different from 5%"
+  ],
+  "lam50|ridge|S|spin_sym": [
+   0.036,
+   0.022891060980292723,
+   0.05618432696802776,
+   "not different from 5%"
+  ],
+  "lam50|ridge|SH|shuffle": [
+   0.088,
+   0.06620598447492893,
+   0.11607647206539012,
+   "liberal"
+  ],
+  "lam50|ridge|SH|spin_std": [
+   0.02,
+   0.01089918359621081,
+   0.036420183246879345,
+   "conservative"
+  ],
+  "lam50|ridge|SH|spin_fslr": [
+   0.032,
+   0.01979151362657112,
+   0.05134486904544179,
+   "not different from 5%"
+  ],
+  "lam50|ridge|SH|spin_aligned": [
+   0.024,
+   0.013781314655496982,
+   0.04147705746390076,
+   "not different from 5%"
+  ],
+  "lam50|ridge|SH|spin_sym": [
+   0.036,
+   0.022891060980292723,
+   0.05618432696802776,
+   "not different from 5%"
+  ],
+  "lam50|ridge|Sw|shuffle": [
+   0.866,
+   0.8333339846536646,
+   0.8930849981284793,
+   "liberal"
+  ],
+  "lam50|ridge|Sw|spin_std": [
+   0.38,
+   0.3385223307845575,
+   0.4233075109262151,
+   "liberal"
+  ],
+  "lam50|ridge|Sw|spin_fslr": [
+   0.096,
+   0.07317350466541903,
+   0.12498696242751522,
+   "liberal"
+  ],
+  "lam50|ridge|Sw|spin_aligned": [
+   0.086,
+   0.06447314240360771,
+   0.11383981149855754,
+   "liberal"
+  ],
+  "lam50|ridge|Sw|spin_sym": [
+   0.062,
+   0.044019209142681565,
+   0.08665971310163822,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD|shuffle": [
+   0.692,
+   0.6501980013173227,
+   0.7308742519454412,
+   "liberal"
+  ],
+  "lam77|knn|DD|spin_std": [
+   0.158,
+   0.12865269786443548,
+   0.19256235101126626,
+   "liberal"
+  ],
+  "lam77|knn|DD|spin_fslr": [
+   0.082,
+   0.06101908946846894,
+   0.10935485915738875,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD|spin_aligned": [
+   0.076,
+   0.05586902703742782,
+   0.10259641367396849,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD|spin_sym": [
+   0.074,
+   0.05416118475101196,
+   0.10033475332223056,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD-H|shuffle": [
+   0.318,
+   0.27870026117642177,
+   0.36007499875158333,
+   "liberal"
+  ],
+  "lam77|knn|DD-H|spin_std": [
+   0.054,
+   0.03737435018105752,
+   0.0774265615106471,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD-H|spin_fslr": [
+   0.046,
+   0.030845108370816207,
+   0.06807779276827325,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD-H|spin_aligned": [
+   0.042,
+   0.027632310108451703,
+   0.06335158575433017,
+   "not different from 5%"
+  ],
+  "lam77|knn|DD-H|spin_sym": [
+   0.044,
+   0.02923395562860718,
+   0.06571944287232848,
+   "not different from 5%"
+  ],
+  "lam77|knn|H|shuffle": [
+   0.406,
+   0.36383044213406346,
+   0.44960293387270855,
+   "liberal"
+  ],
+  "lam77|knn|H|spin_std": [
+   0.102,
+   0.07843435210316953,
+   0.13163462290422606,
+   "liberal"
+  ],
+  "lam77|knn|H|spin_fslr": [
+   0.124,
+   0.09794609113930344,
+   0.15578741288778383,
+   "liberal"
+  ],
+  "lam77|knn|H|spin_aligned": [
+   0.11,
+   0.0854914151566031,
+   0.14045557040340767,
+   "liberal"
+  ],
+  "lam77|knn|H|spin_sym": [
+   0.146,
+   0.11774876682646929,
+   0.1796492662203097,
+   "liberal"
+  ],
+  "lam77|knn|R|shuffle": [
+   0.91,
+   0.8816905887106665,
+   0.9320574521108607,
+   "liberal"
+  ],
+  "lam77|knn|R|spin_std": [
+   0.394,
+   0.3521341694850665,
+   0.4374821906927827,
+   "liberal"
+  ],
+  "lam77|knn|R|spin_fslr": [
+   0.162,
+   0.13230178838983925,
+   0.19685226576217008,
+   "liberal"
+  ],
+  "lam77|knn|R|spin_aligned": [
+   0.146,
+   0.11774876682646929,
+   0.1796492662203097,
+   "liberal"
+  ],
+  "lam77|knn|R|spin_sym": [
+   0.136,
+   0.10871544340723721,
+   0.16883507644877283,
+   "liberal"
+  ],
+  "lam77|knn|S|shuffle": [
+   0.588,
+   0.5443465920099858,
+   0.630311524068781,
+   "liberal"
+  ],
+  "lam77|knn|S|spin_std": [
+   0.144,
+   0.11593807411034973,
+   0.17749045629827542,
+   "liberal"
+  ],
+  "lam77|knn|S|spin_fslr": [
+   0.062,
+   0.044019209142681565,
+   0.08665971310163822,
+   "not different from 5%"
+  ],
+  "lam77|knn|S|spin_aligned": [
+   0.054,
+   0.03737435018105752,
+   0.0774265615106471,
+   "not different from 5%"
+  ],
+  "lam77|knn|S|spin_sym": [
+   0.056,
+   0.03902562068315149,
+   0.07974479364670692,
+   "not different from 5%"
+  ],
+  "lam77|knn|SH|shuffle": [
+   0.192,
+   0.15987621859588308,
+   0.22882037512843312,
+   "liberal"
+  ],
+  "lam77|knn|SH|spin_std": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam77|knn|SH|spin_fslr": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam77|knn|SH|spin_aligned": [
+   0.036,
+   0.022891060980292723,
+   0.05618432696802776,
+   "not different from 5%"
+  ],
+  "lam77|knn|SH|spin_sym": [
+   0.044,
+   0.02923395562860718,
+   0.06571944287232848,
+   "not different from 5%"
+  ],
+  "lam77|knn|Sw|shuffle": [
+   0.952,
+   0.92957280316411,
+   0.9675347930586469,
+   "liberal"
+  ],
+  "lam77|knn|Sw|spin_std": [
+   0.398,
+   0.35602997790389446,
+   0.4415253875502624,
+   "liberal"
+  ],
+  "lam77|knn|Sw|spin_fslr": [
+   0.166,
+   0.13595774323101012,
+   0.2011353161973068,
+   "liberal"
+  ],
+  "lam77|knn|Sw|spin_aligned": [
+   0.142,
+   0.114129360445696,
+   0.1753296673247754,
+   "liberal"
+  ],
+  "lam77|knn|Sw|spin_sym": [
+   0.116,
+   0.09081365651103794,
+   0.14704183696343423,
+   "liberal"
+  ],
+  "lam77|ridge|DD|shuffle": [
+   0.596,
+   0.5524153513244501,
+   0.6381207753069318,
+   "liberal"
+  ],
+  "lam77|ridge|DD|spin_std": [
+   0.166,
+   0.13595774323101012,
+   0.2011353161973068,
+   "liberal"
+  ],
+  "lam77|ridge|DD|spin_fslr": [
+   0.08,
+   0.05929812940985259,
+   0.10710631657785132,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD|spin_aligned": [
+   0.068,
+   0.04906650742490686,
+   0.0935209227338743,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD|spin_sym": [
+   0.066,
+   0.04737852635977387,
+   0.09123940116085351,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD-H|shuffle": [
+   0.29,
+   0.2519474198773656,
+   0.33125480311648636,
+   "liberal"
+  ],
+  "lam77|ridge|DD-H|spin_std": [
+   0.076,
+   0.05586902703742782,
+   0.10259641367396849,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD-H|spin_fslr": [
+   0.058,
+   0.0406837291117572,
+   0.082056187856255,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD-H|spin_aligned": [
+   0.052,
+   0.035730265115705276,
+   0.07510114393784555,
+   "not different from 5%"
+  ],
+  "lam77|ridge|DD-H|spin_sym": [
+   0.058,
+   0.0406837291117572,
+   0.082056187856255,
+   "not different from 5%"
+  ],
+  "lam77|ridge|H|shuffle": [
+   0.32,
+   0.28061775068949024,
+   0.3621270118766686,
+   "liberal"
+  ],
+  "lam77|ridge|H|spin_std": [
+   0.062,
+   0.044019209142681565,
+   0.08665971310163822,
+   "not different from 5%"
+  ],
+  "lam77|ridge|H|spin_fslr": [
+   0.086,
+   0.06447314240360771,
+   0.11383981149855754,
+   "liberal"
+  ],
+  "lam77|ridge|H|spin_aligned": [
+   0.074,
+   0.05416118475101196,
+   0.10033475332223056,
+   "not different from 5%"
+  ],
+  "lam77|ridge|H|spin_sym": [
+   0.106,
+   0.08195705027297034,
+   0.13605093001073285,
+   "liberal"
+  ],
+  "lam77|ridge|R|shuffle": [
+   0.854,
+   0.8203507337796904,
+   0.8822512331735307,
+   "liberal"
+  ],
+  "lam77|ridge|R|spin_std": [
+   0.394,
+   0.3521341694850665,
+   0.4374821906927827,
+   "liberal"
+  ],
+  "lam77|ridge|R|spin_fslr": [
+   0.114,
+   0.08903690099400285,
+   0.1448490898423155,
+   "liberal"
+  ],
+  "lam77|ridge|R|spin_aligned": [
+   0.11,
+   0.0854914151566031,
+   0.14045557040340767,
+   "liberal"
+  ],
+  "lam77|ridge|R|spin_sym": [
+   0.072,
+   0.05245803141812619,
+   0.09806840401696254,
+   "not different from 5%"
+  ],
+  "lam77|ridge|S|shuffle": [
+   0.358,
+   0.317207603401289,
+   0.40095770928979185,
+   "liberal"
+  ],
+  "lam77|ridge|S|spin_std": [
+   0.116,
+   0.09081365651103794,
+   0.14704183696343423,
+   "liberal"
+  ],
+  "lam77|ridge|S|spin_fslr": [
+   0.068,
+   0.04906650742490686,
+   0.0935209227338743,
+   "not different from 5%"
+  ],
+  "lam77|ridge|S|spin_aligned": [
+   0.058,
+   0.0406837291117572,
+   0.082056187856255,
+   "not different from 5%"
+  ],
+  "lam77|ridge|S|spin_sym": [
+   0.056,
+   0.03902562068315149,
+   0.07974479364670692,
+   "not different from 5%"
+  ],
+  "lam77|ridge|SH|shuffle": [
+   0.148,
+   0.1195614053892054,
+   0.18180613029572734,
+   "liberal"
+  ],
+  "lam77|ridge|SH|spin_std": [
+   0.028,
+   0.016750974720756446,
+   0.046446402674948886,
+   "not different from 5%"
+  ],
+  "lam77|ridge|SH|spin_fslr": [
+   0.044,
+   0.02923395562860718,
+   0.06571944287232848,
+   "not different from 5%"
+  ],
+  "lam77|ridge|SH|spin_aligned": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam77|ridge|SH|spin_sym": [
+   0.04,
+   0.02604079738977726,
+   0.06097359583485082,
+   "not different from 5%"
+  ],
+  "lam77|ridge|Sw|shuffle": [
+   0.884,
+   0.8529581630365658,
+   0.9091863434889621,
+   "liberal"
+  ],
+  "lam77|ridge|Sw|spin_std": [
+   0.416,
+   0.37359746679314637,
+   0.45968342240439447,
+   "liberal"
+  ],
+  "lam77|ridge|Sw|spin_fslr": [
+   0.112,
+   0.08726280019410226,
+   0.1426536880040623,
+   "liberal"
+  ],
+  "lam77|ridge|Sw|spin_aligned": [
+   0.1,
+   0.07667756273730171,
+   0.1294219096319401,
+   "liberal"
+  ],
+  "lam77|ridge|Sw|spin_sym": [
+   0.08,
+   0.05929812940985259,
+   0.10710631657785132,
+   "not different from 5%"
+  ]
+ },
+ "real_counts": {
+  "multimodal|knn|DD|shuffle": [
+   12,
+   12
+  ],
+  "multimodal|knn|DD|spin_std": [
+   9,
+   3
+  ],
+  "multimodal|knn|DD|spin_enigma": [
+   11,
+   9
+  ],
+  "multimodal|knn|DD|spin_fslr": [
+   3,
+   3
+  ],
+  "multimodal|knn|DD|spin_aligned": [
+   3,
+   3
+  ],
+  "multimodal|knn|DD|spin_sym": [
+   3,
+   3
+  ],
+  "multimodal|knn|DD-H|shuffle": [
+   10,
+   9
+  ],
+  "multimodal|knn|DD-H|spin_std": [
+   4,
+   4
+  ],
+  "multimodal|knn|DD-H|spin_enigma": [
+   5,
+   4
+  ],
+  "multimodal|knn|DD-H|spin_fslr": [
+   4,
+   4
+  ],
+  "multimodal|knn|DD-H|spin_aligned": [
+   4,
+   4
+  ],
+  "multimodal|knn|DD-H|spin_sym": [
+   4,
+   4
+  ],
+  "multimodal|knn|H|shuffle": [
+   10,
+   10
+  ],
+  "multimodal|knn|H|spin_std": [
+   9,
+   5
+  ],
+  "multimodal|knn|H|spin_enigma": [
+   10,
+   7
+  ],
+  "multimodal|knn|H|spin_fslr": [
+   9,
+   5
+  ],
+  "multimodal|knn|H|spin_aligned": [
+   9,
+   4
+  ],
+  "multimodal|knn|H|spin_sym": [
+   9,
+   4
+  ],
+  "multimodal|knn|R|shuffle": [
+   12,
+   12
+  ],
+  "multimodal|knn|R|spin_std": [
+   11,
+   11
+  ],
+  "multimodal|knn|R|spin_enigma": [
+   12,
+   12
+  ],
+  "multimodal|knn|R|spin_fslr": [
+   9,
+   6
+  ],
+  "multimodal|knn|R|spin_aligned": [
+   9,
+   4
+  ],
+  "multimodal|knn|R|spin_sym": [
+   9,
+   4
+  ],
+  "multimodal|knn|S|shuffle": [
+   12,
+   12
+  ],
+  "multimodal|knn|S|spin_std": [
+   10,
+   4
+  ],
+  "multimodal|knn|S|spin_enigma": [
+   10,
+   10
+  ],
+  "multimodal|knn|S|spin_fslr": [
+   4,
+   3
+  ],
+  "multimodal|knn|S|spin_aligned": [
+   4,
+   0
+  ],
+  "multimodal|knn|S|spin_sym": [
+   3,
+   0
+  ],
+  "multimodal|knn|SH|shuffle": [
+   9,
+   5
+  ],
+  "multimodal|knn|SH|spin_std": [
+   1,
+   1
+  ],
+  "multimodal|knn|SH|spin_enigma": [
+   3,
+   2
+  ],
+  "multimodal|knn|SH|spin_fslr": [
+   1,
+   1
+  ],
+  "multimodal|knn|SH|spin_aligned": [
+   0,
+   0
+  ],
+  "multimodal|knn|SH|spin_sym": [
+   1,
+   1
+  ],
+  "multimodal|knn|Sw|shuffle": [
+   12,
+   12
+  ],
+  "multimodal|knn|Sw|spin_std": [
+   11,
+   11
+  ],
+  "multimodal|knn|Sw|spin_enigma": [
+   12,
+   12
+  ],
+  "multimodal|knn|Sw|spin_fslr": [
+   8,
+   5
+  ],
+  "multimodal|knn|Sw|spin_aligned": [
+   8,
+   3
+  ],
+  "multimodal|knn|Sw|spin_sym": [
+   8,
+   2
+  ],
+  "multimodal|ridge|DD|shuffle": [
+   11,
+   11
+  ],
+  "multimodal|ridge|DD|spin_std": [
+   5,
+   4
+  ],
+  "multimodal|ridge|DD|spin_enigma": [
+   8,
+   5
+  ],
+  "multimodal|ridge|DD|spin_fslr": [
+   5,
+   2
+  ],
+  "multimodal|ridge|DD|spin_aligned": [
+   5,
+   0
+  ],
+  "multimodal|ridge|DD|spin_sym": [
+   5,
+   0
+  ],
+  "multimodal|ridge|DD-H|shuffle": [
+   9,
+   4
+  ],
+  "multimodal|ridge|DD-H|spin_std": [
+   0,
+   0
+  ],
+  "multimodal|ridge|DD-H|spin_enigma": [
+   2,
+   1
+  ],
+  "multimodal|ridge|DD-H|spin_fslr": [
+   0,
+   0
+  ],
+  "multimodal|ridge|DD-H|spin_aligned": [
+   0,
+   0
+  ],
+  "multimodal|ridge|DD-H|spin_sym": [
+   0,
+   0
+  ],
+  "multimodal|ridge|H|shuffle": [
+   9,
+   9
+  ],
+  "multimodal|ridge|H|spin_std": [
+   6,
+   4
+  ],
+  "multimodal|ridge|H|spin_enigma": [
+   7,
+   6
+  ],
+  "multimodal|ridge|H|spin_fslr": [
+   7,
+   3
+  ],
+  "multimodal|ridge|H|spin_aligned": [
+   7,
+   3
+  ],
+  "multimodal|ridge|H|spin_sym": [
+   7,
+   3
+  ],
+  "multimodal|ridge|R|shuffle": [
+   12,
+   12
+  ],
+  "multimodal|ridge|R|spin_std": [
+   11,
+   8
+  ],
+  "multimodal|ridge|R|spin_enigma": [
+   11,
+   11
+  ],
+  "multimodal|ridge|R|spin_fslr": [
+   7,
+   4
+  ],
+  "multimodal|ridge|R|spin_aligned": [
+   7,
+   4
+  ],
+  "multimodal|ridge|R|spin_sym": [
+   6,
+   4
+  ],
+  "multimodal|ridge|S|shuffle": [
+   10,
+   10
+  ],
+  "multimodal|ridge|S|spin_std": [
+   4,
+   3
+  ],
+  "multimodal|ridge|S|spin_enigma": [
+   8,
+   5
+  ],
+  "multimodal|ridge|S|spin_fslr": [
+   3,
+   3
+  ],
+  "multimodal|ridge|S|spin_aligned": [
+   3,
+   2
+  ],
+  "multimodal|ridge|S|spin_sym": [
+   3,
+   1
+  ],
+  "multimodal|ridge|SH|shuffle": [
+   7,
+   6
+  ],
+  "multimodal|ridge|SH|spin_std": [
+   4,
+   0
+  ],
+  "multimodal|ridge|SH|spin_enigma": [
+   5,
+   1
+  ],
+  "multimodal|ridge|SH|spin_fslr": [
+   4,
+   0
+  ],
+  "multimodal|ridge|SH|spin_aligned": [
+   4,
+   0
+  ],
+  "multimodal|ridge|SH|spin_sym": [
+   0,
+   0
+  ],
+  "multimodal|ridge|Sw|shuffle": [
+   11,
+   11
+  ],
+  "multimodal|ridge|Sw|spin_std": [
+   10,
+   9
+  ],
+  "multimodal|ridge|Sw|spin_enigma": [
+   12,
+   12
+  ],
+  "multimodal|ridge|Sw|spin_fslr": [
+   9,
+   5
+  ],
+  "multimodal|ridge|Sw|spin_aligned": [
+   9,
+   5
+  ],
+  "multimodal|ridge|Sw|spin_sym": [
+   8,
+   4
+  ],
+  "receptor_only|knn|DD|shuffle": [
+   10,
+   8
+  ],
+  "receptor_only|knn|DD|spin_std": [
+   4,
+   2
+  ],
+  "receptor_only|knn|DD|spin_enigma": [
+   8,
+   4
+  ],
+  "receptor_only|knn|DD|spin_fslr": [
+   2,
+   2
+  ],
+  "receptor_only|knn|DD|spin_aligned": [
+   2,
+   1
+  ],
+  "receptor_only|knn|DD|spin_sym": [
+   2,
+   1
+  ],
+  "receptor_only|knn|DD-H|shuffle": [
+   8,
+   7
+  ],
+  "receptor_only|knn|DD-H|spin_std": [
+   5,
+   2
+  ],
+  "receptor_only|knn|DD-H|spin_enigma": [
+   7,
+   5
+  ],
+  "receptor_only|knn|DD-H|spin_fslr": [
+   5,
+   2
+  ],
+  "receptor_only|knn|DD-H|spin_aligned": [
+   5,
+   0
+  ],
+  "receptor_only|knn|DD-H|spin_sym": [
+   5,
+   0
+  ],
+  "receptor_only|knn|H|shuffle": [
+   10,
+   10
+  ],
+  "receptor_only|knn|H|spin_std": [
+   8,
+   3
+  ],
+  "receptor_only|knn|H|spin_enigma": [
+   9,
+   6
+  ],
+  "receptor_only|knn|H|spin_fslr": [
+   8,
+   3
+  ],
+  "receptor_only|knn|H|spin_aligned": [
+   8,
+   2
+  ],
+  "receptor_only|knn|H|spin_sym": [
+   8,
+   2
+  ],
+  "receptor_only|knn|R|shuffle": [
+   12,
+   12
+  ],
+  "receptor_only|knn|R|spin_std": [
+   11,
+   9
+  ],
+  "receptor_only|knn|R|spin_enigma": [
+   12,
+   12
+  ],
+  "receptor_only|knn|R|spin_fslr": [
+   8,
+   2
+  ],
+  "receptor_only|knn|R|spin_aligned": [
+   8,
+   2
+  ],
+  "receptor_only|knn|R|spin_sym": [
+   6,
+   2
+  ],
+  "receptor_only|knn|S|shuffle": [
+   11,
+   9
+  ],
+  "receptor_only|knn|S|spin_std": [
+   9,
+   3
+  ],
+  "receptor_only|knn|S|spin_enigma": [
+   9,
+   8
+  ],
+  "receptor_only|knn|S|spin_fslr": [
+   7,
+   3
+  ],
+  "receptor_only|knn|S|spin_aligned": [
+   6,
+   2
+  ],
+  "receptor_only|knn|S|spin_sym": [
+   6,
+   2
+  ],
+  "receptor_only|knn|SH|shuffle": [
+   7,
+   6
+  ],
+  "receptor_only|knn|SH|spin_std": [
+   5,
+   2
+  ],
+  "receptor_only|knn|SH|spin_enigma": [
+   5,
+   5
+  ],
+  "receptor_only|knn|SH|spin_fslr": [
+   5,
+   2
+  ],
+  "receptor_only|knn|SH|spin_aligned": [
+   4,
+   2
+  ],
+  "receptor_only|knn|SH|spin_sym": [
+   4,
+   2
+  ],
+  "receptor_only|knn|Sw|shuffle": [
+   12,
+   12
+  ],
+  "receptor_only|knn|Sw|spin_std": [
+   9,
+   8
+  ],
+  "receptor_only|knn|Sw|spin_enigma": [
+   11,
+   10
+  ],
+  "receptor_only|knn|Sw|spin_fslr": [
+   5,
+   4
+  ],
+  "receptor_only|knn|Sw|spin_aligned": [
+   5,
+   3
+  ],
+  "receptor_only|knn|Sw|spin_sym": [
+   5,
+   2
+  ],
+  "receptor_only|ridge|DD|shuffle": [
+   9,
+   7
+  ],
+  "receptor_only|ridge|DD|spin_std": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|DD|spin_enigma": [
+   2,
+   2
+  ],
+  "receptor_only|ridge|DD|spin_fslr": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|DD|spin_aligned": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|DD|spin_sym": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|DD-H|shuffle": [
+   6,
+   5
+  ],
+  "receptor_only|ridge|DD-H|spin_std": [
+   2,
+   0
+  ],
+  "receptor_only|ridge|DD-H|spin_enigma": [
+   2,
+   1
+  ],
+  "receptor_only|ridge|DD-H|spin_fslr": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|DD-H|spin_aligned": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|DD-H|spin_sym": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|H|shuffle": [
+   7,
+   6
+  ],
+  "receptor_only|ridge|H|spin_std": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|H|spin_enigma": [
+   4,
+   2
+  ],
+  "receptor_only|ridge|H|spin_fslr": [
+   3,
+   0
+  ],
+  "receptor_only|ridge|H|spin_aligned": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|H|spin_sym": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|R|shuffle": [
+   11,
+   11
+  ],
+  "receptor_only|ridge|R|spin_std": [
+   10,
+   4
+  ],
+  "receptor_only|ridge|R|spin_enigma": [
+   10,
+   10
+  ],
+  "receptor_only|ridge|R|spin_fslr": [
+   5,
+   1
+  ],
+  "receptor_only|ridge|R|spin_aligned": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|R|spin_sym": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|S|shuffle": [
+   9,
+   8
+  ],
+  "receptor_only|ridge|S|spin_std": [
+   2,
+   2
+  ],
+  "receptor_only|ridge|S|spin_enigma": [
+   4,
+   3
+  ],
+  "receptor_only|ridge|S|spin_fslr": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|S|spin_aligned": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|S|spin_sym": [
+   0,
+   0
+  ],
+  "receptor_only|ridge|SH|shuffle": [
+   3,
+   3
+  ],
+  "receptor_only|ridge|SH|spin_std": [
+   2,
+   1
+  ],
+  "receptor_only|ridge|SH|spin_enigma": [
+   2,
+   2
+  ],
+  "receptor_only|ridge|SH|spin_fslr": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|SH|spin_aligned": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|SH|spin_sym": [
+   1,
+   1
+  ],
+  "receptor_only|ridge|Sw|shuffle": [
+   12,
+   12
+  ],
+  "receptor_only|ridge|Sw|spin_std": [
+   8,
+   5
+  ],
+  "receptor_only|ridge|Sw|spin_enigma": [
+   11,
+   11
+  ],
+  "receptor_only|ridge|Sw|spin_fslr": [
+   5,
+   1
+  ],
+  "receptor_only|ridge|Sw|spin_aligned": [
+   5,
+   0
+  ],
+  "receptor_only|ridge|Sw|spin_sym": [
+   1,
+   1
+  ]
+ }
+}

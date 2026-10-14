@@ -1,0 +1,65 @@
+id,where,claim,status,detail
+C01,Results 1,annotations more symmetric than disorder maps,PASS,0.97 vs 0.91
+C02,Results 2,fs_LR and aligned spins retain most bilateral structure (>50% of observed median),PASS,"fsLR 0.88, aligned 0.88, observed 0.91"
+C02b,Results 2,conventional and ENIGMA spins lose bilateral structure (ENIGMA < conventional < fsLR),PASS,0.26 < 0.43 < 0.88
+C03,Results 3,"fs_LR, aligned and symmetric spins within 2.5-7.5% (lambda 77, rho 0.9)",PASS,"spin_fslr 6.7%, spin_aligned 6.3%, spin_sym 5.8%"
+C03b,Results 3 / Abstract,conventional and ENIGMA spins liberal (Bradley 'liberal'),PASS,"liberal, liberal"
+C04,Results 3,small residual excess also present without bilateral coupling (sym at rho 0 > 5%),PASS,6.0%
+C05,Results 3,conventional-spin excess scales with bilateral coupling (monotone in rho),PASS,"6.3, 8.0, 8.8, 9.0"
+C06,Results 3,"conventional-spin excess present at every correlation length (> symmetric spin, > 7.5%)",PASS,"25: 7.7, 50: 8.6, 77: 8.8, 100: 8.8"
+C07,Results 3,excess persists with simulated annotations,PASS,9.8%
+C08,Results 3,at rho = 0.9 all differences between symmetric spin and other nulls significant (Holm),PASS,max Holm P 1.5e-12
+C08b,Results 3,at rho = 0 conventional and aligned spins do not differ from symmetric spin (Holm >= 0.05),PASS,"Holm P 0.07, 0.07"
+C09,Results 3,"approximate correspondence: all spins more liberal, ordering unchanged",PASS,shuffle:34.9 spin_std:10.3 spin_enigma:13.9 spin_fslr:8.2 spin_aligned:8.2 spin_sym:7.8
+C09b,Discussion,approximate correspondence: symmetry-preserving spins 'somewhat liberal' (min > 5%),PASS,7.8–8.2%
+C10,Results 3,no FDR-significant real correlations with Hungarian/fsLR/aligned/symmetric spins,PASS,all zero
+C11,Results 3 / Discussion,observed count exceeds joint null (maps share signal),PASS,"41 vs q95 31, P = 0.009"
+C12,Discussion / Limitations,parcel spins slightly liberal even when bilateral structure preserved,PASS,5.8%
+C13,Abstract / cover letters,conventional (Hungarian) < ENIGMA spins < toolbox as implemented,PASS,8.8% < 12.0% < 18.7%
+C14,Results 4,"leaky schemes show spurious performance (R, Sw R2 > 0; DD test r > 0)",PASS,R/RIDGE:0.21 R/KNN:0.19 SW/RIDGE:0.26 SW/KNN:0.22 DD/RIDGE:0.28 DD/KNN:0.27
+C15,Results 4 / Discussion / cover letter,exact DD replication: DD optimistic vs DD-H,PASS,0.22 vs 0.06
+C16,Results 4,SH removes optimism (mean R2 <= 0); DD-H removes most (< DD/2),PASS,RIDGE: SH −0.17 DDH 0.10 DD 0.28 KNN: SH −0.27 DDH 0.11 DD 0.27
+C16b,Results 4,S shows little or no spurious performance (mean R2 <= 0.05),PASS,"−0.15, 0.02"
+C17,Results 4,grouping homologues reduces null R2 (HL of R - H > 0),PASS,"0.28, 0.28"
+C18,Results 4 / Discussion,Sw (homologues apart) has higher null R2 than R ('worst scheme'),PASS,RIDGE: Sw 0.26 R 0.21 KNN: Sw 0.22 R 0.19
+C19,Results 4 / Discussion,symmetry-preserving nulls remove most but not all excess under leaky schemes,PASS,mean excess sym-nulls 5.6 vs conventional 27.1; max 16.6
+C20,Results 4,residual excess highest for kNN under R and Sw,PASS,knn Sw 16.6; knn R 16.2; knn R 14.6; knn Sw 14.2
+C21,Abstract / Results 4 / Discussion,SH and DD-H with symmetry-preserving nulls near nominal (<= 7.5%),PASS,3.6–5.8%
+C22,Discussion / Results 4,"no SH or DD-H cell liberal with any spin, incl. conventional (Bradley)",PASS,conventional-spin range 2.8–7.6%
+C23,Results 4 / Discussion / Box 1,H without spatial blocking remains liberal with symmetry-preserving nulls (above 7.5% in at least five of six model x null combinations; kNN in all),PASS,"ridge 7.4–10.6%, kNN 11.0–14.6%; above 7.5% in five of the six"
+C23b,Results 4,"S: shuffle and conventional liberal (> 7.5%), symmetry-preserving nulls close to nominal (<= 7.5%)",PASS,"shuffle 36–59%, conventional 12–14%, sym-nulls 5.4–6.8%"
+C24,Results 4,shuffle and conventional-spin FPRs rise with homologue leakage (Spearman > 0.5),PASS,0.93 0.93 0.93 0.93
+C25,Results 4,same pattern at lambda = 50 mm,PASS,"lambda 50: leaky shuffle min 77.8; SH/DD-H sym-null 2.4–6.4%, classes {'acceptable': 11, 'borderline': 1}"
+C26,Results 4 / Limitations,same pattern with approximate hemispheric correspondence,PASS,"approx: leaky shuffle min 92.5, SH/DD-H sym-null max 9.0"
+C27,Discussion,DD places homologues of about half of its test regions in training (40-60%),PASS,48%
+C28,Results 5,nested tuning raises SH null R2 and the selected penalty,PASS,−1.11 -> −0.18; alpha 3.2 -> 3.2 × 10³
+C29,Discussion 1 / cover letter,"sensitivity cost depends on scheme: DD-H about as sensitive as R, SH less",PASS,"size-adjusted power: R 0.25, DD-H 0.27, SH 0.19"
+C30,Results 6,random CV optimistic relative to replicate R2,PASS,s=0.3: R skill 0.43 vs replicate -0.05; s=0.5: R skill 0.62 vs replicate 0.24
+C31,Results 6,SH wording versus replicate R2,PASS,close to it
+C32,Results 7,more maps significant under R + shuffle than SH + symmetric spin,PASS,ridge 12 vs 0; kNN 12 vs 1
+C33,Results 7,robustness: Holm range across protocols equals FDR range,PASS,Holm 0–12 vs FDR 0–12; max change 6
+C34,Results 7,random forests reproduce the pattern (R >= SH),PASS,"with the symmetric spin, 8 of 12 maps were significant under R, 1 under SH and 3 under SH with alternative settings"
+C35,Results 7 / Discussion,noise perturbation lowers R2 but the SH-versus-R contrast persists (SH < R in >= 90% of replicates),PASS,R2 0.31 vs 0.54; SD 0.11; SH 1 for both models (range 0–5); R 5 (ridge; range 1–8) and 6 (kNN; range 2–9); SH<R in 96% (ridge) and 99% (kNN)
+C36,Results 7,hyper-parameters: homologue-aware counts never above random folds for any setting,PASS,SH/DD-H 0–5 vs R 5–9
+C37,Results 7,receptor-only sentence,PASS,"among the nine combinations of homologue-aware schemes (H, SH, DD-H) and symmetry-preserving nulls, ridge significantly predicted MDD in 4, ASD in 1 and epilepsy in 1, and no other map (FDR q < 0.05)."
+C38,Results 7,real-data detail sentence,PASS,"Under the distance-dependent scheme, 5 (ridge) and 9 (kNN) maps were significant with the conventional spin and 5 and 3 with the symmetric spin; under its homologue-aware variant with the symmetric spin, 0 and 4."
+C39,Hypotheses table H1a,"null R2 higher under R than SH (both models, both lambdas, Holm P < 0.05)",PASS,lam50/ridge:0.29 lam50/knn:0.45 lam77/ridge:0.37 lam77/knn:0.44
+C40,Hypotheses table H1b,R-SH gap larger for kNN than ridge (both lambdas),PASS,lam50: kNN 0.45 ridge 0.29 lam77: kNN 0.44 ridge 0.37
+C41,Hypotheses table H2,homology > proximity component on both paths (R-H > H-SH; Sw-SH > R-Sw),PASS,see v3_stats_cv_wilcoxon.csv
+C42,Hypotheses table H4,conventional > symmetric under R; alignment removes most of the difference,PASS,lam50/ridge: std 33.0 ali 7.6 sym 6.8; lam50/knn: std 33.2 ali 10.4 sym 9.4; lam77/ridge: std 39.4 ali 11.0 sym 7.2; lam77/knn: std 39.4 ali 14.6 sym 13.6
+C43,Hypotheses table H3b,H3b not supported: symmetric spin > 7.5% in some scheme (lambda 50),PASS,max symmetric-spin FPR at lambda 50: 9.4% (knn R)
+C44,Results 4,McNemar: shuffle and conventional spins reject more than symmetric spin under every leaky scheme,PASS,all 32 contrasts significant in the stated direction
+C45,Results 4,Bradley counts in the text (acceptable + liberal + borderline) cover all cells,PASS,27 + 37 + 6 of 70 (conservative 0)
+C46,Results 6,"PPV with conventional spin lower under R than under SH (s = 0.3, 10% prevalence)",PASS,R 0.18 vs SH 0.45
+C47,Results 4 / Discussion,"approximate correspondence: R/Sw with symmetry-preserving nulls more liberal than exact, SH/DD-H close to nominal",PASS,approx leaky 16.0–28.5% vs exact 6.6–16.6%; approx SH/DD-H 4.0–9.0%
+C48,Results 3b,independent generative nulls: no bilateral structure (|median bilateral r| < 0.1),PASS,"BS -0.003, MSR -0.001"
+C49,Results 3b / Discussion / Abstract,independent generative nulls more liberal than mirrored spins on the same maps,PASS,"BS 0.138, MSR 0.163 vs conventional 0.087, ENIGMA 0.117"
+C50,Results 3b / Discussion,shared seed retains part of the bilateral structure and reduces the excess,PASS,"bil BS -0.00<0.77<0.89, MSR -0.00<0.49<0.91; FPR shared 0.056/0.087 vs indep 0.138/0.163"
+C51,Results 3b,whole-brain BrainSMASH retains less bilateral structure than the shared seed,PASS,whole 0.30 vs shared 0.77
+C52,Results 3b,symmetric generative nulls preserve bilateral structure (within 0.05 of observed) and are within 2 points of the symmetric spin,PASS,bil 0.889/0.910; FPR 0.044/0.054 vs symmetric spin 0.057
+C53,Results 3b,without bilateral coupling no generative variant is liberal (the excess is due to lost bilateral structure),PASS,2.5–5.3%
+C54,Results 3b,ENIGMA data: independent variants declare more correlations significant than symmetric variants,PASS,46 and 41 vs 11 and 3
+C55,Results 4 (tests),independent generative nulls liberal under R and Sw and more liberal than conventional spins,PASS,48.5–82.0% vs conventional 39.0–41.0%
+C56,Results 4 / Discussion,independent generative nulls remain liberal under DD-H (whole CI above 7.5%),PASS,11.5–13.5%
+C57,Results 4 / Discussion,symmetric generative nulls <= 7.5% under every scheme; BrainSMASH below the band (conservative),PASS,Moran 4.0–6.0%; BrainSMASH 0.0–1.5%
+C58,Results 3b / Discussion,"ENIGMA: symmetric generative nulls declare some correlations significant, symmetry-preserving spins none",PASS,symmetry-preserving spins max 0; symmetric generative 11/3

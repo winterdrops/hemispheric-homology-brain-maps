@@ -1,0 +1,30 @@
+{
+ "adhd_parity_adhdallages": {
+  "pearson_r": 0.3989197868384052,
+  "max_abs_diff": 0.16
+ },
+ "adhd_parity_adhdadult": {
+  "pearson_r": 1.0,
+  "max_abs_diff": 0.0
+ },
+ "alpha_H": {
+  "median_plain": 3.1622776601683795,
+  "median_nested": 562.341325190349,
+  "frac_nested_at_max": 0.376
+ },
+ "alpha_SH": {
+  "median_plain": 3.1622776601683795,
+  "median_nested": 3162.2776601683795,
+  "frac_nested_at_max": 0.48
+ },
+ "dropout_median": {
+  "('R', 'Connectivity')": 0.0547,
+  "('R', 'Cytoarchitecture')": -0.0067,
+  "('R', 'MEG')": -0.0023,
+  "('R', 'PET')": 0.1596,
+  "('SH', 'Connectivity')": -0.0166,
+  "('SH', 'Cytoarchitecture')": -0.0111,
+  "('SH', 'MEG')": -0.0568,
+  "('SH', 'PET')": 0.1512
+ }
+}

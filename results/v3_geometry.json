@@ -1,0 +1,110 @@
+{
+  "misalignment": [
+    {
+      "sphere": "fsaverage5",
+      "parcellation": "Desikan-Killiany (68)",
+      "n_pairs": 34,
+      "mean_deg": 13.653290155667847,
+      "median_deg": 14.53025482458839,
+      "max_deg": 18.33838482195161,
+      "kabsch_rotation_deg": 17.156542569590002,
+      "after_alignment_mean_deg": 1.673035681656899,
+      "vertex_frames_identical": true,
+      "vertex_frames_mirrored": false
+    },
+    {
+      "sphere": "fsaverage5",
+      "parcellation": "Glasser (360)",
+      "n_pairs": 180,
+      "mean_deg": 13.54111105089162,
+      "median_deg": 14.459678766329894,
+      "max_deg": 19.21585919942097,
+      "kabsch_rotation_deg": 17.315049771099627,
+      "after_alignment_mean_deg": 2.0012438816298617,
+      "vertex_frames_identical": true,
+      "vertex_frames_mirrored": false
+    },
+    {
+      "sphere": "fs_LR 32k (Conte69)",
+      "parcellation": "Desikan-Killiany (68)",
+      "n_pairs": 34,
+      "mean_deg": 1.5972933397694948,
+      "median_deg": 1.521119960233364,
+      "max_deg": 3.5691632202270345,
+      "kabsch_rotation_deg": 1.0811833438567124,
+      "after_alignment_mean_deg": 1.4201721165849313,
+      "vertex_frames_identical": false,
+      "vertex_frames_mirrored": true
+    },
+    {
+      "sphere": "fs_LR 32k (Conte69)",
+      "parcellation": "Glasser (360)",
+      "n_pairs": 180,
+      "mean_deg": 0.011195156467871245,
+      "median_deg": 0.0,
+      "max_deg": 0.4787278661430175,
+      "kabsch_rotation_deg": 0.006304767439377233,
+      "after_alignment_mean_deg": 0.015755665079999846,
+      "vertex_frames_identical": false,
+      "vertex_frames_mirrored": true
+    }
+  ],
+  "scheme_summary": [
+    {
+      "base": "DD",
+      "hom_mean": 0.47923875432525953,
+      "hom_min": 0.47923875432525953,
+      "hom_max": 0.47923875432525953,
+      "dist_mean": 103.00071910282885
+    },
+    {
+      "base": "DD-H",
+      "hom_mean": 0.0,
+      "hom_min": 0.0,
+      "hom_max": 0.0,
+      "dist_mean": 98.48910563299845
+    },
+    {
+      "base": "H",
+      "hom_mean": 0.0,
+      "hom_min": 0.0,
+      "hom_max": 0.0,
+      "dist_mean": 63.43252541156894
+    },
+    {
+      "base": "R",
+      "hom_mean": 0.9105882352941177,
+      "hom_min": 0.7941176470588235,
+      "hom_max": 1.0,
+      "dist_mean": 63.89186634354666
+    },
+    {
+      "base": "R_prereg2026",
+      "hom_mean": 0.7647058823529411,
+      "hom_min": 0.7647058823529411,
+      "hom_max": 0.7647058823529411,
+      "dist_mean": 61.780677043942205
+    },
+    {
+      "base": "S",
+      "hom_mean": 0.5882352941176471,
+      "hom_min": 0.5882352941176471,
+      "hom_max": 0.5882352941176471,
+      "dist_mean": 101.15529603296636
+    },
+    {
+      "base": "SH",
+      "hom_mean": 0.0,
+      "hom_min": 0.0,
+      "hom_max": 0.0,
+      "dist_mean": 95.70779531497648
+    },
+    {
+      "base": "Sw",
+      "hom_mean": 1.0,
+      "hom_min": 1.0,
+      "hom_max": 1.0,
+      "dist_mean": 98.80592833809753
+    }
+  ]
+}

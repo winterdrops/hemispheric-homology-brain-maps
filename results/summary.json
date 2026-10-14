@@ -1,0 +1,2073 @@
+{
+ "H1": {
+  "per_model": {
+   "knn": {
+    "mean_R": 0.08337155007612358,
+    "mean_H": -0.19871256623359082,
+    "mean_S": -0.03551580233790927,
+    "mean_SH": -0.3412400688029481,
+    "median_R": 0.09035387501448836,
+    "frac_R_positive": 0.683,
+    "n_maps": 1000,
+    "gap_R_minus_SH": [
+     0.4246116188790717,
+     0.40956118908640854,
+     0.44057457380338394
+    ],
+    "gap_R_minus_H": [
+     0.2820841163097144,
+     0.2748343631788609,
+     0.2892103200701305
+    ],
+    "gap_H_minus_SH": [
+     0.14252750256935728,
+     0.12667544158743005,
+     0.15774821385435742
+    ],
+    "gap_R_minus_S": [
+     0.11888735241403285,
+     0.11064689386416392,
+     0.12706684471591242
+    ]
+   },
+   "rf": {
+    "mean_R": NaN,
+    "mean_H": NaN,
+    "mean_S": NaN,
+    "mean_SH": NaN,
+    "median_R": NaN,
+    "frac_R_positive": NaN,
+    "n_maps": 0,
+    "gap_R_minus_SH": [
+     NaN,
+     NaN,
+     NaN
+    ],
+    "gap_R_minus_H": [
+     NaN,
+     NaN,
+     NaN
+    ],
+    "gap_H_minus_SH": [
+     NaN,
+     NaN,
+     NaN
+    ],
+    "gap_R_minus_S": [
+     NaN,
+     NaN,
+     NaN
+    ]
+   },
+   "ridge": {
+    "mean_R": 0.016293311839146292,
+    "mean_H": -0.6029158369755718,
+    "mean_S": -0.46957012729672976,
+    "mean_SH": -1.1481729678307775,
+    "median_R": 0.0339106665706914,
+    "frac_R_positive": 0.56,
+    "n_maps": 1000,
+    "gap_R_minus_SH": [
+     1.1644662796699239,
+     1.113515015805148,
+     1.2177753808432203
+    ],
+    "gap_R_minus_H": [
+     0.619209148814718,
+     0.5973845813601772,
+     0.641621211670214
+    ],
+    "gap_H_minus_SH": [
+     0.5452571308552056,
+     0.49471296556480265,
+     0.5963954684975449
+    ],
+    "gap_R_minus_S": [
+     0.4858634391358761,
+     0.44808388777884584,
+     0.5241649617669709
+    ]
+   }
+  },
+  "gap_comparisons": {
+   "knn_vs_ridge": [
+    -0.739854660790852,
+    -0.7921137395263073,
+    -0.6894793280683654
+   ]
+  }
+ },
+ "H2": {
+  "knn": {
+   "homology_minus_proximity": [
+    0.13955661374035713,
+    0.12090452113633568,
+    0.15823287596801397
+   ]
+  },
+  "rf": {
+   "homology_minus_proximity": [
+    NaN,
+    NaN,
+    NaN
+   ]
+  },
+  "ridge": {
+   "homology_minus_proximity": [
+    0.07395201795951244,
+    0.014362628802725359,
+    0.13147662164856877
+   ]
+  }
+ },
+ "H3_H4_B1_fpr": [
+  {
+   "model": "knn",
+   "scheme": "H",
+   "null": "shuffle",
+   "fpr": 0.222,
+   "lo": 0.1973,
+   "hi": 0.2488,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "H",
+   "null": "spin_std",
+   "fpr": 0.046,
+   "lo": 0.0347,
+   "hi": 0.0608,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "H",
+   "null": "spin_sym",
+   "fpr": 0.087,
+   "lo": 0.0711,
+   "hi": 0.1061,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.743,
+   "lo": 0.715,
+   "hi": 0.7691,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.27,
+   "lo": 0.2434,
+   "hi": 0.2984,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.089,
+   "lo": 0.0729,
+   "hi": 0.1083,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "S",
+   "null": "shuffle",
+   "fpr": 0.486,
+   "lo": 0.4551,
+   "hi": 0.517,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "S",
+   "null": "spin_std",
+   "fpr": 0.132,
+   "lo": 0.1124,
+   "hi": 0.1544,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "S",
+   "null": "spin_sym",
+   "fpr": 0.056,
+   "lo": 0.0434,
+   "hi": 0.072,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.104,
+   "lo": 0.0866,
+   "hi": 0.1245,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.035,
+   "lo": 0.0253,
+   "hi": 0.0483,
+   "n": 1000
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.043,
+   "lo": 0.0321,
+   "hi": 0.0574,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "H",
+   "null": "shuffle",
+   "fpr": 0.073,
+   "lo": 0.0585,
+   "hi": 0.0908,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "H",
+   "null": "spin_std",
+   "fpr": 0.021,
+   "lo": 0.0138,
+   "hi": 0.0319,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "H",
+   "null": "spin_sym",
+   "fpr": 0.064,
+   "lo": 0.0504,
+   "hi": 0.0809,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.57,
+   "lo": 0.5391,
+   "hi": 0.6004,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.242,
+   "lo": 0.2165,
+   "hi": 0.2695,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.071,
+   "lo": 0.0567,
+   "hi": 0.0886,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "S",
+   "null": "shuffle",
+   "fpr": 0.201,
+   "lo": 0.1773,
+   "hi": 0.227,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "S",
+   "null": "spin_std",
+   "fpr": 0.083,
+   "lo": 0.0675,
+   "hi": 0.1017,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "S",
+   "null": "spin_sym",
+   "fpr": 0.054,
+   "lo": 0.0416,
+   "hi": 0.0698,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.034,
+   "lo": 0.0244,
+   "hi": 0.0471,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.013,
+   "lo": 0.0076,
+   "hi": 0.0221,
+   "n": 1000
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.048,
+   "lo": 0.0364,
+   "hi": 0.0631,
+   "n": 1000
+  },
+  {
+   "model": "rf",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.9767,
+   "lo": 0.9526,
+   "hi": 0.9887,
+   "n": 300
+  },
+  {
+   "model": "rf",
+   "scheme": "H",
+   "null": "shuffle",
+   "fpr": NaN,
+   "lo": NaN,
+   "hi": NaN,
+   "n": 0
+  },
+  {
+   "model": "rf",
+   "scheme": "S",
+   "null": "shuffle",
+   "fpr": NaN,
+   "lo": NaN,
+   "hi": NaN,
+   "n": 0
+  },
+  {
+   "model": "rf",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.1133,
+   "lo": 0.0822,
+   "hi": 0.1542,
+   "n": 300
+  }
+ ],
+ "B2_fpr": [
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.2167,
+   "lo": 0.1738,
+   "hi": 0.2667,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.1167,
+   "lo": 0.0851,
+   "hi": 0.1579,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.11,
+   "lo": 0.0794,
+   "hi": 0.1505,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0933,
+   "lo": 0.0654,
+   "hi": 0.1316,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0333,
+   "lo": 0.0182,
+   "hi": 0.0603,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.03,
+   "lo": 0.0159,
+   "hi": 0.056,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.1933,
+   "lo": 0.1526,
+   "hi": 0.2418,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.0633,
+   "lo": 0.0409,
+   "hi": 0.0968,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.08,
+   "lo": 0.0543,
+   "hi": 0.1163,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.1267,
+   "lo": 0.0937,
+   "hi": 0.1691,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0533,
+   "lo": 0.0331,
+   "hi": 0.0849,
+   "n": 300
+  },
+  {
+   "rho": 0.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0467,
+   "lo": 0.028,
+   "hi": 0.0768,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.5433,
+   "lo": 0.4868,
+   "hi": 0.5988,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.1667,
+   "lo": 0.1288,
+   "hi": 0.213,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.09,
+   "lo": 0.0626,
+   "hi": 0.1278,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0767,
+   "lo": 0.0516,
+   "hi": 0.1124,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.03,
+   "lo": 0.0159,
+   "hi": 0.056,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.04,
+   "lo": 0.023,
+   "hi": 0.0686,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.4567,
+   "lo": 0.4012,
+   "hi": 0.5132,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.18,
+   "lo": 0.1407,
+   "hi": 0.2274,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.09,
+   "lo": 0.0626,
+   "hi": 0.1278,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0833,
+   "lo": 0.0571,
+   "hi": 0.1201,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0333,
+   "lo": 0.0182,
+   "hi": 0.0603,
+   "n": 300
+  },
+  {
+   "rho": 0.5,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0433,
+   "lo": 0.0255,
+   "hi": 0.0727,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.5333,
+   "lo": 0.4768,
+   "hi": 0.589,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.18,
+   "lo": 0.1407,
+   "hi": 0.2274,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.0567,
+   "lo": 0.0357,
+   "hi": 0.0889,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.05,
+   "lo": 0.0305,
+   "hi": 0.0808,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0367,
+   "lo": 0.0206,
+   "hi": 0.0645,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0433,
+   "lo": 0.0255,
+   "hi": 0.0727,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.37,
+   "lo": 0.3173,
+   "hi": 0.426,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.2033,
+   "lo": 0.1617,
+   "hi": 0.2525,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.05,
+   "lo": 0.0305,
+   "hi": 0.0808,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0133,
+   "lo": 0.0052,
+   "hi": 0.0338,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.01,
+   "lo": 0.0034,
+   "hi": 0.029,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 25.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.04,
+   "lo": 0.023,
+   "hi": 0.0686,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.75,
+   "lo": 0.698,
+   "hi": 0.7956,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.2267,
+   "lo": 0.1829,
+   "hi": 0.2773,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.08,
+   "lo": 0.0543,
+   "hi": 0.1163,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.11,
+   "lo": 0.0794,
+   "hi": 0.1505,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0433,
+   "lo": 0.0255,
+   "hi": 0.0727,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0467,
+   "lo": 0.028,
+   "hi": 0.0768,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.57,
+   "lo": 0.5134,
+   "hi": 0.6248,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.2533,
+   "lo": 0.2074,
+   "hi": 0.3055,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.0633,
+   "lo": 0.0409,
+   "hi": 0.0968,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0467,
+   "lo": 0.028,
+   "hi": 0.0768,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0033,
+   "lo": 0.0006,
+   "hi": 0.0186,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0433,
+   "lo": 0.0255,
+   "hi": 0.0727,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.9033,
+   "lo": 0.8646,
+   "hi": 0.9318,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.36,
+   "lo": 0.3078,
+   "hi": 0.4158,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.12,
+   "lo": 0.088,
+   "hi": 0.1617,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.2133,
+   "lo": 0.1708,
+   "hi": 0.2632,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.06,
+   "lo": 0.0383,
+   "hi": 0.0928,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0633,
+   "lo": 0.0409,
+   "hi": 0.0968,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.8,
+   "lo": 0.7511,
+   "hi": 0.8413,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.34,
+   "lo": 0.2887,
+   "hi": 0.3953,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.1067,
+   "lo": 0.0766,
+   "hi": 0.1467,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0867,
+   "lo": 0.0598,
+   "hi": 0.124,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.03,
+   "lo": 0.0159,
+   "hi": 0.056,
+   "n": 300
+  },
+  {
+   "rho": 0.9,
+   "lam": 100.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0533,
+   "lo": 0.0331,
+   "hi": 0.0849,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.7367,
+   "lo": 0.6841,
+   "hi": 0.7833,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.24,
+   "lo": 0.1952,
+   "hi": 0.2914,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.08,
+   "lo": 0.0543,
+   "hi": 0.1163,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.0933,
+   "lo": 0.0654,
+   "hi": 0.1316,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0333,
+   "lo": 0.0182,
+   "hi": 0.0603,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0433,
+   "lo": 0.0255,
+   "hi": 0.0727,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.6,
+   "lo": 0.5436,
+   "hi": 0.6538,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.2967,
+   "lo": 0.2478,
+   "hi": 0.3507,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.09,
+   "lo": 0.0626,
+   "hi": 0.1278,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.02,
+   "lo": 0.0092,
+   "hi": 0.0429,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.01,
+   "lo": 0.0034,
+   "hi": 0.029,
+   "n": 300
+  },
+  {
+   "rho": 1.0,
+   "lam": 50.0,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0367,
+   "lo": 0.0206,
+   "hi": 0.0645,
+   "n": 300
+  }
+ ],
+ "B3_fpr": [
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.7817,
+   "lo": 0.7469,
+   "hi": 0.8129,
+   "n": 600
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.1983,
+   "lo": 0.1684,
+   "hi": 0.2321,
+   "n": 600
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.0717,
+   "lo": 0.0536,
+   "hi": 0.0951,
+   "n": 600
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.2517,
+   "lo": 0.2186,
+   "hi": 0.2879,
+   "n": 600
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0617,
+   "lo": 0.0451,
+   "hi": 0.0838,
+   "n": 600
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.08,
+   "lo": 0.0609,
+   "hi": 0.1045,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "fpr": 0.6767,
+   "lo": 0.6382,
+   "hi": 0.7129,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "fpr": 0.1817,
+   "lo": 0.1529,
+   "hi": 0.2145,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "fpr": 0.0567,
+   "lo": 0.0408,
+   "hi": 0.0781,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "fpr": 0.1067,
+   "lo": 0.0844,
+   "hi": 0.1339,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "fpr": 0.0133,
+   "lo": 0.0068,
+   "hi": 0.0261,
+   "n": 600
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "fpr": 0.0433,
+   "lo": 0.0297,
+   "hi": 0.0627,
+   "n": 600
+  }
+ ],
+ "B3_r2": [
+  {
+   "model": "knn",
+   "scheme": "H",
+   "r2": -0.1188
+  },
+  {
+   "model": "knn",
+   "scheme": "R",
+   "r2": 0.134
+  },
+  {
+   "model": "knn",
+   "scheme": "S",
+   "r2": 0.0334
+  },
+  {
+   "model": "knn",
+   "scheme": "SH",
+   "r2": -0.1893
+  },
+  {
+   "model": "ridge",
+   "scheme": "H",
+   "r2": -0.4128
+  },
+  {
+   "model": "ridge",
+   "scheme": "R",
+   "r2": 0.1082
+  },
+  {
+   "model": "ridge",
+   "scheme": "S",
+   "r2": -0.2676
+  },
+  {
+   "model": "ridge",
+   "scheme": "SH",
+   "r2": -0.8467
+  }
+ ],
+ "B4_power": [
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.83,
+   "lo": 0.7834,
+   "hi": 0.8683,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.36,
+   "lo": 0.3078,
+   "hi": 0.4158,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.13,
+   "lo": 0.0966,
+   "hi": 0.1728,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.16,
+   "lo": 0.1229,
+   "hi": 0.2057,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.0567,
+   "lo": 0.0357,
+   "hi": 0.0889,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.06,
+   "lo": 0.0383,
+   "hi": 0.0928,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.72,
+   "lo": 0.6667,
+   "hi": 0.7678,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.34,
+   "lo": 0.2887,
+   "hi": 0.3953,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.1233,
+   "lo": 0.0908,
+   "hi": 0.1654,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.05,
+   "lo": 0.0305,
+   "hi": 0.0808,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.0167,
+   "lo": 0.0071,
+   "hi": 0.0384,
+   "n": 300
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.0667,
+   "lo": 0.0436,
+   "hi": 0.1007,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.94,
+   "lo": 0.9072,
+   "hi": 0.9617,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.4933,
+   "lo": 0.4372,
+   "hi": 0.5496,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.2667,
+   "lo": 0.2198,
+   "hi": 0.3194,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.3567,
+   "lo": 0.3046,
+   "hi": 0.4124,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.14,
+   "lo": 0.1053,
+   "hi": 0.1838,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.1667,
+   "lo": 0.1288,
+   "hi": 0.213,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.8633,
+   "lo": 0.8198,
+   "hi": 0.8976,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.5633,
+   "lo": 0.5068,
+   "hi": 0.6183,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.3,
+   "lo": 0.2509,
+   "hi": 0.3541,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.1667,
+   "lo": 0.1288,
+   "hi": 0.213,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.0933,
+   "lo": 0.0654,
+   "hi": 0.1316,
+   "n": 300
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.1767,
+   "lo": 0.1377,
+   "hi": 0.2238,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.9833,
+   "lo": 0.9616,
+   "hi": 0.9929,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.7667,
+   "lo": 0.7156,
+   "hi": 0.811,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.53,
+   "lo": 0.4735,
+   "hi": 0.5857,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.64,
+   "lo": 0.5842,
+   "hi": 0.6922,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.2867,
+   "lo": 0.2384,
+   "hi": 0.3403,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.3167,
+   "lo": 0.2666,
+   "hi": 0.3713,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "shuffle",
+   "power": 0.9767,
+   "lo": 0.9526,
+   "hi": 0.9887,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_std",
+   "power": 0.7967,
+   "lo": 0.7475,
+   "hi": 0.8383,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "R",
+   "null": "spin_sym",
+   "power": 0.62,
+   "lo": 0.5639,
+   "hi": 0.6731,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "shuffle",
+   "power": 0.41,
+   "lo": 0.3558,
+   "hi": 0.4665,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_std",
+   "power": 0.2167,
+   "lo": 0.1738,
+   "hi": 0.2667,
+   "n": 300
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "SH",
+   "null": "spin_sym",
+   "power": 0.3733,
+   "lo": 0.3205,
+   "hi": 0.4293,
+   "n": 300
+  }
+ ],
+ "B4_r2": [
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "H",
+   "r2_mean": -0.1164,
+   "r2_median": -0.0907,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "R",
+   "r2_mean": 0.1423,
+   "r2_median": 0.1484,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "S",
+   "r2_mean": 0.0192,
+   "r2_median": 0.0221,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "knn",
+   "scheme": "SH",
+   "r2_mean": -0.2742,
+   "r2_median": -0.2637,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "H",
+   "r2_mean": -0.469,
+   "r2_median": -0.3968,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "R",
+   "r2_mean": 0.1141,
+   "r2_median": 0.1237,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "S",
+   "r2_mean": -0.3295,
+   "r2_median": -0.185,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.1,
+   "model": "ridge",
+   "scheme": "SH",
+   "r2_mean": -0.9921,
+   "r2_median": -0.8406,
+   "realised": 0.1265
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "H",
+   "r2_mean": 0.0228,
+   "r2_median": 0.0355,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "R",
+   "r2_mean": 0.2475,
+   "r2_median": 0.2476,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "S",
+   "r2_mean": 0.1353,
+   "r2_median": 0.1444,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "knn",
+   "scheme": "SH",
+   "r2_mean": -0.1397,
+   "r2_median": -0.115,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "H",
+   "r2_mean": -0.2047,
+   "r2_median": -0.1736,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "R",
+   "r2_mean": 0.2641,
+   "r2_median": 0.2784,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "S",
+   "r2_mean": -0.1359,
+   "r2_median": 0.0064,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.3,
+   "model": "ridge",
+   "scheme": "SH",
+   "r2_mean": -0.692,
+   "r2_median": -0.5168,
+   "realised": 0.3088
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "H",
+   "r2_mean": 0.2037,
+   "r2_median": 0.2221,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "R",
+   "r2_mean": 0.3845,
+   "r2_median": 0.4091,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "S",
+   "r2_mean": 0.2663,
+   "r2_median": 0.2799,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "knn",
+   "scheme": "SH",
+   "r2_mean": 0.0492,
+   "r2_median": 0.0652,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "H",
+   "r2_mean": 0.1085,
+   "r2_median": 0.1634,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "R",
+   "r2_mean": 0.4663,
+   "r2_median": 0.4918,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "S",
+   "r2_mean": 0.1576,
+   "r2_median": 0.2409,
+   "realised": 0.503
+  },
+  {
+   "s": 0.5,
+   "model": "ridge",
+   "scheme": "SH",
+   "r2_mean": -0.2128,
+   "r2_median": -0.1236,
+   "realised": 0.503
+  }
+ ],
+ "H5_real_counts": [
+  {
+   "set": "multimodal",
+   "model": "knn",
+   "scheme": "H",
+   "mean_r2": 0.2808,
+   "n_sig_shuffle": 11.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CD,CHR",
+   "n_sig_spin_std": 8.0,
+   "sig_spin_std": "22q11.2DS,ASD,Epilepsy,MDD,SCZ,BD,AN,CHR",
+   "n_sig_spin_sym": 8.0,
+   "sig_spin_sym": "22q11.2DS,ASD,Epilepsy,MDD,SCZ,BD,AN,CHR"
+  },
+  {
+   "set": "multimodal",
+   "model": "knn",
+   "scheme": "R",
+   "mean_r2": 0.4273,
+   "n_sig_shuffle": 12.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",
+   "n_sig_spin_std": 11.0,
+   "sig_spin_std": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_sym": 7.0,
+   "sig_spin_sym": "22q11.2DS,Epilepsy,MDD,BD,PD,AN,CHR"
+  },
+  {
+   "set": "multimodal",
+   "model": "knn",
+   "scheme": "S",
+   "mean_r2": 0.3046,
+   "n_sig_shuffle": 12.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",
+   "n_sig_spin_std": 10.0,
+   "sig_spin_std": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN",
+   "n_sig_spin_sym": 4.0,
+   "sig_spin_sym": "Epilepsy,OCD,BD,AN"
+  },
+  {
+   "set": "multimodal",
+   "model": "knn",
+   "scheme": "SH",
+   "mean_r2": 0.0876,
+   "n_sig_shuffle": 9.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN",
+   "n_sig_spin_std": 2.0,
+   "sig_spin_std": "Epilepsy,BD",
+   "n_sig_spin_sym": 0.0,
+   "sig_spin_sym": ""
+  },
+  {
+   "set": "multimodal",
+   "model": "ridge",
+   "scheme": "H",
+   "mean_r2": -0.0626,
+   "n_sig_shuffle": 8.0,
+   "sig_shuffle": "ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_std": 4.0,
+   "sig_spin_std": "MDD,SCZ,PD,AN",
+   "n_sig_spin_sym": 4.0,
+   "sig_spin_sym": "MDD,SCZ,PD,AN"
+  },
+  {
+   "set": "multimodal",
+   "model": "ridge",
+   "scheme": "R",
+   "mean_r2": 0.3678,
+   "n_sig_shuffle": 10.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_std": 8.0,
+   "sig_spin_std": "22q11.2DS,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_sym": 6.0,
+   "sig_spin_sym": "MDD,SCZ,BD,PD,AN,CHR"
+  },
+  {
+   "set": "multimodal",
+   "model": "ridge",
+   "scheme": "S",
+   "mean_r2": 0.1612,
+   "n_sig_shuffle": 8.0,
+   "sig_shuffle": "22q11.2DS,ADHD,Epilepsy,MDD,SCZ,BD,PD,AN",
+   "n_sig_spin_std": 6.0,
+   "sig_spin_std": "22q11.2DS,Epilepsy,MDD,SCZ,PD,AN",
+   "n_sig_spin_sym": 4.0,
+   "sig_spin_sym": "Epilepsy,MDD,SCZ,AN"
+  },
+  {
+   "set": "multimodal",
+   "model": "ridge",
+   "scheme": "SH",
+   "mean_r2": -0.2711,
+   "n_sig_shuffle": 4.0,
+   "sig_shuffle": "MDD,SCZ,PD,AN",
+   "n_sig_spin_std": 4.0,
+   "sig_spin_std": "MDD,SCZ,PD,AN",
+   "n_sig_spin_sym": 4.0,
+   "sig_spin_sym": "MDD,SCZ,PD,AN"
+  },
+  {
+   "set": "receptor_only",
+   "model": "ridge",
+   "scheme": "H",
+   "mean_r2": -0.0809,
+   "n_sig_shuffle": 6.0,
+   "sig_shuffle": "ASD,Epilepsy,MDD,PD,AN,CHR",
+   "n_sig_spin_std": 0.0,
+   "sig_spin_std": "",
+   "n_sig_spin_sym": 0.0,
+   "sig_spin_sym": ""
+  },
+  {
+   "set": "receptor_only",
+   "model": "ridge",
+   "scheme": "R",
+   "mean_r2": 0.2282,
+   "n_sig_shuffle": 10.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_std": 7.0,
+   "sig_spin_std": "ADHD,ASD,Epilepsy,MDD,SCZ,BD,AN",
+   "n_sig_spin_sym": 0.0,
+   "sig_spin_sym": ""
+  },
+  {
+   "set": "receptor_only",
+   "model": "ridge",
+   "scheme": "S",
+   "mean_r2": 0.1107,
+   "n_sig_shuffle": 9.0,
+   "sig_shuffle": "ADHD,ASD,Epilepsy,MDD,SCZ,BD,PD,AN,CHR",
+   "n_sig_spin_std": 2.0,
+   "sig_spin_std": "Epilepsy,MDD",
+   "n_sig_spin_sym": 2.0,
+   "sig_spin_sym": "Epilepsy,MDD"
+  },
+  {
+   "set": "receptor_only",
+   "model": "ridge",
+   "scheme": "SH",
+   "mean_r2": -0.2921,
+   "n_sig_shuffle": 4.0,
+   "sig_shuffle": "ASD,Epilepsy,MDD,AN",
+   "n_sig_spin_std": 1.0,
+   "sig_spin_std": "MDD",
+   "n_sig_spin_sym": 1.0,
+   "sig_spin_sym": "MDD"
+  },
+  {
+   "set": "multimodal",
+   "model": "rf",
+   "scheme": "R",
+   "mean_r2": 0.5061,
+   "n_sig_shuffle": 12.0,
+   "sig_shuffle": "22q11.2DS,ADHD,ASD,Epilepsy,MDD,OCD,SCZ,BD,PD,AN,CD,CHR",
+   "n_sig_spin_std": NaN,
+   "sig_spin_std": NaN,
+   "n_sig_spin_sym": 7.0,
+   "sig_spin_sym": "MDD,OCD,SCZ,BD,PD,AN,CHR"
+  },
+  {
+   "set": "multimodal",
+   "model": "rf",
+   "scheme": "H",
+   "mean_r2": 0.2886,
+   "n_sig_shuffle": NaN,
+   "sig_shuffle": NaN,
+   "n_sig_spin_std": NaN,
+   "sig_spin_std": NaN,
+   "n_sig_spin_sym": NaN,
+   "sig_spin_sym": NaN
+  },
+  {
+   "set": "multimodal",
+   "model": "rf",
+   "scheme": "S",
+   "mean_r2": 0.3497,
+   "n_sig_shuffle": NaN,
+   "sig_shuffle": NaN,
+   "n_sig_spin_std": NaN,
+   "sig_spin_std": NaN,
+   "n_sig_spin_sym": NaN,
+   "sig_spin_sym": NaN
+  },
+  {
+   "set": "multimodal",
+   "model": "rf",
+   "scheme": "SH",
+   "mean_r2": 0.1412,
+   "n_sig_shuffle": NaN,
+   "sig_shuffle": NaN,
+   "n_sig_spin_std": NaN,
+   "sig_spin_std": NaN,
+   "n_sig_spin_sym": 0.0,
+   "sig_spin_sym": ""
+  }
+ ]
+}
