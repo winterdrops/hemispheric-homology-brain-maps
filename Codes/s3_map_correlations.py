@@ -1,6 +1,6 @@
 """
-s3_map_correlations.py - step 3: tests of map-to-map correlations (no machine learning; Fig. 2, Table 2A,
-Supplementary Tables 2a-2f).
+s3_map_correlations.py - step 3: tests of map-to-map correlations (no machine learning; Figs 2 and 5a,
+Supplementary Fig. 6, Supplementary Tables 2a, 4a-b and 8a-c).
 
   sim        simulated null maps (Gaussian random fields independent of the annotations; lambda and rho varied)
              correlated with the 28 annotations; two-sided P values for shuffle and five spins (1,000 draws); the

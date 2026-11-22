@@ -1,12 +1,13 @@
-# Ignoring hemispheric homology inflates false positives in spatial null models and cross-validation of brain maps
+# Ignoring hemispheric homology miscalibrates parcel-level null models and cross-validation of brain maps: a simulation study and reanalysis
 
 Code, data and results of the study by Yavuz Selim İşler (Department of Electrical and Electronics Engineering,
 Faculty of Engineering and Natural Sciences, Osmaniye Korkut Ata University, Osmaniye, Türkiye).
 
 A cortical region and its contralateral homologue are often near-duplicates. This repository shows how ignoring this
-hemispheric homology makes spin tests of map-to-map correlations and cross-validated prediction across regions report
-false positives, and evaluates remedies (symmetry-preserving nulls, homologue-aware spatial blocks). Every number,
-figure and table of the article and its Supplementary Information can be reproduced from the public raw data.
+hemispheric homology makes spin tests of map-to-map correlations, cross-validated prediction across regions and
+in-sample regressions tested against null maps report false positives, and evaluates remedies (null maps that keep
+bilateral structure, homologue-aware spatial blocks). Every number, figure and table of the article and its Additional
+files can be reproduced from the public raw data.
 
 ## Contents
 
@@ -17,7 +18,7 @@ figure and table of the article and its Supplementary Information can be reprodu
 | `data/raw/` | unmodified public inputs, their provenance, licences and checksums |
 | `data/derived/` | analysis-ready matrices written by step 1 |
 | `results/` | all result tables (CSV, JSON, NPZ) |
-| `figures/` | Figs 1-5, Supplementary Figs 1-13, Source Data and Supplementary Data 1 (Supplementary Tables 1-12) |
+| `figures/` | Figs 1-5, Supplementary Figs 1-14, Source Data and Supplementary Data 1 (Supplementary Tables 1-16); `figures/extra/`: two figures kept in the archive only |
 
 ## Reproducing the results
 

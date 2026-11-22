@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this code or data, please cite the article and this archive."
-title: "Ignoring hemispheric homology inflates false positives in spatial null models and cross-validation of brain maps: code, data and results"
+title: "Ignoring hemispheric homology miscalibrates parcel-level null models and cross-validation of brain maps: code, data and results"
 authors:
   - family-names: "İşler"
     given-names: "Yavuz Selim"
     affiliation: "Department of Electrical and Electronics Engineering, Faculty of Engineering and Natural Sciences, Osmaniye Korkut Ata University, Osmaniye, Türkiye"
     email: "yavuzselimisler@osmaniye.edu.tr"
-version: "1.0.1"
+version: "1.1.0"
 license: MIT
 keywords:
   - brain maps
@@ -15,7 +15,7 @@ keywords:
   - cross-validation
   - data leakage
   - hemispheric homology
-date-released: "2026-10-14"
+date-released: "2026-11-22"
 repository-code: "https://github.com/winterdrops/hemispheric-homology-brain-maps"
 # Concept DOI: always resolves to the most recent version of this archive.
 # Each release also has its own version DOI, shown on the Zenodo record.

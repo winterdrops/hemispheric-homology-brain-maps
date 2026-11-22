@@ -1,6 +1,6 @@
 """
 s2_prespecified.py - step 2: the analyses of the initial (pre-specified) plan and the first revision
-(Supplementary Note 3, Supplementary Figs 3 and 8-11, Fig. 3f, Supplementary Table 9).
+(Supplementary Note 3, Supplementary Figs 2 and 11-14, Supplementary Table 6).
 
 Pre-specified (analysis plan of 28 September 2026)
   B1          null simulation: 1,000 maps (lambda = 50 mm, rho = 0.9), schemes R, H, S, SH, three nulls (500 draws)
@@ -13,7 +13,7 @@ Pre-specified (analysis plan of 28 September 2026)
   rf_sim NJ N         random forests on the first N B1 maps (schemes R and SH) and a common shuffle null of N draws
   summarize   hypothesis tests H1-H5 and summary tables
   baseline    R2_cv of the no-skill training-mean predictor under each scheme (exploratory)
-  partition   B1 false-positive rates of scheme R under six random partitions (exploratory; Supplementary Fig. 3)
+  partition   B1 false-positive rates of scheme R under six random partitions (exploratory; archive-only figure figures/extra/Extra_partition_dose_response)
 First revision (disclosed deviations; Supplementary Note 1)
   rev_real    ENIGMA maps with inner tuning that mirrors the outer scheme, 10 random partitions for R and H, scheme Sw,
               the aligned spin, skill and Pearson r (1,000 draws)

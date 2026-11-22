@@ -1,7 +1,8 @@
-# Code for "Ignoring hemispheric homology inflates false positives in spatial null models and cross-validation of brain maps"
+# Code for "Ignoring hemispheric homology miscalibrates parcel-level null models and cross-validation of brain maps: a
+simulation study and reanalysis"
 
-This folder reproduces every number, figure and table of the article and its Supplementary Information from public raw
-data. All random seeds are fixed, so a rerun gives the archived results (within floating-point tolerance).
+This folder reproduces every number, figure and table of the article and its Additional files (Supplementary
+Information, Supplementary Data 1) from public raw data. All random seeds are fixed, so a rerun gives the archived results (within floating-point tolerance).
 
 ## Layout
 
@@ -15,7 +16,8 @@ data. All random seeds are fixed, so a rerun gives the archived results (within 
 │   ├── s4_cv_simulations.py     step 4  simulations of cross-validated prediction (null, positive control, ...)
 │   ├── s5_enigma.py             step 5  reanalysis of the 12 ENIGMA maps (main, sensitivity, random forests)
 │   ├── s6_statistics.py         step 6  formal tests and summary tables
-│   ├── s7_figures.py            step 7  all figures, the Source Data workbook and Supplementary Data 1 (tables)
+│   ├── s7_figures.py            step 7  all figures, the Source Data workbook and Supplementary Data 1 (Supplementary
+│   │                                    Tables 1-16)
 │   ├── run_all.py               runs steps 1-7 in order (parallel where possible)
 │   ├── check.py                 unit tests and a quick reproducibility check against the archived results
 │   ├── compare_results.py       compares regenerated result files with an archived copy
@@ -27,7 +29,8 @@ data. All random seeds are fixed, so a rerun gives the archived results (within 
 ├── data/raw/                    unmodified public inputs (PROVENANCE.md, SHA256SUMS.txt)
 ├── data/derived/                analysis-ready matrices (written by step 1)
 ├── results/                     result tables (CSV/JSON/NPZ)
-├── figures/                     Fig1-Fig5, figures/supp/SuppFig1-11, Source_Data.xlsx, Supplementary_Data_1.xlsx
+├── figures/                     Fig1-Fig5, figures/supp/SuppFig1-14, Source_Data.xlsx, Supplementary_Data_1.xlsx;
+│                                figures/extra/: two figures kept in the archive only
 └── logs/                        one log per step, run_all_progress.log, run_all_timing.csv
 ```
 
@@ -60,29 +63,35 @@ they stopped when `HEMIHOM_RESUME=1`.
 
 ## Where each result comes from
 
+Numbering of the article (BMC Neuroscience version). Supplementary Tables 1-16 are the sheets of
+`figures/Supplementary_Data_1.xlsx`; Supplementary Figs 1-14 are `figures/supp/SuppFig<N>_*`.
+
 | Item | Computed by (step) | Statistics (s6) / result file | Drawn by |
 |---|---|---|---|
-| Fig. 1a, c | s1 `geometry` | `v3_bilateral_null.csv` | s7 `fig1` |
-| Fig. 1b, Suppl. Table 1 | s1 `geometry` | `v3_misalignment.csv` | s7 `fig1` |
-| Fig. 1e, homologue leakage | s1 `geometry` | `v3_scheme_structure.csv` | s7 `fig1` |
-| Fig. 2a-c, Table 2A, Suppl. Tables 2a-b | s3 `sim` | `main`: `v3_stats_bivariate_fpr.csv`, `v3_stats_bivariate_contrasts.csv` | s7 `fig2` |
-| Fig. 2d, Suppl. Table 2d | s3 `real` | `v3_bivariate_real_counts.csv`, `v3_bivariate_joint_null.csv` | s7 `fig2` |
-| Generative nulls (Fig. 2, Table 2, Suppl. Tables 2e-f, 4c) | s3 `gen_*`, s4 `gen_cv` | `generative`: `v3_stats_gen_*.csv`, `v3_gen_real_counts.csv` | s7 `fig2` |
-| Suppl. Table 2c | s3 `approx` | `v3_approx_coupling_biv.csv` | |
-| Fig. 3a-e, Table 2B, Suppl. Tables 3a, 3c, 3d, 4a, 5a, 5b | s4 `cv` | `main`: `v3_stats_cv_*.csv` | s7 `fig3` |
-| Fig. 3f | s2 `B1`, `rev_sim` | `sim_B1_linear.csv`, `rev_sim_B1.csv` | s7 `fig3` |
-| Suppl. Table 3b, 3f | s4 `dd_ols` | `v3_stats_dd_ols.csv`, `v3_dd_ols_real.csv` | |
-| Suppl. Table 4b | s4 `approx` | `main`: `v3_stats_approx_coupling_cv.csv` | |
-| Fig. 4, Suppl. Tables 3e, 6a-c, Suppl. Fig. 5 | s4 `power`, `estimand` | `main`: `v3_stats_auc*.csv`, `v3_stats_confusion.csv`, `v3_stats_estimation.csv`, `v3_estimand.csv` | s7 `fig4`, `supp` |
-| Fig. 5, Suppl. Tables 7a-c | s5 `cv` | `main`: `v3_stats_real_counts.csv`; `v3_real_cv.csv`, `v3_real_metrics.csv` | s7 `fig5` |
-| Suppl. Tables 8a-c, Suppl. Figs 6-7 | s5 `hyper`, `noise`, `rf`, `rf_merge` | `v3_sens_hyper.csv`, `v3_sens_alpha.json`, `v3_sens_measurement.csv`, `v3_rf_main.csv`, `v3_rf_alt.csv` | s7 `supp` |
-| Table 1, Suppl. Table 10, Suppl. Note 4 | s1 `prepare`, `se` | `descriptives_spatial.csv`, `v3_target_se_sources.json` | |
+| Fig. 1a, c (bilateral correlation of maps and null maps) | s1 `geometry` | `v3_bilateral_null.csv` | s7 `fig1` |
+| Fig. 1b, Suppl. Table 7 (sphere frames) | s1 `geometry` | `v3_misalignment.csv` | s7 `fig1` |
+| Fig. 2a-b, Suppl. Tables 8a-b, Suppl. Fig. 6 | s3 `sim` | `main`: `v3_stats_bivariate_fpr.csv`, `v3_stats_bivariate_contrasts.csv` | s7 `fig2`, `supp` |
+| Generative null models (Fig. 2a, Fig. 5a, Suppl. Tables 4a-c) | s3 `gen_*`, s4 `gen_cv` | `generative`: `v3_stats_gen_*.csv`, `v3_gen_real_counts.csv` | s7 `fig2`, `fig5` |
+| Suppl. Table 2a (approximate correspondence, correlations) | s3 `approx` | `v3_approx_coupling_biv.csv` | |
+| Suppl. Table 2b (approximate correspondence, cross-validation) | s4 `approx` | `main`: `v3_stats_approx_coupling_cv.csv` | |
+| Fig. 3a, homologue leakage in Table 3 | s1 `geometry` | `v3_scheme_structure.csv` | s7 `fig3` |
+| Fig. 3b-c, Fig. 4a-c, Suppl. Tables 9a-c, 10a-c, Suppl. Fig. 7 | s4 `cv` | `main`: `v3_stats_cv_*.csv` | s7 `fig3`, `fig4`, `supp` |
+| Suppl. Fig. 2 (inner folds) | s2 `B1`, `rev_sim` | `sim_B1_linear.csv`, `rev_sim_B1.csv` | s7 `supp` |
+| Suppl. Tables 3a-b (published distance-dependent analysis) | s4 `dd_ols` | `main`: `v3_stats_dd_ols.csv`; `v3_dd_ols_real.csv` | |
+| Fig. 4d, Suppl. Figs 3 and 10, Suppl. Tables 11a-d | s4 `power`, `estimand` | `main`: `v3_stats_auc*.csv`, `v3_stats_roc_curves.csv`, `v3_stats_confusion.csv`, `v3_stats_estimation.csv`, `v3_estimand.csv` | s7 `fig4`, `supp` |
+| Table 4, Suppl. Tables 5a-c (in-sample test) | s4 `insample` | `insample`: `v3_stats_insample_*.csv`; `v3_insample_*.csv` | s7 `supp_data` |
+| Fig. 5a, Suppl. Table 8c | s3 `real` | `v3_bivariate_real_counts.csv`, `v3_bivariate_joint_null.csv` | s7 `fig5` |
+| Fig. 5b-d, Suppl. Tables 12a-c, Suppl. Fig. 4a | s5 `cv` | `main`: `v3_stats_real_counts.csv`; `v3_real_cv.csv`, `v3_real_metrics.csv` | s7 `fig5`, `supp` |
+| Suppl. Figs 4b and 5, Suppl. Tables 13a-c | s5 `hyper`, `noise`, `rf`, `rf_merge` | `v3_sens_hyper.csv`, `v3_sens_alpha.json`, `v3_sens_measurement.csv`, `v3_rf_main.csv`, `v3_rf_alt.csv` | s7 `supp` |
+| Suppl. Table 1 (the 12 disorder maps) | s1 `prepare` | `table1_targets.csv` | s7 `supp_data` |
+| Suppl. Table 14, Suppl. Note 4 (standard errors) | s1 `se` | `v3_target_se_sources.json`, `v3_target_se.csv` | |
 | Suppl. Fig. 1 (correlation length) | s1 `lambda` | `rev_lambda_calibration.csv`, `rev_lambda_summary.csv` | s7 `supp` |
-| Suppl. Figs 3, 8-11, Suppl. Note 3, Suppl. Table 9 | s2 (all steps) | `table_*.csv`, `summary.json`, `rev_*.csv`, `rev_summary.json`, `exploratory_*.csv` | s7 `supp`, `prespecified` |
+| Suppl. Figs 11-14, Suppl. Note 3, Suppl. Table 6 (pre-specified analyses and verdicts) | s2 (all steps) | `table_*.csv`, `summary.json`, `rev_*.csv`, `rev_summary.json`, `exploratory_*.csv` | s7 `prespecified`, `supp_data` |
 | Effective number of target maps | s1 `meff` | `v3_meff.json` | |
-| One value per homologous pair (34 regions): Suppl. Fig. 12, Suppl. Tables 11a-e | s3 `half`, s4 `half_cv`, s5 `half` | `extensions`: `v3_stats_half_*.csv` | s7 `supp` |
-| Glasser parcellation (360 regions): Suppl. Fig. 13, Suppl. Tables 12a-b | s1 `glasser`, s3 `glasser`, s4 `glasser_cv` | `extensions`: `v3_stats_glasser_*.csv` | s7 `supp` |
-| Suppl. Tables 1-10 (Supplementary Data 1, one sheet per table) | the steps above | the result files above | s7 `supp_data` |
+| One value per homologous pair (34 regions): Suppl. Fig. 9, Suppl. Tables 15a-e | s3 `half`, s4 `half_cv`, s5 `half` | `extensions`: `v3_stats_half_*.csv` | s7 `supp` |
+| Glasser parcellation (360 regions): Suppl. Fig. 8, Suppl. Tables 16a-b | s1 `glasser`, s3 `glasser`, s4 `glasser_cv` | `extensions`: `v3_stats_glasser_*.csv` | s7 `supp` |
+| Supplementary Data 1 (Suppl. Tables 1-16, one sheet per table) | the steps above | the result files above | s7 `supp_data` |
+| Archive-only figures (`figures/extra/`) | s3 `sim`; s2 `partition` | `v3_bivariate_sim.csv.gz`; `exploratory_partition_robustness.csv` | s7 `supp` |
 
 ## Licences
 

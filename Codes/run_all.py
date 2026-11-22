@@ -62,6 +62,7 @@ STAGES = {
         [("s4_cv_simulations.py estimand", "s4_estimand.log")],
         [("s4_cv_simulations.py cv lam77 0 500", "s4_cv_lam77.log"),
          ("s4_cv_simulations.py cv lam50 0 500", "s4_cv_lam50.log")],
+        [("s4_cv_simulations.py insample", "s4_insample.log")],
         "POOL",
         [("s5_enigma.py rf_merge", "s5_rf_merge.log")],
         [("s6_statistics.py", "s6_statistics.log")],

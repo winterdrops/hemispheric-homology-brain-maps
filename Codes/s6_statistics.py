@@ -2,22 +2,24 @@
 s6_statistics.py - step 6: statistical summaries and formal tests (reads result files; no model fitting).
 
 main        A. map-to-map correlations: false-positive rates with map-level bootstrap CIs, t-tests against 5%, Holm,
-               classification against the 2.5-7.5% band, paired differences between nulls (Supplementary Tables 2a-b)
+               classification against the 2.5-7.5% band, paired differences between nulls (Supplementary Tables 8a-b)
             B. cross-validation null simulation: Wilson CIs, Monte Carlo SEs, exact binomial tests (Holm), Cochran's Q,
                exact McNemar contrasts, null optimism with Wilcoxon / Hodges-Lehmann and Friedman + Nemenyi
-               (Supplementary Tables 3a, 3c, 3d, 4a, 5a, 5b)
+               (Supplementary Tables 9a-c, 10a-c)
             C. positive control: ROC curves and AUC (score = z relative to the null) with stratified bootstrap CIs,
                paired bootstrap AUC differences, confusion matrices at the nominal threshold (P < 0.05) and at the
                size-adjusted threshold (z above its 95th percentile among the signal-free maps: exactly 5% false
-               positives), PPV/NPV, MCC, estimation (Supplementary Tables 6a-c)
-            D. ENIGMA maps: significant-map counts (BH and Holm) and Wilcoxon tests (Supplementary Table 7c)
-            E. least-squares distance-dependent analysis and approximate correspondence (Supplementary Tables 3b, 4b)
+               positives), PPV/NPV, MCC, estimation (Supplementary Tables 11a-d)
+            D. ENIGMA maps: significant-map counts (BH and Holm) and Wilcoxon tests (Supplementary Table 12c)
+            E. least-squares distance-dependent analysis and approximate correspondence (Supplementary Tables 3a, 2b)
 generative  generative null models: false-positive rates for map-to-map correlations and cross-validation, contrasts
-            with the spins, bilateral structure (Supplementary Tables 2e, 2f, 4c)
+            with the spins, bilateral structure (Supplementary Tables 4a-c)
 extensions  one value per homologous pair (34 regions) and the Glasser parcellation (360 regions): false-positive
-            rates, AUC and power, ENIGMA counts (Supplementary Tables 11 and 12)
+            rates, AUC and power, ENIGMA counts (Supplementary Tables 15 and 16)
+insample    in-sample test (least-squares fit to all regions): false-positive rates, McNemar contrasts, power at the
+            nominal and size-adjusted thresholds, ENIGMA counts (Table 4, Supplementary Tables 5a-c)
 
-Usage: python s6_statistics.py [main] [generative] [extensions]   (default: all)
+Usage: python s6_statistics.py [main] [generative] [extensions] [insample]   (default: all)
 """
 import glob
 import json
@@ -590,7 +592,69 @@ def extensions():
     print(f"Glasser parcellation done ({gc['map'].nunique()} maps in the cross-validation simulation)", flush=True)
 
 
-STEPS = {"main": main_statistics, "generative": generative_statistics, "extensions": extensions}
+# ======================================================================================================================
+# in-sample test (added after the pre-specified plan)
+# ======================================================================================================================
+def insample_statistics():
+    """False-positive rate and power of the in-sample least-squares fit tested against null maps (s4 `insample`), with
+    the same definitions as for the cross-validated statistics: rejection at P < 0.05, Wilson 95% intervals, Bradley's
+    band, and power at the threshold that rejects exactly 5% of the signal-free maps."""
+    f_sim, f_pow = RES / "v3_insample_sim.csv", RES / "v3_insample_power.csv"
+    if not f_sim.exists():
+        print("in-sample test: no result files yet", flush=True)
+        return
+    d = pd.read_csv(f_sim)
+    nulls = [c[2:] for c in d.columns if c.startswith("p_")]
+    rows, crow = [], []
+    for (cond, rho, m), g in d.groupby(["cond", "rho", "model"]):
+        g = g.sort_values("map")
+        for nt in nulls:
+            k, n = int((g[f"p_{nt}"] < 0.05).sum()), len(g)
+            lo, hi = wilson(k, n)
+            rows.append({"cond": cond, "rho": rho, "model": m, "null": nt, "k": k, "n": n, "fpr": k / n, "lo": lo, "hi": hi,
+                         "p_binom_vs_0.05": binom_two_sided(k, n), "bradley": bradley(k / n, lo, hi),
+                         "median_r2": g["stat"].median(), "median_null_r2": g[f"mu_{nt}"].median()})
+        for a_, b_ in [("spin_std", "spin_sym"), ("spin_aligned", "spin_sym"), ("shuffle", "spin_std")]:
+            ra, rb = (g[f"p_{a_}"] < 0.05).to_numpy(), (g[f"p_{b_}"] < 0.05).to_numpy()
+            n_a, n_b, p_mc = mcnemar_exact(ra, rb)
+            crow.append({"cond": cond, "rho": rho, "model": m, "null_a": a_, "null_b": b_, "only_a": n_a, "only_b": n_b,
+                         "p_mcnemar": p_mc})
+    t = pd.DataFrame(rows)
+    t.to_csv(RES / "v3_stats_insample_fpr.csv", index=False)
+    pd.DataFrame(crow).to_csv(RES / "v3_stats_insample_contrasts.csv", index=False)
+    print(t.round(3).to_string(index=False), flush=True)
+    print(pd.DataFrame(crow).round(4).to_string(index=False), flush=True)
+    f_real = RES / "v3_insample_real.csv"
+    if f_real.exists():   # ENIGMA maps: number significant of 12, before and after Benjamini-Hochberg correction
+        r = pd.read_csv(f_real)
+        rr = [{"model": m, "null": c[2:], "n_maps": len(g), "n_p05": int((g[c] < 0.05).sum()),
+               "n_q05": int((g["q_" + c[2:]] < 0.05).sum()), "median_r2": g["stat"].median(),
+               "median_adj_r2": g["adj_r2"].median(), "median_null_r2": g["mu_" + c[2:]].median()}
+              for m, g in r.groupby("model") for c in r.columns if c.startswith("p_")]
+        pd.DataFrame(rr).to_csv(RES / "v3_stats_insample_real.csv", index=False)
+        print(pd.DataFrame(rr).round(3).to_string(index=False), flush=True)
+    if not f_pow.exists():
+        return
+    pw, rows = pd.read_csv(f_pow), []
+    for m, g in pw.groupby("model"):
+        gn = d[(d["model"] == m) & (d["cond"] == "lam77")]
+        for nt in [c[2:] for c in pw.columns if c.startswith("p_")]:
+            zneg = ((gn["stat"] - gn[f"mu_{nt}"]) / gn[f"sd_{nt}"]).to_numpy()
+            zcrit = float(np.quantile(zneg, 0.95))
+            for lvl, gp in g.groupby("s"):
+                zpos = ((gp["stat"] - gp[f"mu_{nt}"]) / gp[f"sd_{nt}"]).to_numpy()
+                n = len(gp)
+                for thr, hit in [("nominal_0.05", (gp[f"p_{nt}"] <= 0.05).to_numpy()), ("size_adjusted", zpos > zcrit)]:
+                    k = int(hit.sum())
+                    lo, hi = wilson(k, n)
+                    rows.append({"model": m, "null": nt, "s": lvl, "threshold": thr, "k": k, "n": n, "power": k / n,
+                                 "lo": lo, "hi": hi, "z_crit": zcrit if thr == "size_adjusted" else np.nan})
+    p = pd.DataFrame(rows)
+    p.to_csv(RES / "v3_stats_insample_power.csv", index=False)
+    print(p.round(3).to_string(index=False), flush=True)
+
+
+STEPS = {"main": main_statistics, "generative": generative_statistics, "extensions": extensions, "insample": insample_statistics}
 
 if __name__ == "__main__":
     for step in (sys.argv[1:] or list(STEPS)):

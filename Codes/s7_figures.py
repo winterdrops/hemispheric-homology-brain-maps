@@ -2,10 +2,11 @@
 s7_figures.py - step 7: all figures and the Source Data workbook (reads result files; no model fitting).
 
   fig1 .. fig5     main figures                          -> figures/Fig1..Fig5 (.pdf, .png, .tif)
-  supp             Supplementary Figs 1-7, 12 and 13     -> figures/supp/SuppFig*.{pdf,png,tif}
-  prespecified     Supplementary Figs 8-11 (pre-specified analyses) -> figures/supp/SuppFig8..11_*.png
-  source_data      Source Data workbook (one sheet per main-figure panel) -> figures/Source_Data.xlsx
-  supp_data        Supplementary Data 1: Supplementary Tables 1-10, one sheet per table -> figures/Supplementary_Data_1.xlsx
+  supp             Supplementary Figs 1-10               -> figures/supp/SuppFig*.{pdf,png,tif}
+                   (and two figures kept in the archive only -> figures/extra/Extra_*)
+  prespecified     Supplementary Figs 11-14 (pre-specified analyses) -> figures/supp/SuppFig11..14_*.png
+  source_data      Source Data workbook (one sheet per figure panel)      -> figures/Source_Data.xlsx
+  supp_data        Supplementary Data 1: Supplementary Tables 1-16, one sheet per table -> figures/Supplementary_Data_1.xlsx
 
 Usage: python s7_figures.py [fig1 fig2 fig3 fig4 fig5 supp prespecified source_data supp_data]   (default: all)
 Style: Nature Communications specifications (Arial-metric sans serif, 5-8 pt text, 180 mm double-column width; vector
@@ -17,6 +18,7 @@ import io
 import json
 import re
 import sys
+import textwrap
 import warnings
 from pathlib import Path
 
@@ -37,7 +39,7 @@ import homology_lib as hl  # noqa: E402
 
 warnings.filterwarnings("ignore")
 RES, RAW = hl.RES, hl.RAW_ENIGMA
-OUT, OUT_SUPP = hl.FIG, hl.FIG / "supp"
+OUT, OUT_SUPP, OUT_EXTRA = hl.FIG, hl.FIG / "supp", hl.FIG / "extra"
 for _ttf in sorted((Path(__file__).resolve().parent / "fonts").glob("*.ttf")):   # bundled Liberation Sans
     font_manager.fontManager.addfont(str(_ttf))
 
@@ -56,7 +58,7 @@ FONT = _font()
 
 
 class fs:
-    """Figure style of the main and Supplementary Figs 1-7 (validated categorical palette)."""
+    """Figure style of the main and Supplementary Figures (validated categorical palette)."""
     MM = 1 / 25.4
     W2, W1 = 180 * MM, 88 * MM
     INK, INK2, MUTED = "#0b0b0b", "#52514e", "#898781"
@@ -65,7 +67,7 @@ class fs:
     NULL_ORDER = ["shuffle", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
     NULL_COL = {"shuffle": "#2a78d6", "spin_enigma": "#e34948", "spin_std": "#eda100", "spin_fslr": "#1baf7a",
                 "spin_aligned": "#4a3aa7", "spin_sym": "#008300"}
-    NULL_SHORT = {"shuffle": "Shuffle", "spin_enigma": "ENIGMA TB", "spin_std": "Conventional", "spin_fslr": "fs_LR",
+    NULL_SHORT = {"shuffle": "Shuffle", "spin_enigma": "Toolbox", "spin_std": "Conventional", "spin_fslr": "fs_LR",
                   "spin_aligned": "Aligned", "spin_sym": "Symmetric"}
     SCHEME_COL = {"R": "#2a78d6", "Sw": "#eb6834", "DD": "#1baf7a", "H": "#eda100", "SH": "#e87ba4", "DD-H": "#008300",
                   "S": "#4a3aa7"}
@@ -73,6 +75,9 @@ class fs:
                  "DD-H": (0, (4, 1.5))}
     SCHEME_LAB = {"R": "R, random", "H": "H, homologue pairs", "S": "S, spatial blocks", "SH": "SH, bilateral blocks",
                   "Sw": "Sw, within-hemisphere blocks", "DD": "DD, distance-dependent", "DD-H": "DD-H, homologue-aware DD"}
+    SCHEME_NAME = {"R": "Random folds", "S": "Spatial blocks", "Sw": "Within-hemisphere blocks",   # names in the text
+                   "DD": "Distance-dependent split", "H": "Homologue-pair folds", "SH": "Bilateral spatial blocks",
+                   "DD-H": "Homologue-aware DD split"}
     MODEL_LAB = {"ridge": "Ridge regression", "knn": "k-nearest neighbours", "rf": "Random forest"}
     SEQ = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
 
@@ -157,14 +162,15 @@ def sphere_angles(surf, parc, align=False):
 
 
 def example_test_sets(reg):
-    """One test set of each scheme, for the source region left superior frontal gyrus (Fig. 1d)."""
+    """One test set of each scheme, for the source region left superior frontal gyrus (Fig. 3a); schemes in the order
+    of their homologue leakage."""
     L = np.where(reg["hemi"] == "L")[0]
     src = reg["name"].tolist().index("L_superiorfrontal")
     tests = {}
-    for s in ["R", "Sw", "DD", "H", "SH", "DD-H"]:
-        if s in ("R", "H", "SH", "Sw"):
+    for s in ["Sw", "R", "S", "DD", "H", "SH", "DD-H"]:
+        if s in ("R", "H", "S", "SH", "Sw"):
             f = (hl.make_folds(s, reg, seed=0) if s in ("R", "H") else hl.make_folds_within(reg) if s == "Sw"
-                 else hl.make_folds("SH", reg))
+                 else hl.make_folds(s, reg))
             tests[s] = np.where(f == f[src])[0]
         elif s == "DD":
             tests[s] = hl.dd_splits(reg)[src][1]
@@ -174,17 +180,15 @@ def example_test_sets(reg):
 
 
 # ======================================================================================================================
-# Fig. 1: hemispheric homology in brain maps, in spin tests and in cross-validation schemes
+# Fig. 1: brain maps are bilaterally near-duplicated, and common spins do not keep this structure
 # ======================================================================================================================
 def fig1():
-    from nilearn import datasets, plotting
-    from PIL import Image
     fs.apply()
     X, Y, reg, geo = hl.load_data()
     hom = reg["homologue_idx"].to_numpy()
     L = np.where(reg["hemi"] == "L")[0]
-    fig = plt.figure(figsize=(fs.W2, 128 * fs.MM))
-    gtop = fig.add_gridspec(1, 3, left=0.07, right=0.99, top=0.95, bottom=0.57, wspace=0.5, width_ratios=[1, 1.05, 1.35])
+    fig = plt.figure(figsize=(fs.W2, 68 * fs.MM))
+    gtop = fig.add_gridspec(1, 3, left=0.07, right=0.99, top=0.89, bottom=0.2, wspace=0.5, width_ratios=[1, 1.05, 1.35])
 
     # a: bilateral symmetry of targets and predictors
     ax = fig.add_subplot(gtop[0, 0])
@@ -242,92 +246,50 @@ def fig1():
     ax.set_ylabel("Bilateral correlation of null maps\n(median over 1,000 draws)")
     ax.set_title("Bilateral structure of null maps", fontsize=6.5, loc="left")
     fs.panel(ax, "c", x=-0.24)
-
-    # d: test sets of each scheme on the inflated cortex
-    aparc = np.loadtxt(RAW / "aparc_fsa5.csv").astype(int)
-    lab2reg = {lab: r for r, lab in enumerate(hl.A_IDX)}
-    fsavg = datasets.fetch_surf_fsaverage("fsaverage5")
-    NV = 10242
-    cmap = ListedColormap([fs.GRAY_LIGHT, "#e87ba4", "#8a6fdf"])
-
-    def to_vertex(values, hemi):
-        lab = aparc[:NV] if hemi == "L" else aparc[NV:]
-        return np.array([values[lab2reg[v]] if v in lab2reg else 0 for v in lab], float)
-
-    def render(lab, hemi):
-        f2 = plt.figure(figsize=(3, 2.2))
-        a2 = f2.add_subplot(111, projection="3d")
-        plotting.plot_surf_roi(fsavg.infl_left if hemi == "L" else fsavg.infl_right, roi_map=to_vertex(lab, hemi),
-                               hemi="left" if hemi == "L" else "right", view="lateral",
-                               bg_map=fsavg.sulc_left if hemi == "L" else fsavg.sulc_right, cmap=cmap, vmin=1, vmax=3,
-                               axes=a2, figure=f2, colorbar=False, bg_on_data=True, engine="matplotlib")
-        a2.set_box_aspect(None, zoom=1.5)
-        buf = io.BytesIO()
-        f2.savefig(buf, dpi=400, format="png", facecolor="white")
-        plt.close(f2)
-        im = np.array(Image.open(buf).convert("RGB"))
-        rows, cols = np.where((im < 245).any(2))
-        return im[rows.min():rows.max() + 1, cols.min():cols.max() + 1]
-
-    test_sets = example_test_sets(reg)
-    shown = list(test_sets)
-    gb = fig.add_gridspec(2, len(shown), left=0.03, right=0.76, top=0.42, bottom=0.02, hspace=0.02, wspace=0.04)
-    for ci, s in enumerate(shown):
-        lab = np.ones(68)
-        lab[test_sets[s]] = 3.0                      # test region
-        for t in test_sets[s]:
-            if lab[hom[t]] != 3.0:
-                lab[hom[t]] = 2.0                    # homologue of a test region sitting in the training set
-        for ri, hemi in enumerate("LR"):
-            ax = fig.add_subplot(gb[ri, ci])
-            ax.imshow(render(lab, hemi))
-            ax.set_axis_off()
-            if ri == 0:
-                ax.set_title(fs.SCHEME_LAB[s].replace(", ", "\n"), fontsize=5.8, color=fs.INK, pad=2)
-            if ci == 0:
-                ax.text(-0.04, 0.5, "Left" if hemi == "L" else "Right", transform=ax.transAxes, rotation=90,
-                        va="center", ha="right", fontsize=5.8, color=fs.INK2)
-    fig.text(0.01, 0.485, "d", fontsize=8, fontweight="bold")
-    fig.text(0.035, 0.485, "One test set per scheme (source region: left superior frontal gyrus). Purple, test regions; "
-             "pink, homologues of test regions that are in the training set", fontsize=5.8, color=fs.INK2)
-
-    # e: homologue leakage per scheme
-    ax = fig.add_axes([0.84, 0.06, 0.15, 0.36])
-    st = scheme_leakage()
-    order = ["Sw", "R", "S", "DD", "H", "SH", "DD-H"]
-    vals = [fs.sel(st, base=s_)["homologue_in_training"].mean() for s_ in order]
-    ax.barh(range(len(order)), vals, color=[fs.SCHEME_COL[s] for s in order], height=0.62)
-    for i, v in enumerate(vals):
-        ax.text(v + 0.02, i, f"{100 * v:.0f}%", va="center", fontsize=5.6, color=fs.INK)
-    ax.set_yticks(range(len(order)))
-    ax.set_yticklabels(order)
-    ax.invert_yaxis()
-    ax.set_xlim(0, 1.25)
-    ax.set_xticks([0, 0.5, 1])
-    ax.set_xticklabels(["0", "50", "100"])
-    ax.grid(axis="x")
-    ax.grid(axis="y", visible=False)
-    ax.set_xlabel("Homologue in the\ntraining set (% of\ntest regions)")
-    fs.panel(ax, "e", x=-0.42, y=1.04)
     fs.save(fig, "Fig1", OUT)
 
 
 # ======================================================================================================================
-# Fig. 2: false-positive rates of spatial nulls for map-to-map correlations, and consequences in ENIGMA data
+# Fig. 2: null maps that lose bilateral structure make tests of map-to-map correlations liberal
 # ======================================================================================================================
 GEN = [("bs_indep", "BrainSMASH ind.", "#eb6834", False), ("bs_sym", "BrainSMASH sym.", "#eb6834", True),
        ("msr_indep", "Moran ind.", "#e87ba4", False), ("msr_sym", "Moran sym.", "#e87ba4", True)]
+BIV_ORDER = ["shuffle", "TB", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
+BIV_LABELS = ["Shuffle", "Toolbox†", "Toolbox", "Conventional", "fs_LR", "Aligned", "Symmetric"]
+
+
+def _sweep(ax, two, conds, xlabels, xlabel, title, letter=None):
+    """False-positive rate of every permutation null across simulation conditions (log scale, 95% CI bands)."""
+    xvals = np.arange(len(conds))
+    g = two.set_index(["cond", "null"])
+    for n in fs.NULL_ORDER:
+        ax.fill_between(xvals, [g.loc[(cc, n), "lo"] for cc in conds], [g.loc[(cc, n), "hi"] for cc in conds],
+                        color=fs.NULL_COL[n], alpha=0.15, linewidth=0)
+        ax.plot(xvals, [g.loc[(cc, n), "fpr"] for cc in conds], color=fs.NULL_COL[n], marker="o", ms=2.5, lw=1.1,
+                label=fs.NULL_SHORT[n])
+    ax.axhline(0.05, color=fs.INK, lw=0.7, ls=(0, (2, 2)))
+    ax.set_xticks(xvals)
+    ax.set_xticklabels(xlabels)
+    ax.set_xlabel(xlabel)
+    ax.set_yscale("log")
+    ax.yaxis.set_minor_locator(NullLocator())
+    ax.yaxis.set_minor_formatter(NullFormatter())
+    ax.set_yticks([0.05, 0.1, 0.2, 0.3])
+    ax.set_yticklabels(["5", "10", "20", "30"])
+    ax.set_ylim(0.04, 0.36)
+    ax.set_ylabel("False-positive rate (%, log scale)")
+    ax.set_title(title, fontsize=6.2, loc="left")
+    if letter:
+        fs.panel(ax, letter, x=-0.2)
 
 
 def fig2():
     fs.apply()
     t = pd.read_csv(RES / "v3_stats_bivariate_fpr.csv")
     two = t[t["pvalue"] == "two_sided"]
-    fig = plt.figure(figsize=(fs.W2, 66 * fs.MM))
-    gs = fig.add_gridspec(1, 4, left=0.06, right=0.99, top=0.86, bottom=0.30, wspace=0.42,
-                          width_ratios=[2.0, 0.85, 0.85, 2.0])
-    order = ["shuffle", "TB", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
-    labels = ["Shuffle", "ENIGMA TB†", "ENIGMA TB", "Conventional", "fs_LR", "Aligned", "Symmetric"]
+    fig = plt.figure(figsize=(fs.W2, 68 * fs.MM))
+    gs = fig.add_gridspec(1, 2, left=0.06, right=0.99, top=0.85, bottom=0.29, wspace=0.2, width_ratios=[1.9, 1.0])
+    order, labels = BIV_ORDER, BIV_LABELS
 
     # a: calibrated condition
     ax = fig.add_subplot(gs[0, 0])
@@ -368,46 +330,292 @@ def fig2():
     ax.set_ylabel("False-positive rate (%; α = 0.05)")
     ax.set_yticks([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3])
     ax.set_yticklabels(["0", "5", "10", "15", "20", "25", "30"])
-    ax.set_title("λ = 77 mm, ρ = 0.9", fontsize=6.2, loc="left")
+    ax.set_title("Correlation length 77 mm, bilateral coupling 0.9", fontsize=6.2, loc="left")
     ax.text(0.30, 0.86, "† as implemented\n(directional P)", transform=ax.transAxes, ha="left", va="top", fontsize=5.2,
             color=fs.NULL_COL["spin_enigma"])
-    fs.panel(ax, "a", x=-0.22)
+    fs.panel(ax, "a", x=-0.12)
 
-    # b, c: sweeps over bilateral coupling and correlation length
-    def sweep(ax, conds, xlabels, xlabel, title, letter):
-        xvals = np.arange(len(conds))
-        g = two.set_index(["cond", "null"])
-        for n in fs.NULL_ORDER:
-            ax.fill_between(xvals, [g.loc[(cc, n), "lo"] for cc in conds], [g.loc[(cc, n), "hi"] for cc in conds],
-                            color=fs.NULL_COL[n], alpha=0.15, linewidth=0)
-            ax.plot(xvals, [g.loc[(cc, n), "fpr"] for cc in conds], color=fs.NULL_COL[n], marker="o", ms=2.5, lw=1.1,
-                    label=fs.NULL_SHORT[n])
-        ax.axhline(0.05, color=fs.INK, lw=0.7, ls=(0, (2, 2)))
-        ax.set_xticks(xvals)
-        ax.set_xticklabels(xlabels)
-        ax.set_xlabel(xlabel)
-        ax.set_yscale("log")
-        ax.yaxis.set_minor_locator(NullLocator())
-        ax.yaxis.set_minor_formatter(NullFormatter())
-        ax.set_yticks([0.05, 0.1, 0.2, 0.3])
-        ax.set_yticklabels(["5", "10", "20", "30"])
-        ax.set_ylim(0.04, 0.36)
-        ax.set_title(title, fontsize=6.2, loc="left")
-        fs.panel(ax, letter, x=-0.28)
-
+    # b: sweep over bilateral coupling
     ax = fig.add_subplot(gs[0, 1])
-    sweep(ax, ["lam77_rho0.0", "lam77_rho0.5", "lam77_rho0.9", "lam77_rho1.0"], ["0", "0.5", "0.9", "1"],
-          "Bilateral coupling ρ", "λ = 77 mm", "b")
-    ax.set_ylabel("False-positive rate (%, log scale)")
-    ax = fig.add_subplot(gs[0, 2])
-    sweep(ax, ["lam25_rho0.9", "lam50_rho0.9", "lam77_rho0.9", "lam100_rho0.9"], ["25", "50", "77", "100"],
-          "Correlation length λ (mm)", "ρ = 0.9", "c")
+    _sweep(ax, two, ["lam77_rho0.0", "lam77_rho0.5", "lam77_rho0.9", "lam77_rho1.0"], ["0", "0.5", "0.9", "1"],
+           "Bilateral coupling ρ", "Correlation length 77 mm", "b")
     h, lab = ax.get_legend_handles_labels()
-    fig.legend(h, lab, loc="upper center", ncol=6, bbox_to_anchor=(0.56, 1.02), fontsize=5.8, handlelength=1.6,
-               columnspacing=1.0)
+    fig.legend(h, lab, loc="upper center", ncol=6, bbox_to_anchor=(0.5, 1.0), fontsize=5.8, handlelength=1.6,
+               columnspacing=1.4)
+    fs.save(fig, "Fig2", OUT)
 
-    # d: ENIGMA data
-    ax = fig.add_subplot(gs[0, 3])
+
+# ======================================================================================================================
+# Fig. 3: homologues leak across cross-validation folds and produce spurious performance on signal-free maps
+# ======================================================================================================================
+def _box(ax, v, pos, col, hatch=None):
+    bp = ax.boxplot(v, positions=[pos], widths=0.36, patch_artist=True, showfliers=False,
+                    medianprops=dict(color=fs.INK, lw=0.9), whiskerprops=dict(color=fs.INK2, lw=0.6),
+                    capprops=dict(color=fs.INK2, lw=0.6), boxprops=dict(lw=0.6))
+    b = bp["boxes"][0]
+    b.set_facecolor("white" if hatch else col)
+    b.set_edgecolor(col)
+    if hatch:
+        b.set_hatch(hatch)
+    ax.scatter(pos, np.mean(v), marker="D", s=6, color="white", edgecolor=fs.INK, linewidth=0.5, zorder=4)
+
+
+def fig3():
+    from nilearn import datasets, plotting
+    from PIL import Image
+    fs.apply()
+    X, Y, reg, geo = hl.load_data()
+    hom = reg["homologue_idx"].to_numpy()
+    d77 = cv_null_results().query("cond == 'lam77'")
+    st = scheme_leakage()
+    n_maps = d77["map"].nunique()
+    fig = plt.figure(figsize=(fs.W2, 122 * fs.MM))
+
+    # a: one test set of each scheme on the inflated cortex
+    aparc = np.loadtxt(RAW / "aparc_fsa5.csv").astype(int)
+    lab2reg = {lab: r for r, lab in enumerate(hl.A_IDX)}
+    fsavg = datasets.fetch_surf_fsaverage("fsaverage5")
+    NV = 10242
+    cmap = ListedColormap([fs.GRAY_LIGHT, "#e87ba4", "#8a6fdf"])
+
+    def to_vertex(values, hemi):
+        lab = aparc[:NV] if hemi == "L" else aparc[NV:]
+        return np.array([values[lab2reg[v]] if v in lab2reg else 0 for v in lab], float)
+
+    def render(lab, hemi):
+        f2 = plt.figure(figsize=(3, 2.2))
+        a2 = f2.add_subplot(111, projection="3d")
+        plotting.plot_surf_roi(fsavg.infl_left if hemi == "L" else fsavg.infl_right, roi_map=to_vertex(lab, hemi),
+                               hemi="left" if hemi == "L" else "right", view="lateral",
+                               bg_map=fsavg.sulc_left if hemi == "L" else fsavg.sulc_right, cmap=cmap, vmin=1, vmax=3,
+                               axes=a2, figure=f2, colorbar=False, bg_on_data=True, engine="matplotlib")
+        a2.set_box_aspect(None, zoom=1.5)
+        buf = io.BytesIO()
+        f2.savefig(buf, dpi=400, format="png", facecolor="white")
+        plt.close(f2)
+        im = np.array(Image.open(buf).convert("RGB"))
+        rows, cols = np.where((im < 245).any(2))
+        return im[rows.min():rows.max() + 1, cols.min():cols.max() + 1]
+
+    test_sets = example_test_sets(reg)
+    shown = list(test_sets)
+    gb = fig.add_gridspec(2, len(shown), left=0.04, right=0.99, top=0.875, bottom=0.545, hspace=0.02, wspace=0.04)
+    for ci, s in enumerate(shown):
+        lab = np.ones(68)
+        lab[test_sets[s]] = 3.0                      # test region
+        for t in test_sets[s]:
+            if lab[hom[t]] != 3.0:
+                lab[hom[t]] = 2.0                    # homologue of a test region sitting in the training set
+        leak = fs.sel(st, base=s)["homologue_in_training"].mean()
+        for ri, hemi in enumerate("LR"):
+            ax = fig.add_subplot(gb[ri, ci])
+            ax.imshow(render(lab, hemi))
+            ax.set_axis_off()
+            if ri == 0:                              # header: scheme code, then the name used in the text
+                ax.annotate(s, (0.5, 1), xycoords="axes fraction", xytext=(0, 25), textcoords="offset points",
+                            ha="center", va="top", fontsize=6.5, fontweight="bold", color=fs.INK)
+                ax.annotate(textwrap.fill(fs.SCHEME_NAME[s], 18, break_on_hyphens=False), (0.5, 1),
+                            xycoords="axes fraction", xytext=(0, 16.5), textcoords="offset points", ha="center",
+                            va="top", fontsize=5.8, color=fs.INK2, linespacing=1.05)
+            else:
+                ax.annotate(f"leakage {100 * leak:.0f}%", (0.5, 0), xycoords="axes fraction", xytext=(0, -2),
+                            textcoords="offset points", ha="center", va="top", fontsize=5.8, color=fs.INK)
+            if ci == 0:
+                ax.text(-0.04, 0.5, "Left" if hemi == "L" else "Right", transform=ax.transAxes, rotation=90,
+                        va="center", ha="right", fontsize=5.8, color=fs.INK2)
+    fig.text(0.01, 0.972, "a", fontsize=8, fontweight="bold")
+    fig.text(0.035, 0.974, "One test set of each scheme", fontsize=6.5, color=fs.INK)
+    fig.legend(handles=[Patch(facecolor="#8a6fdf", label="test region"),
+                        Patch(facecolor="#e87ba4", label="homologue of a test region, in the training set"),
+                        Patch(facecolor=fs.GRAY_LIGHT, label="other training regions")],
+               loc="upper right", bbox_to_anchor=(0.995, 1.0), ncol=3, fontsize=5.8, handlelength=1.0,
+               columnspacing=1.4)
+
+    g2 = fig.add_gridspec(1, 2, left=0.065, right=0.985, top=0.425, bottom=0.07, wspace=0.22, width_ratios=[2.0, 1.0])
+    # b: R2_cv on signal-free maps (partition schemes)
+    ax = fig.add_subplot(g2[0, 0])
+    PART = ["Sw", "R", "S", "H", "SH"]
+    for i, sc in enumerate(PART):
+        for m, off, h in [("ridge", -0.2, None), ("knn", 0.2, "//////")]:
+            _box(ax, fs.sel(d77, model=m, scheme=sc)["r2"].to_numpy(), i + off, fs.SCHEME_COL[sc], h)
+    ax.axhline(0, color=fs.INK, lw=0.7)
+    ax.set_xticks(range(len(PART)))
+    ax.set_xticklabels(PART)
+    ax.set_ylim(-1.0, 0.8)
+    ax.set_ylabel("$R^2_{cv}$ on signal-free maps")
+    ax.set_title("Partition schemes", fontsize=6.0, loc="left")
+    ax.legend(handles=[Patch(facecolor=fs.MUTED, label="ridge"),
+                       Patch(facecolor="white", edgecolor=fs.MUTED, hatch="//////", label="kNN")],
+              loc="upper right", fontsize=5.4, handlelength=1.2, ncol=2, borderaxespad=0.2)
+    fs.panel(ax, "b", x=-0.1)
+
+    # c: mean test-set r on signal-free maps (distance-dependent schemes)
+    ax = fig.add_subplot(g2[0, 1])
+    for i, sc in enumerate(["DD", "DD-H"]):
+        for m, off, h in [("ridge", -0.2, None), ("knn", 0.2, "//////")]:
+            _box(ax, fs.sel(d77, model=m, scheme=sc)["stat"].to_numpy(), i + off, fs.SCHEME_COL[sc], h)
+    ax.axhline(0, color=fs.INK, lw=0.7)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["DD", "DD-H"])
+    ax.set_ylim(-0.55, 0.8)
+    ax.set_ylabel("Mean test-set r on signal-free maps")
+    ax.set_title("Distance-dependent schemes", fontsize=6.0, loc="left")
+    fs.panel(ax, "c", x=-0.22)
+    fig.text(0.99, 0.005, f"Correlation length 77 mm, bilateral coupling 0.9, {n_maps} maps (b, c)", ha="right",
+             fontsize=5.2, color=fs.MUTED)
+    fs.save(fig, "Fig3", OUT)
+
+
+# ======================================================================================================================
+# Fig. 4: false positives need both homologue leakage and a null without bilateral structure; power is kept
+# ======================================================================================================================
+def _fpr_heatmap(ax, fpr, m, order, nulls, title, fontsize=5.3, label_fontsize=None, ylabels=None, sep=None):
+    cm = LinearSegmentedColormap.from_list("seq", ["#f4f8fd"] + fs.SEQ[1:])
+    sub = fpr[fpr["model"] == m].set_index(["scheme", "null"])
+    M = np.array([[sub.loc[(sc, n), "fpr"] for n in nulls] for sc in order])
+    V = np.array([[sub.loc[(sc, n), "bradley"] for n in nulls] for sc in order])
+    ax.imshow(np.clip(M, 0.01, 1), cmap=cm, norm=LogNorm(0.02, 1), aspect="auto")
+    for i in range(len(order)):
+        for j in range(len(nulls)):
+            val = M[i, j]
+            nominal = V[i, j] == "acceptable"     # bold-outlined: within the 2.5-7.5% band
+            ax.text(j, i, f"{100 * val:.0f}" if val >= 0.095 else f"{100 * val:.1f}", ha="center", va="center",
+                    fontsize=fontsize, color="white" if val > 0.25 else fs.INK, fontweight="bold" if nominal else "normal")
+            if nominal:
+                ax.add_patch(plt.Rectangle((j - 0.46, i - 0.46), 0.92, 0.92, fill=False, edgecolor=fs.INK, lw=0.7))
+    if sep is not None:                           # gap between schemes that split homologues and schemes that do not
+        ax.axhline(sep, color="white", lw=2.5)
+    ax.set_xticks(range(len(nulls)))
+    ax.set_xticklabels([fs.NULL_SHORT[n] for n in nulls], rotation=40, ha="right",
+                       **({"fontsize": label_fontsize} if label_fontsize else {}))
+    ax.set_yticks(range(len(order)))
+    ax.set_yticklabels(ylabels if ylabels is not None else order, **({"fontsize": 5.8} if label_fontsize else {}))
+    ax.grid(False)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.tick_params(length=0)
+    ax.set_title(title, fontsize=6.3, loc="left")
+
+
+def fig4():
+    from statsmodels.stats.proportion import proportion_confint
+    fs.apply()
+    fpr = pd.read_csv(RES / "v3_stats_cv_fpr.csv").query("cond == 'lam77'")
+    cmx = pd.read_csv(RES / "v3_stats_confusion.csv")
+    st = scheme_leakage()
+    ORDER = ["Sw", "R", "S", "DD", "H", "SH", "DD-H"]
+    NULLS = ["shuffle", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
+    leak = {s_: fs.sel(st, base=s_)["homologue_in_training"].mean() for s_ in ORDER}
+    n_maps = int(fpr["n"].iloc[0])
+    fig = plt.figure(figsize=(fs.W2, 124 * fs.MM))
+
+    # a, b: false-positive rate of every combination of scheme and null; rows ordered by homologue leakage
+    g1 = fig.add_gridspec(1, 2, left=0.115, right=0.985, top=0.94, bottom=0.6, wspace=0.42)
+    rows = [f"{s_} ({100 * leak[s_]:.0f}%)" for s_ in ORDER]
+    for mi, m in enumerate(["ridge", "knn"]):
+        ax = fig.add_subplot(g1[0, mi])
+        _fpr_heatmap(ax, fpr, m, ORDER, NULLS, f"{fs.MODEL_LAB[m]}: false positives (%)", fontsize=6.0,
+                     label_fontsize=5.8, ylabels=rows, sep=3.5)
+        ax.set_ylabel("Scheme (homologue leakage)")
+        fs.panel(ax, "ab"[mi], x=-0.3)
+
+    g2 = fig.add_gridspec(1, 2, left=0.075, right=0.985, top=0.465, bottom=0.115, wspace=0.24, width_ratios=[1.0, 1.15])
+    # c: the two ingredients, separated (random folds vs bilateral blocks; frames misaligned, aligned, exactly symmetric)
+    ax = fig.add_subplot(g2[0, 0])
+    XN = ["spin_std", "spin_aligned", "spin_sym"]
+    xs = np.arange(len(XN))
+    ax.axhspan(0.025, 0.075, color=fs.GRAY_LIGHT, alpha=0.55, lw=0, zorder=0)
+    ax.axhline(0.05, color=fs.INK, lw=0.7, ls=(0, (2, 2)), zorder=1)
+    for sc in ["R", "SH"]:
+        for m, fill, ls, off in [("ridge", True, "-", -0.035), ("knn", False, (0, (3, 1.5)), 0.035)]:
+            q = [fs.sel(fpr, model=m, scheme=sc, null=n).iloc[0] for n in XN]
+            y = np.array([r_["fpr"] for r_ in q])
+            lo, hi = np.array([r_["lo"] for r_ in q]), np.array([r_["hi"] for r_ in q])
+            ax.errorbar(xs + off, y, yerr=[y - lo, hi - y], color=fs.SCHEME_COL[sc], lw=1.2, ls=ls, marker="o", ms=3.6,
+                        mfc=fs.SCHEME_COL[sc] if fill else "white", mew=0.8, elinewidth=0.6, capsize=1.5, zorder=3)
+    ax.text(2.33, 0.004, "grey band: 2.5–7.5%", ha="right", va="bottom", fontsize=5.2, color=fs.MUTED)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(["Conventional spin\n(frames misaligned)", "Aligned spin\n(frames aligned)",
+                        "Symmetric spin\n(exact symmetry)"], fontsize=5.6)
+    ax.set_xlim(-0.35, 2.35)
+    ax.set_ylim(0, 0.46)
+    ax.set_yticks([0, 0.05, 0.1, 0.2, 0.3, 0.4])
+    ax.set_yticklabels(["0", "5", "10", "20", "30", "40"])
+    ax.set_ylabel("False-positive rate (%)")
+    ax.legend(handles=[Line2D([], [], color=fs.SCHEME_COL[sc], marker="o", ms=3.4, mew=0.8, ls=ls,
+                              mfc=fs.SCHEME_COL[sc] if fill else "white", label=f"{lab_}, {ml}")
+                       for sc, lab_ in [("R", "Random folds (R)"), ("SH", "Bilateral spatial blocks (SH)")]
+                       for ml, fill, ls in [("ridge", True, "-"), ("kNN", False, (0, (3, 1.5)))]],
+              loc="upper right", fontsize=5.6, handlelength=2.8, borderaxespad=0.2, labelspacing=0.35)
+    ax.set_title("Leakage and loss of bilateral structure act together", fontsize=6.3, loc="left")
+    fs.panel(ax, "c", x=-0.17)
+
+    # d: power at a true 5% error rate against the signal share, for random folds and the two homologue-aware blocked
+    #    schemes (symmetric spin; 150 maps with signal per share; Wilson 95% CI)
+    ax = fig.add_subplot(g2[0, 1])
+    shares = [0.1, 0.3, 0.5]
+    xs = np.arange(len(shares))
+    POW = [("R", "Random folds (R)", -0.07), ("SH", "Bilateral spatial blocks (SH)", 0.0),
+           ("DD-H", "Homologue-aware DD split (DD-H)", 0.07)]
+    for sc, _, dx in POW:
+        for m, fill, ls, off in [("ridge", True, "-", -0.015), ("knn", False, (0, (3, 1.5)), 0.015)]:
+            q = [fs.sel(cmx, model=m, scheme=sc, null="spin_sym", s=s_, threshold="size_adjusted").iloc[0] for s_ in shares]
+            tp = np.array([r_["TP"] for r_ in q])
+            npos = np.array([r_["TP"] + r_["FN"] for r_ in q])
+            lo, hi = proportion_confint(tp, npos, alpha=0.05, method="wilson")
+            ax.errorbar(xs + dx + off, tp / npos, yerr=[tp / npos - lo, hi - tp / npos], color=fs.SCHEME_COL[sc], lw=1.2,
+                        ls=ls, marker="o", ms=3.6, mfc=fs.SCHEME_COL[sc] if fill else "white", mew=0.8, elinewidth=0.6,
+                        capsize=1.5, zorder=3)
+    ax.set_xticks(xs)
+    ax.set_xticklabels([str(v) for v in shares])
+    ax.set_xlim(-0.3, 2.3)
+    ax.set_ylim(0, 0.8)
+    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
+    ax.set_yticklabels(["0", "20", "40", "60", "80"])
+    ax.set_ylabel("Power at a true 5% error rate (%)")
+    ax.set_xlabel("Signal share")
+    ax.legend(handles=[Line2D([], [], color=fs.SCHEME_COL[sc], lw=1.2, label=lab_) for sc, lab_, _ in POW] +
+              [Line2D([], [], color=fs.MUTED, marker="o", ms=3.4, ls="-", label="ridge"),
+               Line2D([], [], color=fs.MUTED, marker="o", ms=3.4, mfc="white", ls=(0, (3, 1.5)), label="kNN")],
+              loc="upper left", fontsize=5.6, handlelength=2.6, borderaxespad=0.2, labelspacing=0.35)
+    ax.set_title("Power: similar, except ridge regression at a strong signal", fontsize=6.3, loc="left")
+    fs.panel(ax, "d", x=-0.14)
+    fig.text(0.99, 0.005, f"Correlation length 77 mm, bilateral coupling 0.9; {n_maps} signal-free maps (a–c); "
+             "150 maps with signal per signal share, symmetric spin (d)", ha="right", fontsize=5.2, color=fs.MUTED)
+    fs.save(fig, "Fig4", OUT)
+
+
+# ======================================================================================================================
+# Fig. 5: in the ENIGMA data the result depends on the protocol
+# ======================================================================================================================
+def count_heatmap(ax, M, ylabels, xlabels, fontsize=6):
+    cm = LinearSegmentedColormap.from_list("cnt", ["#f7f7f5"] + fs.SEQ[1:])
+    ax.imshow(M, cmap=cm, vmin=0, vmax=12, aspect="auto")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            ax.text(j, i, str(M[i, j]), ha="center", va="center", fontsize=fontsize,
+                    color="white" if M[i, j] > 7 else fs.INK)
+    ax.set_yticks(range(len(ylabels)))
+    ax.set_yticklabels(ylabels, fontsize=5.8)
+    ax.set_xticks(range(len(xlabels)))
+    ax.grid(False)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.tick_params(length=0)
+
+
+def fig5():
+    fs.apply()
+    d = pd.read_csv(RES / "v3_real_cv.csv")
+    d = d[d["set"] == "multimodal"]
+    ORDER = ["Sw", "R", "S", "DD", "H", "SH", "DD-H"]
+    NULLS = ["shuffle", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
+    order, labels = BIV_ORDER, BIV_LABELS
+    fig = plt.figure(figsize=(fs.W2, 132 * fs.MM))
+    g1 = fig.add_gridspec(1, 2, left=0.07, right=0.985, top=0.945, bottom=0.62, wspace=0.3, width_ratios=[1.3, 1.0])
+
+    # a: map-to-map correlations declared significant under each null
+    ax = fig.add_subplot(g1[0, 0])
     r = pd.read_csv(RES / "v3_bivariate_real_counts.csv")
     rr = r[r["pvalue"] == "two_sided"].set_index("null")
     tbr = r[r["pvalue"] == "enigma_toolbox"].iloc[0]
@@ -442,338 +650,56 @@ def fig2():
     ax.set_xticks(list(range(len(order))) + xg)
     ax.set_xticklabels(labels + [g[1] for g in GEN][:len(xg)], rotation=40, ha="right", fontsize=5.6)
     ax.set_ylabel("Correlations (of 336)")
-    ax.set_title("ENIGMA: 12 maps × 28 annotations", fontsize=6.2, loc="left")
+    ax.set_title("Map-to-map correlations: 12 disorder maps × 28 annotations", fontsize=6.2, loc="left")
     ax.legend(handles=[Patch(color=fs.MUTED, alpha=0.35, label="P < 0.05"), Patch(color=fs.MUTED, label="FDR q < 0.05")],
               loc="upper right", fontsize=5.4, handlelength=1.0, borderaxespad=0.2)
-    fs.panel(ax, "d", x=-0.25)
-    fs.save(fig, "Fig2", OUT)
+    fs.panel(ax, "a", x=-0.13)
 
-
-# ======================================================================================================================
-# Fig. 3: homologue leakage in cross-validation under the null (lambda = 77 mm), and inner-loop tuning
-# ======================================================================================================================
-def _box(ax, v, pos, col, hatch=None):
-    bp = ax.boxplot(v, positions=[pos], widths=0.36, patch_artist=True, showfliers=False,
-                    medianprops=dict(color=fs.INK, lw=0.9), whiskerprops=dict(color=fs.INK2, lw=0.6),
-                    capprops=dict(color=fs.INK2, lw=0.6), boxprops=dict(lw=0.6))
-    b = bp["boxes"][0]
-    b.set_facecolor("white" if hatch else col)
-    b.set_edgecolor(col)
-    if hatch:
-        b.set_hatch(hatch)
-    ax.scatter(pos, np.mean(v), marker="D", s=6, color="white", edgecolor=fs.INK, linewidth=0.5, zorder=4)
-
-
-def _fpr_heatmap(ax, fpr, m, order, nulls, title, fontsize=5.3, label_fontsize=None):
-    cm = LinearSegmentedColormap.from_list("seq", ["#f4f8fd"] + fs.SEQ[1:])
-    sub = fpr[fpr["model"] == m].set_index(["scheme", "null"])
-    M = np.array([[sub.loc[(sc, n), "fpr"] for n in nulls] for sc in order])
-    V = np.array([[sub.loc[(sc, n), "bradley"] for n in nulls] for sc in order])
-    ax.imshow(np.clip(M, 0.01, 1), cmap=cm, norm=LogNorm(0.02, 1), aspect="auto")
-    for i in range(len(order)):
-        for j in range(len(nulls)):
-            val = M[i, j]
-            nominal = V[i, j] == "acceptable"     # bold-outlined: within the 2.5-7.5% band
-            ax.text(j, i, f"{100 * val:.0f}" if val >= 0.095 else f"{100 * val:.1f}", ha="center", va="center",
-                    fontsize=fontsize, color="white" if val > 0.25 else fs.INK, fontweight="bold" if nominal else "normal")
-            if nominal:
-                ax.add_patch(plt.Rectangle((j - 0.46, i - 0.46), 0.92, 0.92, fill=False, edgecolor=fs.INK, lw=0.7))
-    ax.set_xticks(range(len(nulls)))
-    ax.set_xticklabels([fs.NULL_SHORT[n] for n in nulls], rotation=40, ha="right",
-                       **({"fontsize": label_fontsize} if label_fontsize else {}))
-    ax.set_yticks(range(len(order)))
-    ax.set_yticklabels(order, **({"fontsize": 5.8} if label_fontsize else {}))
-    ax.grid(False)
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-    ax.tick_params(length=0)
-    ax.set_title(title, fontsize=6.3, loc="left")
-
-
-def fig3():
-    fs.apply()
-    d77 = cv_null_results().query("cond == 'lam77'")
-    fpr = pd.read_csv(RES / "v3_stats_cv_fpr.csv").query("cond == 'lam77'")
-    st = scheme_leakage()
-    leak = {s_: fs.sel(st, base=s_)["homologue_in_training"].mean() for s_ in ["R", "H", "S", "SH", "Sw", "DD", "DD-H"]}
-    leak["R"] = st.query("base == 'R' and scheme in ['R_seed0','R_seed1','R_seed2','R_seed3','R_seed4']")[
-        "homologue_in_training"].mean()  # the five partitions used in the simulation
-    leak["H"] = 0.0
-    ORDER = ["Sw", "R", "S", "DD", "H", "SH", "DD-H"]
-    NULLS = ["shuffle", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
-    n_maps = d77["map"].nunique()
-    fig = plt.figure(figsize=(fs.W2, 118 * fs.MM))
-    g1 = fig.add_gridspec(1, 4, left=0.065, right=0.985, top=0.93, bottom=0.60, wspace=0.45,
-                          width_ratios=[1.35, 0.75, 1.05, 1.05])
-
-    # a: R2_cv on signal-free maps (partition schemes)
-    ax = fig.add_subplot(g1[0, 0])
-    PART = ["Sw", "R", "S", "H", "SH"]
-    for i, sc in enumerate(PART):
-        for m, off, h in [("ridge", -0.2, None), ("knn", 0.2, "//////")]:
-            _box(ax, fs.sel(d77, model=m, scheme=sc)["r2"].to_numpy(), i + off, fs.SCHEME_COL[sc], h)
-    ax.axhline(0, color=fs.INK, lw=0.7)
-    ax.set_xticks(range(len(PART)))
-    ax.set_xticklabels(PART)
-    ax.set_ylim(-1.0, 0.8)
-    ax.set_ylabel("$R^2_{cv}$ on signal-free maps")
-    ax.set_title("Partition schemes", fontsize=6.0, loc="left")
-    ax.legend(handles=[Patch(facecolor=fs.MUTED, label="ridge"),
-                       Patch(facecolor="white", edgecolor=fs.MUTED, hatch="//////", label="kNN")],
-              loc="upper right", fontsize=5.4, handlelength=1.2, ncol=2, borderaxespad=0.2)
-    fs.panel(ax, "a", x=-0.26)
-
-    # b: mean test-set r on signal-free maps (distance-dependent schemes)
+    # b: ridge R2 under random folds and under bilateral spatial blocks, per map
     ax = fig.add_subplot(g1[0, 1])
-    for i, sc in enumerate(["DD", "DD-H"]):
-        for m, off, h in [("ridge", -0.2, None), ("knn", 0.2, "//////")]:
-            _box(ax, fs.sel(d77, model=m, scheme=sc)["stat"].to_numpy(), i + off, fs.SCHEME_COL[sc], h)
-    ax.axhline(0, color=fs.INK, lw=0.7)
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(["DD", "DD-H"])
-    ax.set_ylim(-0.55, 0.8)
-    ax.set_ylabel("Mean test-set r")
-    ax.set_title("Distance-dependent", fontsize=6.0, loc="left")
-    fs.panel(ax, "b", x=-0.5)
-
-    # c, d: false-positive-rate heatmaps
-    for mi, m in enumerate(["ridge", "knn"]):
-        ax = fig.add_subplot(g1[0, 2 + mi])
-        _fpr_heatmap(ax, fpr, m, ORDER, NULLS, f"{'Ridge' if m == 'ridge' else 'kNN'}: false positives (%)",
-                     label_fontsize=5.6)
-        fs.panel(ax, "c" if mi == 0 else "d", x=-0.3)
-
-    g2 = fig.add_gridspec(1, 2, left=0.065, right=0.985, top=0.44, bottom=0.08, wspace=0.3, width_ratios=[1.3, 1.0])
-    # e: false positives vs homologue leakage
-    ax = fig.add_subplot(g2[0, 0])
-    for n, mk in [("shuffle", "o"), ("spin_std", "^"), ("spin_sym", "D")]:
-        for m, fill in [("ridge", True), ("knn", False)]:
-            xs = [leak[s] for s in ORDER]
-            ys = [fs.sel(fpr, model=m, scheme=s, null=n)["fpr"].iloc[0] for s in ORDER]
-            jit = np.array([{"H": -0.03, "SH": 0.0, "DD-H": 0.03}.get(sc, 0.0) for sc in ORDER])
-            ax.scatter(np.array(xs) + jit, ys, marker=mk, s=13, facecolor=fs.NULL_COL[n] if fill else "white",
-                       edgecolor=fs.NULL_COL[n], linewidth=0.7, zorder=3)
-            if n == "shuffle" and m == "ridge":
-                for sc, x_, y_ in zip(ORDER, np.array(xs) + jit, ys):
-                    ax.annotate(sc, (x_, y_), xytext=(3, 3), textcoords="offset points", fontsize=5.0, color=fs.INK2)
-    ax.axhline(0.05, color=fs.INK, lw=0.7, ls=(0, (2, 2)))
-    ax.set_yscale("log")
-    ax.yaxis.set_minor_locator(NullLocator())
-    ax.yaxis.set_minor_formatter(NullFormatter())
-    ax.set_yticks([0.02, 0.05, 0.1, 0.2, 0.5, 1])
-    ax.set_yticklabels(["2", "5", "10", "20", "50", "100"])
-    ax.set_xlabel("Homologue leakage (share of test regions whose homologue is in the training set)")
-    ax.set_ylabel("False-positive rate (%, log scale)")
-    ax.set_xlim(-0.08, 1.1)
-    ax.legend(handles=[Line2D([], [], color=fs.NULL_COL[n], marker=mk, ms=3, ls="", label=fs.NULL_SHORT[n])
-                       for n, mk in [("shuffle", "o"), ("spin_std", "^"), ("spin_sym", "D")]] +
-              [Line2D([], [], color=fs.MUTED, marker="o", ms=3, ls="", label="ridge (filled)"),
-               Line2D([], [], color=fs.MUTED, marker="o", mfc="white", ms=3, ls="", label="kNN (open)")],
-              loc="lower right", bbox_to_anchor=(1.0, 0.0), fontsize=5.4, handlelength=1.2, ncol=2, framealpha=0.95)
-    ax.set_title("False positives track homologue leakage", fontsize=6.3, loc="left")
-    fs.panel(ax, "e", x=-0.12)
-
-    # f: inner tuning (pre-specified plain leave-one-out vs group-matched; lambda = 50 mm, first 200 maps)
-    ax = fig.add_subplot(g2[0, 1])
-    pre = pd.read_csv(RES / "sim_B1_linear.csv").query("model == 'ridge' and map < 200")
-    post = pd.read_csv(RES / "rev_sim_B1.csv").query("cond == 'B1_lam50' and model == 'ridge'")
-    pos = 0
-    ticks, labels = [], []
-    for s in ["H", "S", "SH"]:
-        for lab, df, col in [("LOO", pre, fs.MUTED), ("matched", post, fs.SCHEME_COL[s])]:
-            bp = ax.boxplot(fs.sel(df, scheme=s)["r2"].to_numpy(), positions=[pos], widths=0.6, patch_artist=True,
-                            showfliers=False, medianprops=dict(color=fs.INK, lw=0.9),
-                            whiskerprops=dict(color=fs.INK2, lw=0.6), capprops=dict(color=fs.INK2, lw=0.6),
-                            boxprops=dict(lw=0))
-            bp["boxes"][0].set_facecolor(col)
-            ticks.append(pos)
-            labels.append(lab)
-            pos += 1
-        ax.text(pos - 1.5, -0.13, s, ha="center", fontsize=6, color=fs.INK, transform=ax.get_xaxis_transform())
-        pos += 0.5
-    ax.axhline(0, color=fs.INK, lw=0.6)
-    ax.set_ylim(-2.8, 0.8)
-    ax.set_xticks(ticks)
-    ax.set_xticklabels(labels, fontsize=5.4)
-    ax.set_ylabel("Ridge $R^2_{cv}$ on signal-free maps")
-    ax.set_title("Inner tuning: plain leave-one-out vs mirroring the outer split", fontsize=6.3, loc="left")
-    fs.panel(ax, "f", x=-0.16)
-    fig.text(0.99, 0.005, f"λ = 77 mm, ρ = 0.9, {n_maps} maps (a–e); λ = 50 mm, 200 maps (f)", ha="right",
-             fontsize=5.2, color=fs.MUTED)
-    fs.save(fig, "Fig3", OUT)
-
-
-# ======================================================================================================================
-# Fig. 4: testing protocols as classifiers of maps with vs without signal (lambda = 77 mm)
-# ======================================================================================================================
-def fig4():
-    fs.apply()
-    roc = pd.read_csv(RES / "v3_stats_roc_curves.csv")
-    auc = pd.read_csv(RES / "v3_stats_auc.csv")
-    cmx = pd.read_csv(RES / "v3_stats_confusion.csv")
-    est = pd.read_csv(RES / "v3_stats_estimation.csv")
-    SCH = ["R", "Sw", "DD", "H", "SH", "DD-H"]
-    lv = [0.1, 0.3, 0.5]
-    fig = plt.figure(figsize=(fs.W2, 112 * fs.MM))
-    g = fig.add_gridspec(2, 3, left=0.065, right=0.985, top=0.94, bottom=0.08, wspace=0.34, hspace=0.55)
-
-    # a, b: ROC curves with the symmetric spin at s = 0.3
-    for mi, m in enumerate(["ridge", "knn"]):
-        ax = fig.add_subplot(g[0, mi])
-        for sc in SCH:
-            r = fs.sel(roc, model=m, scheme=sc, null="spin_sym", s=0.3)
-            a = fs.sel(auc, model=m, scheme=sc, null="spin_sym", s=0.3).iloc[0]
-            ax.plot(r["fpr"], r["tpr"], color=fs.SCHEME_COL[sc], ls=fs.SCHEME_LS[sc], lw=1.1, label=f"{sc} ({a['auc']:.2f})")
-        ax.plot([0, 1], [0, 1], color=fs.MUTED, lw=0.6, ls=(0, (2, 2)))
-        ax.set_xlim(0, 1)
-        ax.set_ylim(0, 1)
-        ax.set_aspect("equal")
-        ax.grid(axis="both")
-        ax.set_xlabel("False-positive rate")
-        ax.set_ylabel("True-positive rate")
-        ax.set_title(f"{fs.MODEL_LAB[m]}, s = 0.3 (AUC)", fontsize=6.2, loc="left")
-        ax.legend(loc="lower right", fontsize=5.3, handlelength=1.8, labelspacing=0.25)
-        fs.panel(ax, "ab"[mi], x=-0.3)
-
-    # c: AUC vs signal share
-    ax = fig.add_subplot(g[0, 2])
-    for sc in SCH:
-        for m, mk, fill in [("ridge", "o", True), ("knn", "s", False)]:
-            a = fs.sel(auc, model=m, scheme=sc, null="spin_sym").sort_values("s")
-            x = np.arange(3) + (-0.06 if m == "ridge" else 0.06)
-            ax.errorbar(x, a["auc"], yerr=[a["auc"] - a["lo"], a["hi"] - a["auc"]], color=fs.SCHEME_COL[sc], lw=0.9,
-                        ls=fs.SCHEME_LS[sc] if m == "ridge" else (0, (1, 1.2)), marker=mk, ms=2.8,
-                        mfc=fs.SCHEME_COL[sc] if fill else "white", elinewidth=0.5, capsize=0)
-    ax.axhline(0.5, color=fs.MUTED, lw=0.6, ls=(0, (2, 2)))
-    ax.set_xticks(range(3))
-    ax.set_xticklabels([str(v) for v in lv])
-    ax.set_xlabel("Signal share s")
-    ax.set_ylabel("AUC (95% CI)")
-    ax.set_ylim(0.45, 1.0)
-    ax.set_title("AUC, symmetric spin (filled: ridge; open: kNN)", fontsize=6.0, loc="left")
-    fs.panel(ax, "c", x=-0.28)
-
-    # d: size-adjusted power at s = 0.3; e: PPV at 10% prevalence (nominal threshold)
-    nulls, w = ["spin_std", "spin_fslr", "spin_sym"], 0.26
-    for k, (col, thr, ylab, title) in enumerate([
-            ("sensitivity", "size_adjusted", "Size-adjusted power", "Ridge, s = 0.3: power at a true 5% error rate"),
-            ("PPV_prev10", "nominal_0.05", "Positive predictive value", "Ridge, s = 0.3, P < 0.05, 10% of maps with signal")]):
-        ax = fig.add_subplot(g[1, k])
-        for ni, n in enumerate(nulls):
-            vals = [fs.sel(cmx, model="ridge", scheme=sc_, null=n, s=0.3, threshold=thr)[col].iloc[0] for sc_ in SCH]
-            ax.bar(np.arange(len(SCH)) + (ni - 1) * w, vals, width=w - 0.03, color=fs.NULL_COL[n], label=fs.NULL_SHORT[n])
-        ax.set_xticks(range(len(SCH)))
-        ax.set_xticklabels(SCH)
-        ax.set_ylim(0, 1)
-        ax.set_ylabel(ylab)
-        ax.set_title(title, fontsize=6.0, loc="left")
-        if k == 0:
-            ax.legend(loc="upper left", fontsize=5.4, ncol=3, handlelength=1.0, columnspacing=0.8)
-        fs.panel(ax, "de"[k], x=-0.28)
-
-    # f: estimation
-    ax = fig.add_subplot(g[1, 2])
-    for sc in ["R", "Sw", "H", "SH"]:
-        e = fs.sel(est, model="ridge", scheme=sc).sort_values("s")
-        x = np.arange(3) + {"R": -0.15, "Sw": -0.05, "H": 0.05, "SH": 0.15}[sc]
-        ax.errorbar(x, e["skill_median"], yerr=[e["skill_median"] - e["skill_q25"], e["skill_q75"] - e["skill_median"]],
-                    color=fs.SCHEME_COL[sc], marker="o", ms=2.8, lw=0.9, ls=fs.SCHEME_LS[sc], elinewidth=0.6,
-                    capsize=0, label=sc)
-    leg = ax.legend(loc="upper left", fontsize=5.2, ncol=4, handlelength=1.6, columnspacing=0.9)
-    ax.add_artist(leg)
-    tr = fs.sel(est, model="ridge", scheme="R").sort_values("s")["true_share"].to_numpy()
-    em = pd.read_csv(RES / "v3_estimand.csv")
-    rep = em[em["model"] == "ridge"].groupby("s")[["replicate_r2", "replicate_r2_loo", "replicate_r2_best"]].median()
-    rep = rep.reindex(lv)
-    band = ax.fill_between(np.arange(3), rep["replicate_r2_loo"], rep["replicate_r2_best"], color=fs.MUTED, alpha=0.2,
-                           lw=0)
-    bench = [ax.plot(np.arange(3), v, color=fs.INK, lw=0.8, ls=ls)[0]
-             for v, ls in [(tr, (0, (3, 2))), (rep["replicate_r2"], (0, (1, 1.2)))]]
-    for v in [tr, rep["replicate_r2"]]:    # exact values; drawn separately so that the legend shows the line styles
-        ax.plot(np.arange(3), v, color=fs.INK, ls="none", marker="_", ms=8)
-    ax.legend(bench + [band], ["realized share", "replicate R², pair-tuned", "replicate R², LOO-tuned to best penalty"],
-              loc="upper left", bbox_to_anchor=(0, 0.91), fontsize=5.2, handlelength=2.6)
-    ax.axhline(0, color=fs.MUTED, lw=0.5)
-    ax.set_ylim(-0.35, 1.3)
-    ax.set_yticks(np.arange(-0.2, 0.81, 0.2))
-    ax.set_xticks(range(3))
-    ax.set_xticklabels([str(v) for v in lv])
-    ax.set_xlabel("Signal share s")
-    ax.set_ylabel("Cross-validated skill (median, IQR)")
-    ax.set_title("Ridge: cross-validated skill vs benchmarks", fontsize=6.0, loc="left")
-    fs.panel(ax, "f", x=-0.28)
-    fs.save(fig, "Fig4", OUT)
-
-
-# ======================================================================================================================
-# Fig. 5: reanalysis of 12 ENIGMA disorder maps with 28 annotations
-# ======================================================================================================================
-def count_heatmap(ax, M, ylabels, xlabels, fontsize=6):
-    cm = LinearSegmentedColormap.from_list("cnt", ["#f7f7f5"] + fs.SEQ[1:])
-    ax.imshow(M, cmap=cm, vmin=0, vmax=12, aspect="auto")
-    for i in range(M.shape[0]):
-        for j in range(M.shape[1]):
-            ax.text(j, i, str(M[i, j]), ha="center", va="center", fontsize=fontsize,
-                    color="white" if M[i, j] > 7 else fs.INK)
-    ax.set_yticks(range(len(ylabels)))
-    ax.set_yticklabels(ylabels, fontsize=5.8)
-    ax.set_xticks(range(len(xlabels)))
-    ax.grid(False)
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-    ax.tick_params(length=0)
-
-
-def fig5():
-    fs.apply()
-    d = pd.read_csv(RES / "v3_real_cv.csv")
-    d = d[d["set"] == "multimodal"]
-    ORDER = ["R", "Sw", "DD", "S", "H", "SH", "DD-H"]
-    NULLS = ["shuffle", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
-    fig = plt.figure(figsize=(fs.W2, 100 * fs.MM))
-    g = fig.add_gridspec(2, 3, left=0.08, right=0.985, top=0.94, bottom=0.1, wspace=0.42, hspace=0.62,
-                         width_ratios=[1.15, 1, 1])
-
-    # a: ridge R2 under R vs SH per map
-    ax = fig.add_subplot(g[:, 0])
     r = d.query("model == 'ridge' and scheme == 'R'").set_index("map")
     sh = d.query("model == 'ridge' and scheme == 'SH'").set_index("map")
-    order = r["stat"].sort_values().index.tolist()
-    yy = np.arange(len(order))
+    morder = r["stat"].sort_values().index.tolist()
+    yy = np.arange(len(morder))
     lo = -0.8
-    ax.hlines(yy, np.clip(sh.loc[order, "stat"], lo, None), r.loc[order, "stat"], color=fs.GRAY_LIGHT, lw=1.2, zorder=1)
+    ax.hlines(yy, np.clip(sh.loc[morder, "stat"], lo, None), r.loc[morder, "stat"], color=fs.GRAY_LIGHT, lw=1.2, zorder=1)
     for sc, df, col in [("R", r, fs.SCHEME_COL["R"]), ("SH", sh, fs.SCHEME_COL["SH"])]:
-        sig = (df.loc[order, "q_spin_sym"] < 0.05).to_numpy()
-        x = np.clip(df.loc[order, "stat"].to_numpy(), lo, None)
-        ax.scatter(x[sig], yy[sig], s=22, color=col, zorder=3, edgecolor=col, linewidth=0.8)
-        ax.scatter(x[~sig], yy[~sig], s=22, facecolor="white", edgecolor=col, zorder=3, linewidth=0.8)
+        sig = (df.loc[morder, "q_spin_sym"] < 0.05).to_numpy()
+        x = np.clip(df.loc[morder, "stat"].to_numpy(), lo, None)
+        ax.scatter(x[sig], yy[sig], s=16, color=col, zorder=3, edgecolor=col, linewidth=0.8)
+        ax.scatter(x[~sig], yy[~sig], s=16, facecolor="white", edgecolor=col, zorder=3, linewidth=0.8)
     ax.axvline(0, color=fs.INK2, lw=0.6)
     ax.set_yticks(yy)
-    ax.set_yticklabels(order)
+    ax.set_yticklabels(morder, fontsize=5.6)
     ax.set_xlim(lo - 0.05, 0.9)
     ax.set_xlabel("Ridge $R^2_{cv}$")
     ax.grid(axis="x")
     ax.grid(axis="y", visible=False)
-    ax.legend(handles=[Line2D([], [], marker="o", ls="", color=fs.SCHEME_COL["R"], label="R (10 partitions)"),
-                       Line2D([], [], marker="o", ls="", color=fs.SCHEME_COL["SH"], label="SH"),
-                       Line2D([], [], marker="o", ls="", mfc="white", color=fs.MUTED, label="not significant")],
-              loc="lower right", fontsize=5.4, handletextpad=0.2)
-    ax.set_title("Filled: FDR q < 0.05, symmetric spin", fontsize=6.0, loc="left")
-    fs.panel(ax, "a", x=-0.3, y=1.02)
+    ax.legend(handles=[Line2D([], [], marker="o", ms=4, ls="", color=fs.SCHEME_COL["R"], label="Random folds (R)"),
+                       Line2D([], [], marker="o", ms=4, ls="", color=fs.SCHEME_COL["SH"],
+                              label="Bilateral spatial blocks (SH)"),
+                       Line2D([], [], marker="o", ms=4, ls="", mfc="white", color=fs.MUTED, label="not significant")],
+              loc="upper left", fontsize=5.4, handletextpad=0.2, borderaxespad=0.3, frameon=True, facecolor="white",
+              edgecolor="none", framealpha=1.0)
+    ax.set_title("Prediction: filled, FDR q < 0.05 (symmetric spin)", fontsize=6.2, loc="left")
+    fs.panel(ax, "b", x=-0.27)
 
-    # b, c: number of significant maps per protocol
+    # c, d: number of disorder maps significantly predicted under every protocol
+    g2 = fig.add_gridspec(1, 2, left=0.12, right=0.985, top=0.44, bottom=0.085, wspace=0.42)
     for mi, m in enumerate(["ridge", "knn"]):
-        ax = fig.add_subplot(g[mi, 1:])
+        ax = fig.add_subplot(g2[0, mi])
         M = np.array([[int((fs.sel(d, model=m, scheme=sc_)[f"q_{n_}"] < 0.05).sum()) for sc_ in ORDER] for n_ in NULLS])
         count_heatmap(ax, M, [fs.NULL_SHORT[n] for n in NULLS], ORDER)
-        ax.set_xticklabels([fs.SCHEME_LAB[sc] for sc in ORDER], fontsize=5.4, rotation=20, ha="right")
-        ax.set_title(f"{fs.MODEL_LAB[m]}: disorder maps 'predicted' (of 12; FDR q < 0.05)", fontsize=6.2, loc="left")
-        fs.panel(ax, "bc"[mi], x=-0.14, y=1.03)
+        ax.set_xticklabels(ORDER, fontsize=5.8)
+        ax.axvline(3.5, color="white", lw=2.5)   # gap between schemes that split homologues and schemes that do not
+        ax.set_xlabel("Cross-validation scheme")
+        ax.set_title(f"{fs.MODEL_LAB[m]}: maps predicted (of 12; FDR q < 0.05)", fontsize=6.2, loc="left")
+        fs.panel(ax, "cd"[mi], x=-0.3, y=1.03)
     fs.save(fig, "Fig5", OUT)
 
 
 # ======================================================================================================================
-# Supplementary Figs 1-7
+# Supplementary Figs 1-10 (numbered in the order in which the article cites them) and two archive-only figures
 # ======================================================================================================================
 def supp_lambda():
     c = pd.read_csv(RES / "rev_lambda_calibration.csv")
@@ -810,7 +736,7 @@ def supp_biv_annot():
     ax.grid(axis="both")
     ax.legend(fontsize=5.6, loc="upper left")
     ax.set_title("Per-annotation false-positive rates (λ = 77 mm, ρ = 0.9)", fontsize=6.2, loc="left")
-    fs.save(fig, "SuppFig2_bivariate_per_annotation", OUT_SUPP)
+    fs.save(fig, "Extra_bivariate_per_annotation", OUT_EXTRA)
 
 
 def supp_partition():
@@ -827,7 +753,7 @@ def supp_partition():
         ax.set_title(f"{fs.MODEL_LAB[m]}: single random partitions (λ = 50 mm)", fontsize=6.2, loc="left")
     axes[0].set_ylabel("False-positive rate")
     axes[0].legend(fontsize=5.6)
-    fs.save(fig, "SuppFig3_partition_dose_response", OUT_SUPP)
+    fs.save(fig, "Extra_partition_dose_response", OUT_EXTRA)
 
 
 def supp_cv50():
@@ -837,7 +763,7 @@ def supp_cv50():
         _fpr_heatmap(ax, fpr, m, ["Sw", "R", "S", "DD", "H", "SH", "DD-H"],
                      ["shuffle", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"],
                      f"{fs.MODEL_LAB[m]}: false positives (%), λ = 50 mm", fontsize=5.4)
-    fs.save(fig, "SuppFig4_cv_fpr_lambda50", OUT_SUPP)
+    fs.save(fig, "SuppFig7_cv_fpr_lambda50", OUT_SUPP)
 
 
 def supp_roc_all():
@@ -869,7 +795,7 @@ def supp_roc_all():
         fig.text(x0, axes[0, 0].get_position().y1 + 0.075, fs.NULL_SHORT[n] + " spin", ha="center", fontsize=6.4,
                  color=fs.INK)
     axes[1, 0].legend(fontsize=4.8, loc="lower right", handlelength=1.2, labelspacing=0.15)
-    fs.save(fig, "SuppFig5_roc_all", OUT_SUPP)
+    fs.save(fig, "SuppFig10_roc_all", OUT_SUPP)
 
 
 def supp_rf_dd():
@@ -916,7 +842,7 @@ def supp_rf_dd():
     ax.grid(axis="x")
     ax.set_title("Random forests over repeated partitions", fontsize=6.2, loc="left")
     fs.panel(ax, "b", x=-0.3)
-    fs.save(fig, "SuppFig6_dd_rf_real", OUT_SUPP)
+    fs.save(fig, "SuppFig4_dd_rf_real", OUT_SUPP)
 
 
 def supp_sens():
@@ -968,7 +894,7 @@ def supp_sens():
                   Line2D([], [], marker="D", ls="", ms=3, mfc="white", mec=fs.INK2, label="unperturbed")]
             ax.legend(handles=hd, fontsize=5.6, loc="upper center", bbox_to_anchor=(1.12, -0.2), ncol=3, frameon=False)
             fs.panel(ax, "b", x=-0.35)
-    fs.save(fig, "SuppFig7_sensitivity", OUT_SUPP)
+    fs.save(fig, "SuppFig5_sensitivity", OUT_SUPP)
 
 
 def _fpr_bars(ax, labels, fpr, lo, hi, cols, ref=None):
@@ -987,7 +913,7 @@ def _fpr_bars(ax, labels, fpr, lo, hi, cols, ref=None):
 
 
 def supp_half():
-    """Supplementary Fig. 12: one value per homologous pair (34 regions)."""
+    """Supplementary Fig. 9: one value per homologous pair (34 regions)."""
     biv = pd.read_csv(RES / "v3_stats_half_biv.csv")
     main = pd.read_csv(RES / "v3_stats_bivariate_fpr.csv").query("cond == 'lam77_rho0.9' and pvalue == 'two_sided'")
     cv = pd.read_csv(RES / "v3_stats_half_cv_fpr.csv")
@@ -1058,11 +984,11 @@ def supp_half():
         ax.set_title(f"{fs.MODEL_LAB[m]}: positive control", fontsize=6.2, loc="left")
         ax.legend(fontsize=5.0, ncol=2, loc="upper left", handlelength=1.8)
         fs.panel(ax, "ef"[k], x=-0.12)
-    fs.save(fig, "SuppFig12_one_value_per_pair", OUT_SUPP)
+    fs.save(fig, "SuppFig9_one_value_per_pair", OUT_SUPP)
 
 
 def supp_glasser():
-    """Supplementary Fig. 13: the Glasser parcellation (360 regions)."""
+    """Supplementary Fig. 8: the Glasser parcellation (360 regions)."""
     gb = pd.read_csv(RES / "v3_stats_glasser_biv.csv")
     biv = gb[gb["cond"] == "lam77_rho0.9"].set_index("null")
     rho0 = gb[gb["cond"] == "lam77_rho0.0"].set_index("null")
@@ -1094,12 +1020,131 @@ def supp_glasser():
         _fpr_heatmap(ax, cv, m, ["Sw", "R", "S", "H", "SH"], ["shuffle", "spin_std", "spin_sym"],
                      f"{'Ridge' if m == 'ridge' else 'kNN'}: CV false positives (%)", fontsize=5.6)
         fs.panel(ax, "cd"[k], x=-0.3)
-    fs.save(fig, "SuppFig13_glasser", OUT_SUPP)
+    fs.save(fig, "SuppFig8_glasser", OUT_SUPP)
+
+
+# Supplementary Figs 2, 3 and 6: panels that the main figures no longer carry
+def supp_corr_length():
+    """Supplementary Fig. 6: false-positive rates of map-to-map tests across correlation lengths."""
+    t = pd.read_csv(RES / "v3_stats_bivariate_fpr.csv")
+    fig, ax = plt.subplots(figsize=(fs.W1 * 1.3, 62 * fs.MM))
+    _sweep(ax, t[t["pvalue"] == "two_sided"], ["lam25_rho0.9", "lam50_rho0.9", "lam77_rho0.9", "lam100_rho0.9"],
+           ["25", "50", "77", "100"], "Correlation length λ (mm)", "Map-to-map correlations, bilateral coupling 0.9")
+    ax.legend(loc="upper left", bbox_to_anchor=(1.02, 1.0), fontsize=5.6, handlelength=1.6)
+    fs.save(fig, "SuppFig6_correlation_length", OUT_SUPP)
+
+
+def supp_inner_tuning():
+    """Supplementary Fig. 2: inner tuning by plain leave-one-out versus tuning that mirrors the outer split
+    (ridge, correlation length 50 mm, first 200 maps)."""
+    pre = pd.read_csv(RES / "sim_B1_linear.csv").query("model == 'ridge' and map < 200")
+    post = pd.read_csv(RES / "rev_sim_B1.csv").query("cond == 'B1_lam50' and model == 'ridge'")
+    fig, ax = plt.subplots(figsize=(fs.W1 * 1.1, 62 * fs.MM))
+    pos = 0
+    ticks, labels = [], []
+    for s in ["H", "S", "SH"]:
+        for lab, df, col in [("LOO", pre, fs.MUTED), ("matched", post, fs.SCHEME_COL[s])]:
+            bp = ax.boxplot(fs.sel(df, scheme=s)["r2"].to_numpy(), positions=[pos], widths=0.6, patch_artist=True,
+                            showfliers=False, medianprops=dict(color=fs.INK, lw=0.9),
+                            whiskerprops=dict(color=fs.INK2, lw=0.6), capprops=dict(color=fs.INK2, lw=0.6),
+                            boxprops=dict(lw=0))
+            bp["boxes"][0].set_facecolor(col)
+            ticks.append(pos)
+            labels.append(lab)
+            pos += 1
+        ax.text(pos - 1.5, -0.13, s, ha="center", fontsize=6, color=fs.INK, transform=ax.get_xaxis_transform())
+        pos += 0.5
+    ax.axhline(0, color=fs.INK, lw=0.6)
+    ax.set_ylim(-2.8, 0.8)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(labels, fontsize=5.4)
+    ax.set_ylabel("Ridge $R^2_{cv}$ on signal-free maps")
+    ax.set_title("Inner tuning: plain leave-one-out vs mirroring the outer split", fontsize=6.3, loc="left")
+    fs.save(fig, "SuppFig2_inner_tuning", OUT_SUPP)
+
+
+def supp_positive_control():
+    """Supplementary Fig. 3: maps with an added signal - discrimination, predictive value and estimation."""
+    auc = pd.read_csv(RES / "v3_stats_auc.csv")
+    cmx = pd.read_csv(RES / "v3_stats_confusion.csv")
+    est = pd.read_csv(RES / "v3_stats_estimation.csv")
+    SCH = ["Sw", "R", "DD", "H", "SH", "DD-H"]
+    lv = [0.1, 0.3, 0.5]
+    fig = plt.figure(figsize=(fs.W2, 64 * fs.MM))
+    g = fig.add_gridspec(1, 3, left=0.065, right=0.985, top=0.88, bottom=0.17, wspace=0.36)
+
+    # a: AUC against the signal share
+    ax = fig.add_subplot(g[0, 0])
+    for sc in SCH:
+        for m, mk, fill in [("ridge", "o", True), ("knn", "s", False)]:
+            a = fs.sel(auc, model=m, scheme=sc, null="spin_sym").sort_values("s")
+            x = np.arange(3) + (-0.06 if m == "ridge" else 0.06)
+            ax.errorbar(x, a["auc"], yerr=[a["auc"] - a["lo"], a["hi"] - a["auc"]], color=fs.SCHEME_COL[sc], lw=0.9,
+                        ls=fs.SCHEME_LS[sc] if m == "ridge" else (0, (1, 1.2)), marker=mk, ms=2.8,
+                        mfc=fs.SCHEME_COL[sc] if fill else "white", elinewidth=0.5, capsize=0)
+    ax.axhline(0.5, color=fs.MUTED, lw=0.6, ls=(0, (2, 2)))
+    ax.set_xticks(range(3))
+    ax.set_xticklabels([str(v) for v in lv])
+    ax.set_xlabel("Signal share s")
+    ax.set_ylabel("AUC (95% CI)")
+    ax.set_ylim(0.45, 1.0)
+    ax.legend(handles=[Line2D([], [], color=fs.SCHEME_COL[sc], ls=fs.SCHEME_LS[sc], lw=1.1, label=sc) for sc in SCH],
+              loc="upper left", fontsize=5.3, ncol=2, handlelength=1.8, labelspacing=0.25, columnspacing=1.0)
+    ax.set_title("AUC, symmetric spin (filled: ridge; open: kNN)", fontsize=6.0, loc="left")
+    fs.panel(ax, "a", x=-0.26)
+
+    # b: positive predictive value when 10% of the maps carry a signal (nominal threshold)
+    ax = fig.add_subplot(g[0, 1])
+    nulls, w = ["spin_std", "spin_fslr", "spin_sym"], 0.26
+    for ni, n in enumerate(nulls):
+        vals = [fs.sel(cmx, model="ridge", scheme=sc_, null=n, s=0.3, threshold="nominal_0.05")["PPV_prev10"].iloc[0]
+                for sc_ in SCH]
+        ax.bar(np.arange(len(SCH)) + (ni - 1) * w, vals, width=w - 0.03, color=fs.NULL_COL[n], label=fs.NULL_SHORT[n])
+    ax.set_xticks(range(len(SCH)))
+    ax.set_xticklabels(SCH)
+    ax.set_ylim(0, 1)
+    ax.set_ylabel("Positive predictive value")
+    ax.legend(loc="upper left", fontsize=5.4, ncol=3, handlelength=1.0, columnspacing=0.8)
+    ax.set_title("Ridge, s = 0.3, P < 0.05, 10% of maps with signal", fontsize=6.0, loc="left")
+    fs.panel(ax, "b", x=-0.26)
+
+    # c: estimation
+    ax = fig.add_subplot(g[0, 2])
+    for sc in ["R", "Sw", "H", "SH"]:
+        e = fs.sel(est, model="ridge", scheme=sc).sort_values("s")
+        x = np.arange(3) + {"R": -0.15, "Sw": -0.05, "H": 0.05, "SH": 0.15}[sc]
+        ax.errorbar(x, e["skill_median"], yerr=[e["skill_median"] - e["skill_q25"], e["skill_q75"] - e["skill_median"]],
+                    color=fs.SCHEME_COL[sc], marker="o", ms=2.8, lw=0.9, ls=fs.SCHEME_LS[sc], elinewidth=0.6,
+                    capsize=0, label=sc)
+    leg = ax.legend(loc="upper left", fontsize=5.2, ncol=4, handlelength=1.6, columnspacing=0.9)
+    ax.add_artist(leg)
+    tr = fs.sel(est, model="ridge", scheme="R").sort_values("s")["true_share"].to_numpy()
+    em = pd.read_csv(RES / "v3_estimand.csv")
+    rep = em[em["model"] == "ridge"].groupby("s")[["replicate_r2", "replicate_r2_loo", "replicate_r2_best"]].median()
+    rep = rep.reindex(lv)
+    band = ax.fill_between(np.arange(3), rep["replicate_r2_loo"], rep["replicate_r2_best"], color=fs.MUTED, alpha=0.2,
+                           lw=0)
+    bench = [ax.plot(np.arange(3), v, color=fs.INK, lw=0.8, ls=ls)[0]
+             for v, ls in [(tr, (0, (3, 2))), (rep["replicate_r2"], (0, (1, 1.2)))]]
+    for v in [tr, rep["replicate_r2"]]:    # exact values; drawn separately so that the legend shows the line styles
+        ax.plot(np.arange(3), v, color=fs.INK, ls="none", marker="_", ms=8)
+    ax.legend(bench + [band], ["realized share", "replicate R², pair-tuned", "replicate R², LOO-tuned to best penalty"],
+              loc="upper left", bbox_to_anchor=(0, 0.91), fontsize=5.2, handlelength=2.6)
+    ax.axhline(0, color=fs.MUTED, lw=0.5)
+    ax.set_ylim(-0.35, 1.3)
+    ax.set_yticks(np.arange(-0.2, 0.81, 0.2))
+    ax.set_xticks(range(3))
+    ax.set_xticklabels([str(v) for v in lv])
+    ax.set_xlabel("Signal share s")
+    ax.set_ylabel("Cross-validated skill (median, IQR)")
+    ax.set_title("Ridge: cross-validated skill vs benchmarks", fontsize=6.0, loc="left")
+    fs.panel(ax, "c", x=-0.26)
+    fs.save(fig, "SuppFig3_positive_control", OUT_SUPP)
 
 
 def supp():
     for f in (supp_lambda, supp_biv_annot, supp_partition, supp_cv50, supp_roc_all, supp_rf_dd, supp_sens, supp_half,
-              supp_glasser):
+              supp_glasser, supp_corr_length, supp_inner_tuning, supp_positive_control):
         fs.apply()
         try:
             f()
@@ -1109,7 +1154,7 @@ def supp():
 
 
 # ======================================================================================================================
-# Supplementary Figs 8-11: pre-specified analyses (style of the initial analysis plan)
+# Supplementary Figs 11-14: pre-specified analyses (style of the initial analysis plan)
 # ======================================================================================================================
 class old:
     INK, INK2, MUTED = "#0b0b0b", "#52514e", "#898781"
@@ -1215,7 +1260,7 @@ def supp8_null_simulation():
                     transform=ax.transAxes, fontsize=5.8, color=old.MUTED, va="top")
     handles, labels = axes[1, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, bbox_to_anchor=(0.5, -0.02), handlelength=1.2)
-    fig.savefig(OUT_SUPP / "SuppFig8_prespecified_null_simulation.png")
+    fig.savefig(OUT_SUPP / "SuppFig11_prespecified_null_simulation.png")
     plt.close(fig)
 
 
@@ -1267,7 +1312,7 @@ def supp9_sensitivity():
     old.panel(axes[0, 2], "c", x=-0.3)
     fig.legend(handles=old.legend_r_sh(), loc="lower center", ncol=5, bbox_to_anchor=(0.5, -0.03), handlelength=2.0,
                columnspacing=1.0, fontsize=6.5)
-    fig.savefig(OUT_SUPP / "SuppFig9_prespecified_sensitivity.png")
+    fig.savefig(OUT_SUPP / "SuppFig12_prespecified_sensitivity.png")
     plt.close(fig)
 
 
@@ -1320,7 +1365,7 @@ def supp10_positive_control():
         ax.set_axisbelow(True)
     fig.legend(handles=old.legend_r_sh(), loc="upper center", ncol=5, bbox_to_anchor=(0.5, 1.02), fontsize=6.5,
                handlelength=2.0, columnspacing=1.0)
-    fig.savefig(OUT_SUPP / "SuppFig10_prespecified_positive_control.png")
+    fig.savefig(OUT_SUPP / "SuppFig13_prespecified_positive_control.png")
     plt.close(fig)
 
 
@@ -1373,7 +1418,7 @@ def supp11_real_data():
          Line2D([], [], marker="s", ls="none", color=old.ORANGE, ms=5,
                 label="Spatial + homologue CV (SH); filled = q < 0.05, symmetric spin")]
     fig.legend(handles=h, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.06), fontsize=6.5, columnspacing=1.5)
-    fig.savefig(OUT_SUPP / "SuppFig11_prespecified_real_data.png")
+    fig.savefig(OUT_SUPP / "SuppFig14_prespecified_real_data.png")
     plt.close(fig)
 
 
@@ -1400,40 +1445,44 @@ def source_data():
             lk, ang = sphere_angles(surf, parc)
             rows += [{"sphere": sname, "parcellation": pname, "left_label": k, "angle_deg": float(a)}
                      for k, a in zip(lk, ang)]
+    lk, ang = sphere_angles("fsa5", "aparc", align=True)
+    rows += [{"sphere": "fsaverage5, right frame aligned", "parcellation": "Desikan-Killiany", "left_label": k,
+              "angle_deg": float(a)} for k, a in zip(lk, ang)]
     sheets["Fig1b"] = pd.DataFrame(rows)
     sheets["Fig1c"] = b[b["kind"] == "target"][["map", "bilateral_r"] + [c for c in b.columns if c.startswith("median_")]]
+    sheets["Fig2a-b"] = pd.read_csv(RES / "v3_stats_bivariate_fpr.csv")   # also Supplementary Fig. 6
+    sheets["Fig2a_generative"] = pd.read_csv(RES / "v3_stats_gen_biv_fpr.csv")
     tests = example_test_sets(reg)
     rows = []
-    for s in ["R", "H", "Sw", "SH", "DD", "DD-H"]:
-        te = tests[s]
+    for s, te in tests.items():
         for r in range(68):
             rr = "test" if r in te else ("homologue of a test region (training)" if hom[r] in te else "training")
             rows.append({"scheme": s, "region": reg["name"][r], "role": rr})
-    sheets["Fig1d"] = pd.DataFrame(rows)
-    sheets["Fig1e"] = pd.read_csv(RES / "v3_scheme_structure.csv")
-    sheets["Fig2a-c"] = pd.read_csv(RES / "v3_stats_bivariate_fpr.csv")
-    sheets["Fig2d"] = pd.read_csv(RES / "v3_bivariate_real_counts.csv")
-    sheets["Fig2d_all_tests"] = pd.read_csv(RES / "v3_bivariate_real.csv")
-    sheets["Fig2a_generative"] = pd.read_csv(RES / "v3_stats_gen_biv_fpr.csv")
-    sheets["Fig2d_generative"] = pd.read_csv(RES / "v3_gen_real_counts.csv")
+    sheets["Fig3a_test_sets"] = pd.DataFrame(rows)
+    sheets["Fig3a_leakage"] = pd.read_csv(RES / "v3_scheme_structure.csv")   # also the row labels of Fig. 4a-b
     d = cv_null_results()
-    sheets["Fig3a-b_per_map"] = d[d["cond"] == "lam77"][["map", "model", "scheme", "stat", "r2", "skill", "r"]]
-    sheets["Fig3c-e"] = pd.read_csv(RES / "v3_stats_cv_fpr.csv")
+    sheets["Fig3b-c_per_map"] = d[d["cond"] == "lam77"][["map", "model", "scheme", "stat", "r2", "skill", "r"]]
+    sheets["Fig4a-c"] = pd.read_csv(RES / "v3_stats_cv_fpr.csv")
+    sheets["Fig4d_SuppFig3b_confusion"] = pd.read_csv(RES / "v3_stats_confusion.csv")
+    sheets["Fig5a"] = pd.read_csv(RES / "v3_bivariate_real_counts.csv")
+    sheets["Fig5a_all_tests"] = pd.read_csv(RES / "v3_bivariate_real.csv")
+    sheets["Fig5a_generative"] = pd.read_csv(RES / "v3_gen_real_counts.csv")
+    rc = pd.read_csv(RES / "v3_real_cv.csv")
+    sheets["Fig5b"] = rc[(rc["set"] == "multimodal") & (rc["model"] == "ridge") & rc["scheme"].isin(["R", "SH"])][
+        ["scheme", "map", "stat", "p_spin_sym", "q_spin_sym"]]
+    sheets["Fig5c-d"] = pd.read_csv(RES / "v3_stats_real_counts.csv")
+    # panels that moved to the Supplementary Figures keep their data here
     pre = pd.read_csv(RES / "sim_B1_linear.csv")
     pre = pre[(pre["model"] == "ridge") & (pre["map"] < 200)][["map", "scheme", "r2"]]
     pre["tuning"] = "plain leave-one-out (pre-specified)"
     post = pd.read_csv(RES / "rev_sim_B1.csv")
     post = post[(post["cond"] == "B1_lam50") & (post["model"] == "ridge")][["map", "scheme", "r2"]]
     post["tuning"] = "nested, mirrors outer scheme"
-    sheets["Fig3f"] = pd.concat([pre, post])
-    for name, f in [("Fig4a-b_ROC", "v3_stats_roc_curves.csv"), ("Fig4c_AUC", "v3_stats_auc.csv"),
-                    ("Fig4d-e_confusion", "v3_stats_confusion.csv"), ("Fig4f_estimation", "v3_stats_estimation.csv"),
-                    ("Fig4f_replicate_R2", "v3_estimand.csv")]:
+    sheets["SuppFig2_inner_tuning"] = pd.concat([pre, post])
+    for name, f in [("SuppFig10_ROC", "v3_stats_roc_curves.csv"), ("SuppFig3a_AUC", "v3_stats_auc.csv"),
+                    ("SuppFig3c_estimation", "v3_stats_estimation.csv"),
+                    ("SuppFig3c_replicate_R2", "v3_estimand.csv")]:
         sheets[name] = pd.read_csv(RES / f)
-    rc = pd.read_csv(RES / "v3_real_cv.csv")
-    sheets["Fig5a"] = rc[(rc["set"] == "multimodal") & (rc["model"] == "ridge") & rc["scheme"].isin(["R", "SH"])][
-        ["scheme", "map", "stat", "p_spin_sym", "q_spin_sym"]]
-    sheets["Fig5b-c"] = pd.read_csv(RES / "v3_stats_real_counts.csv")
     OUT.mkdir(parents=True, exist_ok=True)
     with pd.ExcelWriter(OUT / "Source_Data.xlsx") as w:
         pd.DataFrame({"Sheet": list(sheets), "Rows": [len(v) for v in sheets.values()]}).to_excel(
@@ -1446,12 +1495,12 @@ def source_data():
 # ======================================================================================================================
 # Supplementary Data 1: Supplementary Tables 1-10 (one sheet per table), built from the result files
 # ======================================================================================================================
-LAB = {"shuffle": "shuffle", "spin_std": "conventional", "spin_enigma": "ENIGMA TB", "spin_fslr": "fs_LR",
+LAB = {"shuffle": "shuffle", "spin_std": "conventional", "spin_enigma": "toolbox", "spin_fslr": "fs_LR",
        "spin_aligned": "aligned", "spin_sym": "symmetric", "bs_indep": "BrainSMASH, independent",
        "bs_shared": "BrainSMASH, shared seed", "bs_whole": "BrainSMASH, whole brain", "bs_sym": "BrainSMASH, symmetric",
        "msr_indep": "MSR, independent", "msr_shared": "MSR, shared seed", "msr_sym": "MSR, symmetric",
-       "knn": "kNN", "ridge": "ridge", "two_sided": "two-sided", "enigma_toolbox": "ENIGMA TB, as implemented",
-       "enigma_toolbox_doubled": "ENIGMA TB, P doubled", "multimodal": "28 annotations", "receptor_only": "19 receptors"}
+       "knn": "kNN", "ridge": "ridge", "two_sided": "two-sided", "enigma_toolbox": "toolbox, P as implemented",
+       "enigma_toolbox_doubled": "toolbox, P doubled", "multimodal": "28 annotations", "receptor_only": "19 receptors"}
 TABLE9 = [  # verdicts under the pre-specified decision rules (Supplementary Notes 1 and 3)
     ("H1a: null R²(R) > R²(SH)", "Supported", "Supported with group-matched tuning at λ = 50 and 77 mm"),
     ("H1b: R–SH gap larger for flexible models", "Not supported (ridge gap larger, an artefact of inner-loop leakage)",
@@ -1460,7 +1509,7 @@ TABLE9 = [  # verdicts under the pre-specified decision rules (Supplementary Not
      "Supported for kNN and ridge on both decomposition paths (R → H → SH and R → Sw → SH)"),
     ("H3a: shuffle FPR > 0.10 under R", "Supported (ridge 57%, kNN 74%, RF 98%)", "Supported (λ = 77 mm: 85–91%)"),
     ("H3b: symmetric-spin FPR ≤ 0.075 in every scheme", "Not supported (kNN 8.9% under R, 8.7% under H)",
-     "Not supported (Supplementary Table 4a)"),
+     "Not supported (Supplementary Table 9a)"),
     ("H4: conventional spin more liberal than symmetric spin under R", "Supported",
      "Supported; aligning the sphere frames removes most of the difference"),
     ("H5: fewer significant maps under (SH, symmetric spin) than (R, shuffle)", "Supported",
@@ -1475,6 +1524,42 @@ TABLE9 = [  # verdicts under the pre-specified decision rules (Supplementary Not
     ("H6d: in cross-validation, independent variants are liberal under R and Sw, and symmetric variants have "
      "false-positive rates ≤ 7.5% under SH and DD-H",
      "Supported (independent: 48.5–82.0% under R and Sw; symmetric: 0.5–6.0% under SH and DD-H)", "–")]
+
+
+CONDITION = {"22q11.2DS": "22q11.2 deletion syndrome", "ADHD": "Attention-deficit/hyperactivity disorder (all ages)",
+             "ASD": "Autism spectrum disorder (meta-analysis)", "Epilepsy": "Epilepsy (all)",
+             "MDD": "Major depressive disorder (adults)", "OCD": "Obsessive–compulsive disorder (adults)",
+             "SCZ": "Schizophrenia", "BD": "Bipolar disorder (adults)", "PD": "Parkinson's disease",
+             "AN": "Anorexia nervosa", "CD": "Conduct disorder", "CHR": "Clinical high risk for psychosis"}
+# New label of every table and the key under which supp_tables() builds it. Supplementary Tables 1-6 are those that the
+# article cites, in the order of their first citation; the others follow by topic.
+TABLE_ORDER = [("1", "TARGETS"), ("2a", "S2c"), ("2b", "S4b"), ("3a", "S3b"), ("3b", "S3f"), ("4a", "S2e"), ("4b", "S2f"),
+               ("4c", "S4c"), ("5a", "S13a"), ("5b", "S13b"), ("5c", "S13c"), ("6", "S9"), ("7", "S1"), ("8a", "S2a"),
+               ("8b", "S2b"), ("8c", "S2d"), ("9a", "S3a"), ("9b", "S3c"), ("9c", "S3d"), ("10a", "S4a"), ("10b", "S5a"),
+               ("10c", "S5b"), ("11a", "S6a"), ("11b", "S6b"), ("11c", "S6c"), ("11d", "S3e"), ("12a", "S7a"),
+               ("12b", "S7b"), ("12c", "S7c"), ("12c_full", "S7c_full"), ("13a", "S8a"), ("13a_full", "S8a_full"),
+               ("13b", "S8b"), ("13c", "S8c"), ("14", "S10"), ("15a", "S11a"), ("15b", "S11b"), ("15c", "S11c"),
+               ("15d", "S11d"), ("15e", "S11e"), ("16a", "S12a"), ("16b", "S12b")]
+
+
+def _renumber_tables(T):
+    """Tables in the order of TABLE_ORDER, with their new labels in the captions and in the cross-references."""
+    new = {old: lab for lab, old in TABLE_ORDER}
+    missing = [k for k in T if k not in new]
+    assert not missing, f"tables without a new number: {missing}"
+
+    def refs(text):
+        text = re.sub(r"sheet S(\w+)", lambda m: "sheet S" + new["S" + m.group(1)], text)
+        return re.sub(r"Supplementary Table (\d+[a-f]?)", lambda m: "Supplementary Table " + new.get("S" + m.group(1), m.group(1)), text)
+
+    out = {}
+    for lab, old in TABLE_ORDER:
+        if old not in T:
+            continue
+        cap, note, t = T[old]
+        head, rest = re.match(r"Supplementary Table \S+?( \(full\))?\.(.*)", cap, flags=re.S).groups()
+        out["S" + lab] = (f"Supplementary Table {lab.replace('_full', '')}{head or ''}." + refs(rest), refs(note), t)
+    return out
 
 
 def _cond(c):
@@ -1508,8 +1593,8 @@ def supp_tables():
     T["S2a"] = ("Supplementary Table 2a. False-positive rates of null models for map-to-map correlations (28 annotations "
                 "per map; two-sided α = 0.05).", "Confidence intervals from 2,000 bootstrap resamples of maps; tests "
                 "against 5% are one-sample t-tests on per-map rejection proportions, Holm-corrected. Simulated "
-                "annotations: the 28 annotations replaced by 28 simulated maps. 'ENIGMA TB, as implemented': the "
-                "toolbox's directional P value; 'ENIGMA TB, P doubled': the same P value doubled.", pd.DataFrame({
+                "annotations: the 28 annotations replaced by 28 simulated maps. 'toolbox, P as implemented': the "
+                "directional P value of the ENIGMA Toolbox; 'toolbox, P doubled': the same P value doubled.", pd.DataFrame({
                     "Condition": d["cond"].map(_cond), "Null": d["null"].map(LAB), "P value": d["pvalue"].map(LAB),
                     "Maps": d["n_maps"], "FPR": d["fpr"], "CI low": d["lo"], "CI high": d["hi"],
                     "P vs 5%": d["p_vs_0.05"], "Holm P": d["p_holm"], "Classification": d["bradley"]}))
@@ -1718,7 +1803,7 @@ def supp_tables():
                 r[f"{LAB[st]}, {LAB[m]}: Holm"] = x["n_holm05"]
         rows.append(r)
     sch = {s_: i for i, s_ in enumerate(["R", "Sw", "DD", "S", "H", "SH", "DD-H"])}
-    nul = {n_: i for i, n_ in enumerate(["shuffle", "ENIGMA TB", "conventional", "fs_LR", "aligned", "symmetric"])}
+    nul = {n_: i for i, n_ in enumerate(["shuffle", "toolbox", "conventional", "fs_LR", "aligned", "symmetric"])}
     p7 = pd.DataFrame(rows).sort_values(["Scheme", "Null"], key=lambda v: v.map(sch if v.name == "Scheme" else nul))
     T["S7c"] = ("Supplementary Table 7c. Number of ENIGMA maps significant under each protocol (of 12), with BH-FDR and "
                 "Holm correction, for all 28 annotations and for the 19 receptor maps as predictors.", "Which maps were "
@@ -1842,6 +1927,49 @@ def supp_tables():
                          "Rejections": d["k"], "Maps": d["n"], "FPR": d["fpr"], "CI low": d["lo"], "CI high": d["hi"],
                          "Mean statistic": d["mean_stat"], "Mean null statistic": d["mean_null"], "Holm P": d["p_holm"],
                          "Classification": d["bradley"]}))
+    d = pd.read_csv(RES / "v3_stats_insample_fpr.csv")
+    T["S13a"] = ("Supplementary Table 13a. In-sample test: false-positive rates of a least-squares fit to all regions "
+                 "whose R² is tested against null maps.", "Main simulation: the 500 signal-free maps and the null maps "
+                 "of the cross-validation simulation (λ = 77 mm, ρ = 0.9), with the toolbox spin added. Control: 2,000 "
+                 "further maps at each bilateral coupling ρ. The 28 annotations span 27 dimensions. Wilson 95% confidence "
+                 "intervals; exact two-sided binomial tests against 5%. Added after the pre-specified plan.",
+                 pd.DataFrame({
+                     "Simulation": d["cond"].map({"lam77": "main", "control": "control"}), "ρ": d["rho"],
+                     "Predictors": d["model"].map({"ols28": "28 annotations", "ols19": "19 receptors"}),
+                     "Null": d["null"].map(LAB), "Rejections": d["k"], "Maps": d["n"], "FPR": d["fpr"], "CI low": d["lo"],
+                     "CI high": d["hi"], "Binomial P": d["p_binom_vs_0.05"], "Classification": d["bradley"],
+                     "Median R²": d["median_r2"], "Median R² of null maps": d["median_null_r2"]}))
+    d = pd.read_csv(RES / "v3_stats_insample_power.csv")
+    T["S13b"] = ("Supplementary Table 13b. In-sample test: power for maps with signal (150 maps per signal share).",
+                 "Threshold: P < 0.05 (nominal) or the 95th percentile of the null-standardized statistic of the 500 "
+                 "signal-free maps (size-adjusted), as for the cross-validated statistics. The signal is built from "
+                 "three of the 28 annotations, so the model with 19 receptor maps does not always contain it.",
+                 pd.DataFrame({
+                     "Predictors": d["model"].map({"ols28": "28 annotations", "ols19": "19 receptors"}),
+                     "Null": d["null"].map(LAB), "s": d["s"],
+                     "Threshold": d["threshold"].map({"nominal_0.05": "P < 0.05", "size_adjusted": "size-adjusted"}),
+                     "Detected": d["k"], "Maps": d["n"], "Power": d["power"], "CI low": d["lo"], "CI high": d["hi"]}))
+    d = pd.read_csv(RES / "v3_insample_real.csv")
+    ins = {"Map": d["map"], "Predictors": d["model"].map({"ols28": "28 annotations", "ols19": "19 receptors"}),
+           "R²": d["stat"], "Adjusted R²": d["adj_r2"]}
+    for nt in ["shuffle", "spin_std", "spin_enigma", "spin_fslr", "spin_aligned", "spin_sym"]:
+        ins[f"P ({LAB[nt]})"], ins[f"q BH ({LAB[nt]})"] = d[f"p_{nt}"], d[f"q_{nt}"]
+    T["S13c"] = ("Supplementary Table 13c. In-sample test on the 12 ENIGMA maps.", "Least-squares fit to all 68 "
+                 "regions; one-sided Monte Carlo P values from 2,000 null maps (the null maps of the reanalysis); "
+                 "Benjamini–Hochberg q across the 12 maps of each predictor set and null model.", pd.DataFrame(ins))
+
+    tg = pd.read_csv(RES / "table1_targets.csv")
+    T["TARGETS"] = ("Supplementary Table 0. The 12 ENIGMA case–control maps of cortical thickness used as targets.",
+                    "d, Cohen's d of cases versus controls in the 68 Desikan–Killiany regions. Bilateral r, correlation "
+                    "between left-hemisphere values and their right homologues. SE source, origin of the region-wise "
+                    "standard errors (Supplementary Note 4). Sample sizes are the largest regional values in the "
+                    "released file and are empty where the file does not report them.", pd.DataFrame({
+                        "Map": tg["map"], "Condition": tg["map"].map(CONDITION), "ENIGMA Toolbox file": tg["file"],
+                        "Cases (max.)": tg["n_patients_max"], "Controls (max.)": tg["n_controls_max"],
+                        "Mean d": tg["mean_d"], "Min d": tg["min_d"], "Max d": tg["max_d"],
+                        "Bilateral r": tg["bilateral_r"],
+                        "SE source": tg["map"].map(lambda m_: src[m_].split(";")[0].replace("p-values", "P values"))}))
+    T = _renumber_tables(T)
     for k_, (cap, note, t) in T.items():
         T[k_] = (cap, note, t.reset_index(drop=True))
     return T
@@ -1873,7 +2001,13 @@ def supp_data():
                     fmt = "[=0]0.000;[<0.001]0.0E+00;0.000" if pcols.search(col) else "0.000"
                     for i in range(len(t)):
                         ws.cell(row=5 + i, column=j).number_format = fmt
-        w.sheets["Contents"].column_dimensions["B"].width = 120
+        ws = w.sheets["Contents"]
+        ws.column_dimensions["B"].width = 120
+        ws.cell(row=len(T) + 4, column=1).value = "Symbols"
+        ws.cell(row=len(T) + 4, column=2).value = (
+            "λ, correlation length; ρ, bilateral coupling; s, signal share. Schemes: R, random folds; S, spatial blocks; "
+            "Sw, within-hemisphere blocks; DD, distance-dependent split; H, homologue-pair folds; SH, bilateral spatial "
+            "blocks; DD-H, homologue-aware distance-dependent split. Supplementary Tables 1-6 are cited in the article.")
     print("wrote", f, len(T), "tables")
 
 

@@ -612,8 +612,9 @@ def shuffle_permutations(n_regions, n_perm, seed=4321):
 
 
 def spin_permutations(reg, n_spins, seed=1234):
-    """Conventional parcel spin (Alexander-Bloch et al. 2018; Hungarian re-assignment as in Vasa et al. 2018) on the
-    sphere centroids in `reg`: the right hemisphere receives the mirror image of the left-hemisphere rotation."""
+    """Conventional parcel spin (rotations of Alexander-Bloch et al. 2018; Hungarian re-assignment of parcel centroids as
+    in Markello & Misic 2021) on the sphere centroids in `reg`: the right hemisphere receives the mirror image of the
+    left-hemisphere rotation."""
     rng = np.random.default_rng(seed)
     sph = reg[["sph_x", "sph_y", "sph_z"]].to_numpy()
     hemi = reg["hemi"].to_numpy()

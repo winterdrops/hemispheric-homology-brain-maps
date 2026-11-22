@@ -1,6 +1,6 @@
 """
-s5_enigma.py - step 5: reanalysis of the 12 ENIGMA cortical-thickness maps (Fig. 5, Supplementary Figs 6-7,
-Supplementary Tables 3f, 7 and 8).
+s5_enigma.py - step 5: reanalysis of the 12 ENIGMA cortical-thickness maps (Figs 5b-d, Supplementary Figs 4-5,
+Supplementary Tables 3b, 12a-c and 13a-c).
 
   cv          ridge and kNN under all seven schemes and six nulls (2,000 draws each), for the 28 annotations and for the
               19 receptor maps; out-of-fold predictions, full regression metrics, z-scores relative to every null,

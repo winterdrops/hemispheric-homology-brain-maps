@@ -1,6 +1,6 @@
 """
-s4_cv_simulations.py - step 4: simulations of cross-validated prediction (Figs 3 and 4, Table 2B,
-Supplementary Tables 3-6).
+s4_cv_simulations.py - step 4: simulations of cross-validated prediction (Figs 3 and 4, Table 4,
+Supplementary Figs 3, 7 and 10, Supplementary Tables 2b, 3a-b, 4c, 5a-c and 9a-11d).
 
 Target maps are Gaussian random fields independent of the 28 real predictors (or, in the positive control, with a signal
 built from three of them). Models: ridge (inner tuning mirrors the outer scheme; DD uses leave-one-out tuning as in
@@ -20,6 +20,9 @@ SH, Sw, DD and DD-H. Statistic tested: R2_cv (partition schemes) or the mean tes
                     (R, S, DD; shuffle and a spin of the left sphere)
   glasser_cv I0 I1  fine parcellation (Glasser, 360 regions): null maps I0..I1-1 of 300 (R, H, S, SH, Sw; shuffle,
                     conventional and symmetric spins)
+  insample          in-sample least squares with R2 tested against null maps (the test most used in published work),
+                    on the maps and null permutations of the cv and power steps, on maps with weaker or no bilateral
+                    coupling, and on the 12 ENIGMA maps; added after the pre-specified plan
 Long jobs resume where they stopped when HEMIHOM_RESUME=1.
 
 Usage: python s4_cv_simulations.py STEP [arguments]
@@ -375,10 +378,76 @@ def glasser_cv(i0, i1):
             print(f"glasser: map {j} at {time.time() - t0:.0f}s", flush=True)
 
 
+# ======================================================================================================================
+# insample: in-sample multiple regression tested against null maps (added after the pre-specified plan)
+# ======================================================================================================================
+def insample():
+    """Least squares (with intercept) of a whole map on the annotations, with its R2 tested against null maps. Two sets
+    of predictors: the 28 annotations of the simulations (ols28) and the 19 PET receptor maps of Hansen et al. (2022)
+    (ols19). The signal-free maps, the maps with signal and the null permutations are those of the `cv` and `power`
+    steps, so every result is paired with the cross-validated one. For a fixed design, adjusted R2 is a monotone
+    function of R2 and gives the same P values. The signal of the positive control is built from three of the 28
+    annotations, so ols19 does not always contain it. The six MEG band powers sum to a constant, so the 28 annotations
+    span 27 dimensions; the fit uses an orthonormal basis of the space they span. Three further sets of 2,000
+    signal-free maps (cond "control"; bilateral coupling 0, 0.5 and 0.9) show how much of the excess comes from
+    bilateral structure. The 12 ENIGMA
+    maps are tested against the null permutations of the reanalysis (s5 `cv`; 2,000 draws)."""
+    def basis(A):
+        U, sv, _ = np.linalg.svd((A - A.mean(0)) / A.std(0), full_matrices=False)
+        return U[:, sv > 1e-10 * sv[0]]
+
+    Q = {"ols28": basis(Xv), "ols19": basis(X[[c for c in X.columns if c.startswith("PET_")]].to_numpy(float))}
+
+    def r2(Ymat, q):
+        Yc = Ymat - Ymat.mean(0)
+        return ((q.T @ Yc) ** 2).sum(0) / (Yc ** 2).sum(0)
+
+    def rows_for(y, nulls, base):
+        out = []
+        for k, q in Q.items():
+            obs = float(r2(y[:, None], q)[0])
+            row = {**base, "model": k, "rank": q.shape[1], "stat": obs}
+            for nt, perms in nulls.items():
+                ns = r2(y[perms].T, q)
+                row[f"p_{nt}"] = hl.perm_pvalue(obs, ns)
+                row[f"mu_{nt}"], row[f"sd_{nt}"] = float(ns.mean()), float(ns.std(ddof=1))
+            out.append(row)
+        return out
+
+    nulls, rows = {**cv_nulls(), **hl.null_permutations(reg, 500, {"spin_enigma": 19002})}, []   # cv nulls + toolbox
+    sims = [("lam77", 0.9, null_maps("lam77"))]
+    sims += [("control", rho, hl.grf_maps(reg, geo, lam=77, rho=rho, n_maps=2000, seed=33100 + int(10 * rho)))
+             for rho in (0.0, 0.5, 0.9)]
+    for cond, rho, M in sims:
+        for j in range(M.shape[1]):
+            rows += rows_for(M[:, j], nulls, {"cond": cond, "rho": rho, "map": j})
+    pd.DataFrame(rows).to_csv(RES / "v3_insample_sim.csv", index=False)
+
+    nulls, rows = hl.null_permutations(reg, 500, {"spin_std": 20001, "spin_fslr": 20003, "spin_sym": 20005}), []
+    for li, s_level in enumerate(LEVELS):   # the maps of the `power` step
+        E = hl.grf_maps(reg, geo, lam=77.0, rho=0.9, n_maps=150, seed=20700 + li)
+        Ms, S, Cs = hl.signal_maps(Xs, E, s_level, np.random.default_rng(20600 + li))
+        for j in range(Ms.shape[1]):
+            rows += rows_for(Ms[:, j], nulls, {"s": s_level, "map": j,
+                                               "realised_share": float(np.corrcoef(Ms[:, j], S[:, j])[0, 1] ** 2)})
+    pd.DataFrame(rows).to_csv(RES / "v3_insample_power.csv", index=False)
+
+    nulls, rows = hl.null_permutations(reg, 2000, {"shuffle": 21000, "spin_std": 21001, "spin_enigma": 21002,
+                                                   "spin_fslr": 21003, "spin_aligned": 21004, "spin_sym": 21005}), []
+    for k, name in enumerate(Y.columns):
+        rows += rows_for(Yv[:, k], nulls, {"map": name})
+    real = pd.DataFrame(rows)
+    real["adj_r2"] = 1 - (1 - real["stat"]) * (len(Yv) - 1) / (len(Yv) - 1 - real["rank"])
+    for nt in nulls:   # Benjamini-Hochberg across the 12 maps of each predictor set and null model
+        real[f"q_{nt}"] = real.groupby("model")[f"p_{nt}"].transform(hl.bh_fdr)
+    real.to_csv(RES / "v3_insample_real.csv", index=False)
+    print("in-sample test: null simulation, positive control and ENIGMA maps written", flush=True)
+
+
 STEPS = {"cv": lambda tag, a=0, b=500: cv(tag, int(a), int(b)),
          "power": lambda *lv: power([int(v) for v in lv] or [0, 1, 2]), "estimand": estimand, "approx": approx,
          "dd_ols": dd_ols, "gen_cv": lambda i0, i1: gen_cv(int(i0), int(i1)), "half_cv": half_cv,
-         "glasser_cv": lambda i0, i1: glasser_cv(int(i0), int(i1))}
+         "glasser_cv": lambda i0, i1: glasser_cv(int(i0), int(i1)), "insample": insample}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in STEPS:

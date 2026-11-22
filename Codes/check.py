@@ -168,7 +168,7 @@ def tests():
         mis = pd.read_csv(hl.RES / "v3_misalignment.csv").set_index(["sphere", "parcellation"])
         ag = hl.homologue_angles(rg, rg[["sph_x", "sph_y", "sph_z"]].to_numpy()).mean()
         hg = rg["homologue_idx"].to_numpy()
-        check(f"Glasser: 360 regions, 180 pairs, misalignment {ag:.2f} deg as in Supplementary Table 1",
+        check(f"Glasser: 360 regions, 180 pairs, misalignment {ag:.2f} deg as in Supplementary Table 7",
               len(rg) == 360 and np.array_equal(hg[hg], np.arange(360))
               and abs(ag - mis.loc[("fsaverage5", "Glasser (360)"), "mean_deg"]) < 1e-6
               and np.isfinite(gg[:180, :180]).all() and np.allclose(gg[:180, :180], gg[:180, :180].T, atol=1e-6))

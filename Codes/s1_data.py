@@ -3,17 +3,19 @@ s1_data.py - step 1: data, geometry and descriptive analyses (no outcome statist
 
   prepare   analysis-ready matrices from the public raw files: 12 ENIGMA case-control Cohen's d maps (targets), 28
             annotations (predictors), region geometry (sphere and surface centroids, geodesic distances), descriptive
-            spatial statistics and the parity check against Hansen et al. (2022)
+            spatial statistics, the parity check against Hansen et al. (2022) and the summary of the 12 target maps
+            (Supplementary Table 1)
   lambda    correlation length: empirical correlogram fits and calibration of the generating lambda by simulation
             (Supplementary Fig. 1)
-  geometry  sphere-frame misalignment on fsaverage5 and fs_LR (Fig. 1b, Supplementary Table 1), bilateral structure of
-            the null maps (Fig. 1c) and homologue leakage of every cross-validation scheme (Fig. 1e)
-  se        region-wise standard errors of the ENIGMA effect sizes (Supplementary Note 4, Supplementary Table 10)
+  geometry  sphere-frame misalignment on fsaverage5 and fs_LR (Fig. 1b, Supplementary Table 7), bilateral structure of
+            the maps and their null maps (Fig. 1a, c) and homologue leakage of every cross-validation scheme (Fig. 3a,
+            Table 3)
+  se        region-wise standard errors of the ENIGMA effect sizes (Supplementary Note 4, Supplementary Table 14)
   meff      effective number of independent target maps (Li & Ji 2005; Nyholt 2004)
   glasser   geometry of the Glasser parcellation (360 regions) for the fine-parcellation simulations
 
 Usage: python s1_data.py [prepare|lambda|geometry|se|meff|glasser ...]   (default: all, in this order)
-Outputs: data/derived/*, results/data_checks.json, descriptives_spatial.csv, rev_lambda_*.csv, v3_misalignment.csv,
+Outputs: data/derived/*, results/data_checks.json, descriptives_spatial.csv, table1_targets.csv, rev_lambda_*.csv, v3_misalignment.csv,
          v3_bilateral_null.csv, v3_null_perms_geometry.npz, v3_scheme_structure.csv, v3_geometry.json,
          v3_target_se*.{csv,json}, v3_meff.json, v3_target_correlations.csv
 """
@@ -153,7 +155,19 @@ def prepare():
                          "mean": float(x.mean()), "sd": float(x.std(ddof=1))})
     desc = pd.DataFrame(rows)
 
+    # summary of the 12 target maps (Supplementary Table 1): largest reported sample sizes and range of the effects
+    tab = []
+    for k, stem in hl.TARGETS_PRIMARY.items():
+        src = pd.read_csv(raw / f"enigma/{stem}.csv")
+        d = targets[k].to_numpy(float)
+        tab.append({"map": k, "file": stem,
+                    "n_patients_max": src["n_patients"].max() if "n_patients" in src else np.nan,
+                    "n_controls_max": src["n_controls"].max() if "n_controls" in src else np.nan,
+                    "mean_d": d.mean(), "min_d": d.min(), "max_d": d.max(),
+                    "bilateral_r": float(np.corrcoef(d[:34], d[homologue[:34]])[0, 1])})
+
     # 7. save
+    pd.DataFrame(tab).to_csv(hl.RES / "table1_targets.csv", index=False)
     targets.to_csv(hl.DER / "targets_primary.csv")
     targets_sec.to_csv(hl.DER / "targets_secondary.csv")
     predictors.to_csv(hl.DER / "predictors.csv")
