@@ -19,7 +19,10 @@ extensions  one value per homologous pair (34 regions) and the Glasser parcellat
 insample    in-sample test (least-squares fit to all regions): false-positive rates, McNemar contrasts, power at the
             nominal and size-adjusted thresholds, ENIGMA counts (Table 4, Supplementary Tables 5a-c)
 
-Usage: python s6_statistics.py [main] [generative] [extensions] [insample]   (default: all)
+design      two descriptive numbers of the design: regions whose nearest neighbour in the standardized
+            annotations is the homologue, and regions per block of the blocked schemes (v3_design_numbers.json)
+
+Usage: python s6_statistics.py [main] [generative] [extensions] [insample] [design]   (default: all)
 """
 import glob
 import json
@@ -654,7 +657,40 @@ def insample_statistics():
     print(p.round(3).to_string(index=False), flush=True)
 
 
-STEPS = {"main": main_statistics, "generative": generative_statistics, "extensions": extensions, "insample": insample_statistics}
+def design_numbers():
+    """Descriptive numbers of the article that come from the design rather than from a test: how many regions have
+    their homologue as nearest neighbour in the space of the standardized annotations (the space in which kNN regression
+    finds neighbours; Discussion), the number of regions per block of the blocked schemes (Section 2.6), and the median
+    absolute bilateral correlation of simulated maps with independent hemispheres (benchmark for hypothesis H6a)."""
+    X, _, reg, _ = hl.load_data()
+    Z = X.to_numpy(float)
+    Z = (Z - Z.mean(0)) / Z.std(0)
+    D = np.linalg.norm(Z[:, None, :] - Z[None, :, :], axis=2)
+    np.fill_diagonal(D, np.inf)
+    hom = reg["homologue_idx"].to_numpy()
+    nearest_is_homologue = int((D.argmin(1) == hom).sum())
+    sizes = {}
+    for scheme in ("S", "SH", "Sw"):
+        folds = hl.make_folds_within(reg) if scheme == "Sw" else hl.make_folds(scheme, reg)
+        counts = np.bincount(np.asarray(folds).astype(int))
+        counts = counts[counts > 0]
+        sizes[scheme] = [int(counts.min()), int(counts.max())]
+    # benchmark for hypothesis H6a: median absolute bilateral correlation of maps whose hemispheres are generated
+    # independently (rho = 0, lambda = 77 mm), i.e. the level reached by chance without any bilateral structure
+    _, _, reg_, geo_ = hl.load_data()
+    G = hl.grf_maps(reg_, geo_, lam=77, rho=0.0, n_maps=1000, seed=777)
+    L = np.where(reg_["hemi"].to_numpy() == "L")[0]
+    rr = np.array([np.corrcoef(G[L, j], G[hom[L], j])[0, 1] for j in range(G.shape[1])])
+    out = {"nearest_neighbour_is_homologue_standardized_annotations": nearest_is_homologue, "n_regions": len(reg),
+           "regions_per_block_min_max": sizes,
+           "h6a_benchmark_independent_hemispheres": {"n_maps": int(G.shape[1]), "median_abs_r": float(np.median(np.abs(rr))),
+                                                     "median_r": float(np.median(rr))}}
+    (RES / "v3_design_numbers.json").write_text(json.dumps(out, indent=2))
+    print(json.dumps(out), flush=True)
+
+
+STEPS = {"main": main_statistics, "generative": generative_statistics, "extensions": extensions, "insample": insample_statistics,
+         "design": design_numbers}
 
 if __name__ == "__main__":
     for step in (sys.argv[1:] or list(STEPS)):

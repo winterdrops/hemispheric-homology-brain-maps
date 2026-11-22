@@ -1,8 +1,11 @@
 # Code for "Ignoring hemispheric homology miscalibrates parcel-level null models and cross-validation of brain maps: a
 simulation study and reanalysis"
 
-This folder reproduces every number, figure and table of the article and its Additional files (Supplementary
-Information, Supplementary Data 1) from public raw data. All random seeds are fixed, so a rerun gives the archived results (within floating-point tolerance).
+This folder reruns every analysis of the article from public raw data and regenerates the result files, the figures
+and the supplementary tables (Supplementary Data 1). All random seeds are fixed, so a rerun gives the archived results
+(within floating-point tolerance). Supplementary Table 6 (the verdicts on the pre-specified hypotheses) is written from
+text in s7_figures.py that quotes the result files. results/ also holds three bookkeeping files from the preparation of
+the article that no step writes (v3_claim_checks.csv, v3_manuscript_numbers.json, v3_runtime.json).
 
 ## Layout
 
@@ -24,7 +27,8 @@ Information, Supplementary Data 1) from public raw data. All random seeds are fi
 │   ├── hemisafe/                stand-alone Python package with the remedies (MIT)
 │   ├── fonts/                   Liberation Sans for the figures (SIL Open Font License 1.1)
 │   ├── requirements.txt, LICENSE
-├── plan/                        pre-specified analysis plan (preregistration.md, frozen 2026-09-28) and the plan of
+├── plan/                        pre-specified analysis plan (preregistration.md, dated 2026-09-28; editorial version of
+│                                2026-10-12, see its header) and the plan of
 │                                the generative-null analyses (prereg_generative_nulls.md); SHA256SUMS.txt
 ├── data/raw/                    unmodified public inputs (PROVENANCE.md, SHA256SUMS.txt)
 ├── data/derived/                analysis-ready matrices (written by step 1)
@@ -52,7 +56,9 @@ python -m venv .venv
 
 ```bash
 python Codes/check.py tests                      # unit tests (about 1 minute)
-python Codes/check.py quick                      # recompute a subset and compare with results/ (a few minutes)
+python Codes/check.py quick                      # recompute a subset and compare with results/ (a few minutes;
+                                                 # rewrites v3_bivariate_real.csv and v3_bivariate_real_counts.csv
+                                                 # in place, so run it on a copy of the archive)
 python Codes/run_all.py --workers 4              # everything (about 8 hours with 4 workers)
 python Codes/compare_results.py --ref <untouched copy of the archived project>
 ```
@@ -88,6 +94,7 @@ Numbering of the article (BMC Neuroscience version). Supplementary Tables 1-16 a
 | Suppl. Fig. 1 (correlation length) | s1 `lambda` | `rev_lambda_calibration.csv`, `rev_lambda_summary.csv` | s7 `supp` |
 | Suppl. Figs 11-14, Suppl. Note 3, Suppl. Table 6 (pre-specified analyses and verdicts) | s2 (all steps) | `table_*.csv`, `summary.json`, `rev_*.csv`, `rev_summary.json`, `exploratory_*.csv` | s7 `prespecified`, `supp_data` |
 | Effective number of target maps | s1 `meff` | `v3_meff.json` | |
+| Regions per block (Section 2.6); regions whose nearest neighbour in the standardized annotations is the homologue (Discussion) | s6 `design` | `v3_design_numbers.json` | |
 | One value per homologous pair (34 regions): Suppl. Fig. 9, Suppl. Tables 15a-e | s3 `half`, s4 `half_cv`, s5 `half` | `extensions`: `v3_stats_half_*.csv` | s7 `supp` |
 | Glasser parcellation (360 regions): Suppl. Fig. 8, Suppl. Tables 16a-b | s1 `glasser`, s3 `glasser`, s4 `glasser_cv` | `extensions`: `v3_stats_glasser_*.csv` | s7 `supp` |
 | Supplementary Data 1 (Suppl. Tables 1-16, one sheet per table) | the steps above | the result files above | s7 `supp_data` |

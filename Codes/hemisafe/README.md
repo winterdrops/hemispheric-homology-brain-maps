@@ -16,13 +16,13 @@ Most brain maps are near-duplicated across hemispheres: a region and its contral
 | `align_hemispheres(coords, hom, hemi)` | Rigid (Kabsch) alignment of the right-hemisphere sphere frame |
 | `spin(coords, hemi, n, align=True, homologue=hom)` | Conventional parcel spin (Hungarian), optionally on aligned frames |
 | `spin_symmetric(coords, hemi, hom, n)` | Symmetric spin: preserves each map's bilateral structure exactly |
-| `symmetric_surrogates(y, hom, hemi, generator, n)` | Makes any surrogate generator (BrainSMASH, Moran spectral randomization, eigenmodes) symmetry-preserving by applying it to the homologous sum and difference maps |
+| `symmetric_surrogates(y, hom, hemi, generator, n)` | Applies a surrogate generator (e.g. BrainSMASH, Moran spectral randomization) to the homologous sum and difference maps, so that the null maps keep the bilateral structure (exactly if the generator reproduces the variance of its input, as Moran spectral randomization does; check with `check_bilateral`) |
 | `check_bilateral(y, perms, hom, hemi)` | Does a null keep the map's bilateral correlation? (accepts permutation indices or surrogate maps) |
 | `HomologueKFold`, `BilateralSpatialKFold` | scikit-learn splitters that keep homologues in the same fold |
 | `DistanceDependentCV(coords, homologue=hom, hemi=hemi)` | Distance-dependent CV, optionally homologue-aware |
 | `homologue_leakage(splits, hom)` | Share of test regions whose homologue is in the training set |
 | `corr_test(x, y, perms)` | Two-sided spin/permutation test of a map correlation |
-| `nested_cv_predict(est, X, y, splits, param_grid, inner_groups)` | Out-of-fold predictions with tuning that respects homologues/blocks |
+| `nested_cv_predict(est, X, y, splits, param_grid, inner_groups, standardize)` | Out-of-fold predictions with tuning that respects homologues/blocks when `inner_groups` is given (pooled inner error; `standardize=True` standardizes once per training set, as in the article) |
 | `cv_permutation_test(est, X, y, cv, perms, param_grid=..., inner_groups=...)` | Re-runs the whole CV pipeline (including tuning) for every null draw |
 
 Generators such as BrainSMASH or Moran spectral randomization are usually applied to each hemisphere separately; with
@@ -35,12 +35,14 @@ L = np.where(hemi == "L")[0]
 D = (dist[np.ix_(L, L)] + dist[np.ix_(hom[L], hom[L])]) / 2      # mean of the two hemispheric distance matrices
 S = hs.symmetric_surrogates(disorder_map, hom, hemi, lambda x, n, s: Base(x, D, seed=s)(n, 50), n_perm=10000, seed=1)
 r, p, _ = hs.corr_test(annotation_map, disorder_map, S)          # surrogate maps instead of permutation indices
+print(hs.check_bilateral(disorder_map, S, hom, hemi))            # how much of the bilateral r the null maps keep
 ```
 
 ## Install
 
 ```bash
 pip install .            # from this folder (Python >= 3.9; numpy, scipy, scikit-learn)
+pip install ".[test]"    # adds pytest, needed only for the tests
 python -m pytest tests   # 9 tests
 ```
 
@@ -50,8 +52,6 @@ python -m pytest tests   # 9 tests
 import numpy as np
 import hemisafe as hs
 from sklearn.linear_model import Ridge
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
 
 hom, hemi = hs.homologue_index(region_names)          # e.g. ENIGMA / Desikan-Killiany names ("L_...", "R_...")
 print(hs.homologue_angles(sphere_centroids, hom, hemi).mean())   # ~14 deg on fsaverage spheres, ~0-2 deg on fs_LR
@@ -64,20 +64,24 @@ r, p, _ = hs.corr_test(annotation_map, disorder_map, perms)
 # 2) Cross-validated prediction: homologue-aware spatial folds, nested tuning that keeps homologues together,
 #    and a spin test that re-runs the whole pipeline for every null map
 outer = hs.BilateralSpatialKFold(surface_centroids, hom, hemi, n_splits=10)
-model = make_pipeline(StandardScaler(), Ridge())
-grid = {"ridge__alpha": np.logspace(-2, 4, 25)}
-obs, p, null = hs.cv_permutation_test(model, X, disorder_map, outer, perms[:1000], param_grid=grid,
-                                      inner_groups=outer.folds())   # inner loop leaves out whole outer blocks
+grid = {"alpha": np.logspace(-2, 4, 25)}
+obs, p, null = hs.cv_permutation_test(Ridge(), X, disorder_map, outer, perms[:1000], param_grid=grid,
+                                      inner_groups=outer.folds(),   # inner loop leaves out whole outer blocks
+                                      standardize=True)             # predictors standardized per training set
 ```
 
-A complete, runnable example with the 12 ENIGMA maps and 28 annotations of the article is in `examples/example_enigma.py`.
+A runnable example that applies the package to one of the 12 ENIGMA maps (obsessive–compulsive disorder) and the 28 annotations of the article is in `examples/example_enigma.py`. Besides the package dependencies it needs pandas and the `data/derived/` folder of the study archive.
 
 Use `inner_groups=hs.pair_groups(hom)` with `HomologueKFold`. For distance-dependent CV (overlapping test sets), compute per-split metrics from `DistanceDependentCV(..., homologue=hom, hemi=hemi).split()`.
 
 ## Tests
 
-The unit tests in `tests/` compare the implementations with scikit-learn and with explicit reference computations
-(`python -m pytest tests`).
+The unit tests in `tests/` check, on a toy geometry, structural properties (the homologue index; removal of a known
+frame offset by the alignment; homologous pairs never split between training and test sets; exact preservation of
+the bilateral correlation by the symmetric spin), check P values against hand-computed values, and check that the
+correlation and cross-validation tests run (`pip install ".[test]"`, then `python -m pytest tests`). The study
+archive's `Codes/check.py tests` also checks that `nested_cv_predict` reproduces the tuned ridge predictions of the
+article.
 
 ## Citation
 

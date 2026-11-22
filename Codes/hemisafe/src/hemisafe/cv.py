@@ -1,7 +1,9 @@
 """Cross-validation splitters for region-level prediction that keep hemispheric homologues on the same side.
 
 All splitters follow the scikit-learn cross-validator interface (``split(X, y=None, groups=None)`` and
-``get_n_splits``) and can be passed to ``cross_val_predict``, ``cross_val_score`` or ``GridSearchCV``.
+``get_n_splits``) and can be passed to ``cross_val_score`` or ``GridSearchCV``. HomologueKFold and
+BilateralSpatialKFold partition the regions and can also be passed to ``cross_val_predict``; DistanceDependentCV
+has overlapping test sets, so use it with per-split metrics, not ``cross_val_predict``.
 """
 from __future__ import annotations
 
@@ -38,7 +40,9 @@ class HomologueKFold(BaseCrossValidator):
 
 class BilateralSpatialKFold(BaseCrossValidator):
     """Spatial + homologue blocks ("SH"): k-means on mirrored pair centroids (|x|, y, z), so every test fold is a
-    contiguous bilateral block and no region's neighbours or homologue can inform its prediction."""
+    contiguous bilateral block. A test region's homologue is never in the training set; its spatial neighbours are
+    in the training set only where they lie across a block border, so blocking reduces but does not remove
+    leakage between neighbouring regions."""
 
     def __init__(self, coords, homologue, hemi, n_splits=10, random_state=2026, n_init=100):
         self.coords = np.asarray(coords, float)

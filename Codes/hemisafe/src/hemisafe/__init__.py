@@ -13,7 +13,7 @@ from .nulls import shuffle, spin, spin_symmetric, symmetric_surrogates, check_bi
 from .cv import HomologueKFold, BilateralSpatialKFold, DistanceDependentCV, homologue_leakage
 from .inference import perm_pvalue, corr_test, nested_cv_predict, cv_permutation_test
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __all__ = ["homologue_index", "pair_groups", "bilateral_r", "homologue_angles", "align_hemispheres", "shuffle",
            "spin", "spin_symmetric", "symmetric_surrogates", "check_bilateral", "HomologueKFold", "BilateralSpatialKFold",
            "DistanceDependentCV", "homologue_leakage", "perm_pvalue", "corr_test", "nested_cv_predict", "cv_permutation_test"]

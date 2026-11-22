@@ -210,9 +210,9 @@ def fig1():
 
     # b: sphere-frame misalignment
     ax = fig.add_subplot(gtop[0, 1])
-    conds = [("fsavg\nDK", "fsa5", "aparc", False), ("fsavg\nGlasser", "fsa5", "glasser_360", False),
+    conds = [("fsaverage5\nDK", "fsa5", "aparc", False), ("fsaverage5\nGlasser", "fsa5", "glasser_360", False),
              ("fs_LR\nDK", "conte69", "aparc", False), ("fs_LR\nGlasser", "conte69", "glasser_360", False),
-             ("fsavg DK\naligned", "fsa5", "aparc", True)]
+             ("fsaverage5 DK\naligned", "fsa5", "aparc", True)]
     for i, (lab, s, p, al) in enumerate(conds):
         a = sphere_angles(s, p, al)[1]
         jit = np.random.default_rng(i).uniform(-0.18, 0.18, len(a))
@@ -243,7 +243,7 @@ def fig1():
     ax.set_xticks(xs)
     ax.set_xticklabels(["Observed"] + [fs.NULL_SHORT[n] for n in fs.NULL_ORDER], rotation=35, ha="right", fontsize=5.6)
     ax.set_ylim(-0.1, 1.09)
-    ax.set_ylabel("Bilateral correlation of null maps\n(median over 1,000 draws)")
+    ax.set_ylabel("Bilateral correlation of null maps\n(median over 1,000 null maps)")
     ax.set_title("Bilateral structure of null maps", fontsize=6.5, loc="left")
     fs.panel(ax, "c", x=-0.24)
     fs.save(fig, "Fig1", OUT)
@@ -252,7 +252,7 @@ def fig1():
 # ======================================================================================================================
 # Fig. 2: null maps that lose bilateral structure make tests of map-to-map correlations liberal
 # ======================================================================================================================
-GEN = [("bs_indep", "BrainSMASH ind.", "#eb6834", False), ("bs_sym", "BrainSMASH sym.", "#eb6834", True),
+GEN = [("bs_indep", "Variogram ind.", "#eb6834", False), ("bs_sym", "Variogram sym.", "#eb6834", True),
        ("msr_indep", "Moran ind.", "#e87ba4", False), ("msr_sym", "Moran sym.", "#e87ba4", True)]
 BIV_ORDER = ["shuffle", "TB", "spin_enigma", "spin_std", "spin_fslr", "spin_aligned", "spin_sym"]
 BIV_LABELS = ["Shuffle", "Toolbox†", "Toolbox", "Conventional", "fs_LR", "Aligned", "Symmetric"]
@@ -550,7 +550,7 @@ def fig4():
     ax.set_title("Leakage and loss of bilateral structure act together", fontsize=6.3, loc="left")
     fs.panel(ax, "c", x=-0.17)
 
-    # d: power at a true 5% error rate against the signal share, for random folds and the two homologue-aware blocked
+    # d: power at a matched 5% error rate against the signal share, for random folds and the two homologue-aware blocked
     #    schemes (symmetric spin; 150 maps with signal per share; Wilson 95% CI)
     ax = fig.add_subplot(g2[0, 1])
     shares = [0.1, 0.3, 0.5]
@@ -572,13 +572,13 @@ def fig4():
     ax.set_ylim(0, 0.8)
     ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8])
     ax.set_yticklabels(["0", "20", "40", "60", "80"])
-    ax.set_ylabel("Power at a true 5% error rate (%)")
+    ax.set_ylabel("Power at a matched 5% error rate (%)")
     ax.set_xlabel("Signal share")
     ax.legend(handles=[Line2D([], [], color=fs.SCHEME_COL[sc], lw=1.2, label=lab_) for sc, lab_, _ in POW] +
               [Line2D([], [], color=fs.MUTED, marker="o", ms=3.4, ls="-", label="ridge"),
                Line2D([], [], color=fs.MUTED, marker="o", ms=3.4, mfc="white", ls=(0, (3, 1.5)), label="kNN")],
               loc="upper left", fontsize=5.6, handlelength=2.6, borderaxespad=0.2, labelspacing=0.35)
-    ax.set_title("Power: similar, except ridge regression at a strong signal", fontsize=6.3, loc="left")
+    ax.set_title("Power: a clear loss only for ridge regression at a strong signal", fontsize=6.3, loc="left")
     fs.panel(ax, "d", x=-0.14)
     fig.text(0.99, 0.005, f"Correlation length 77 mm, bilateral coupling 0.9; {n_maps} signal-free maps (a–c); "
              "150 maps with signal per signal share, symmetric spin (d)", ha="right", fontsize=5.2, color=fs.MUTED)
@@ -710,8 +710,8 @@ def supp_lambda():
     ax.plot(c["generator_lambda"], c["estimated_median"], color=fs.SEQ[4], marker="o", ms=2.5, label="median")
     ax.axhline(s["empirical_targets_mm"], color=fs.INK, lw=0.7, ls=(0, (2, 2)))
     ax.axvline(s["calibrated_generator_lambda_mm"], color=fs.INK, lw=0.7, ls=(0, (2, 2)))
-    ax.text(s["calibrated_generator_lambda_mm"] + 2, 12, f"calibrated λ = {s['calibrated_generator_lambda_mm']:.0f} mm",
-            fontsize=5.8)
+    ax.text(s["calibrated_generator_lambda_mm"] - 2, 25, f"calibrated λ = {s['calibrated_generator_lambda_mm']:.0f} mm",
+            fontsize=5.8, ha="right")
     ax.text(32, s["empirical_targets_mm"] + 1.5, f"targets: plug-in estimate {s['empirical_targets_mm']:.1f} mm",
             fontsize=5.8)
     ax.set_xlabel("Generating correlation length λ (mm)")
@@ -732,7 +732,7 @@ def supp_biv_annot():
                    edgecolor="white", linewidth=0.4)
     ax.axhline(0.05, color=fs.INK, lw=0.7, ls=(0, (2, 2)))
     ax.set_xlabel("Bilateral correlation of the annotation")
-    ax.set_ylabel("False-positive rate (1,000 null maps)")
+    ax.set_ylabel("False-positive rate (1,000 signal-free maps)")
     ax.grid(axis="both")
     ax.legend(fontsize=5.6, loc="upper left")
     ax.set_title("Per-annotation false-positive rates (λ = 77 mm, ρ = 0.9)", fontsize=6.2, loc="left")
@@ -794,7 +794,9 @@ def supp_roc_all():
         x0 = (axes[0, ni * 3].get_position().x0 + axes[0, ni * 3 + 2].get_position().x1) / 2
         fig.text(x0, axes[0, 0].get_position().y1 + 0.075, fs.NULL_SHORT[n] + " spin", ha="center", fontsize=6.4,
                  color=fs.INK)
-    axes[1, 0].legend(fontsize=4.8, loc="lower right", handlelength=1.2, labelspacing=0.15)
+    h_, l_ = axes[1, 0].get_legend_handles_labels()
+    fig.legend(h_, l_, loc="lower center", ncol=len(l_), fontsize=5.4, handlelength=1.2, frameon=False,
+               bbox_to_anchor=(0.5, -0.04))
     fs.save(fig, "SuppFig10_roc_all", OUT_SUPP)
 
 
@@ -854,7 +856,7 @@ def supp_sens():
     cnt = cnt[["R", "SH", "DD-H"]]
     rows_ = [("ridge", "alpha 1e-2..1e4 (main)"), ("ridge", "alpha 1e-3..1e6"), ("knn", "k=3"), ("knn", "k=5 (main)"),
              ("knn", "k=10"), ("knn", "k=20")]
-    labs_ = ["Ridge, α 10$^{-2}$–10$^{4}$ (main)", "Ridge, α 10$^{-3}$–10$^{6}$", "kNN, k = 3", "kNN, k = 5 (main)",
+    labs_ = ["Ridge, penalty 10$^{-2}$–10$^{4}$ (main)", "Ridge, penalty 10$^{-3}$–10$^{6}$", "kNN, k = 3", "kNN, k = 5 (main)",
              "kNN, k = 10", "kNN, k = 20"]
     cnt = cnt.loc[[r for r in rows_ if r in cnt.index]]
     ax.imshow(cnt.to_numpy(), cmap=LinearSegmentedColormap.from_list("c", ["#f7f7f5"] + fs.SEQ[1:]), vmin=0, vmax=12,
@@ -981,7 +983,7 @@ def supp_half():
         ax.set_xlabel("Signal share s")
         ax.set_ylabel("AUC (95% CI)")
         ax.set_ylim(0.45, 1.0)
-        ax.set_title(f"{fs.MODEL_LAB[m]}: positive control", fontsize=6.2, loc="left")
+        ax.set_title(f"{fs.MODEL_LAB[m]}: maps with signal", fontsize=6.2, loc="left")
         ax.legend(fontsize=5.0, ncol=2, loc="upper left", handlelength=1.8)
         fs.panel(ax, "ef"[k], x=-0.12)
     fs.save(fig, "SuppFig9_one_value_per_pair", OUT_SUPP)
@@ -1162,7 +1164,7 @@ class old:
     BLUE, ORANGE = "#2a78d6", "#eb6834"
     GRAY_LIGHT = "#dcdbd5"
     NULL_COLORS = {"shuffle": BLUE, "spin_std": ORANGE, "spin_sym": "#1baf7a"}
-    NULL_LABELS = {"shuffle": "Shuffle", "spin_std": "Spin (conventional)", "spin_sym": "Spin (symmetric)"}
+    NULL_LABELS = {"shuffle": "Shuffle", "spin_std": "Conventional spin", "spin_sym": "Symmetric spin"}
     MODEL_LABELS = {"ridge": "Ridge regression", "knn": "k-nearest neighbours", "rf": "Random forest"}
     NULLS = ["shuffle", "spin_std", "spin_sym"]
 
@@ -1189,9 +1191,9 @@ class old:
     @staticmethod
     def legend_r_sh():
         h = [Line2D([], [], color=old.NULL_COLORS[n], lw=1.6, label=old.NULL_LABELS[n]) for n in old.NULLS]
-        return h + [Line2D([], [], color=old.INK2, lw=1.2, marker="o", ms=3.5, label="Random CV (R)"),
+        return h + [Line2D([], [], color=old.INK2, lw=1.2, marker="o", ms=3.5, label="Random folds (R)"),
                     Line2D([], [], color=old.INK2, lw=1.2, ls=(0, (3, 1.5)), marker="s", mfc="white", ms=3.5,
-                           label="Spatial + homologue CV (SH)")]
+                           label="Bilateral spatial blocks (SH)")]
 
 
 def supp8_null_simulation():
@@ -1233,7 +1235,7 @@ def supp8_null_simulation():
         ax.set_ylim(lo - 0.1, hi + 0.15)
         ax.set_xlim(-0.5, 3.8)
         if mi == 0:
-            ax.set_ylabel("Out-of-sample $R^2_{cv}$\n(null maps: true value ≤ 0)")
+            ax.set_ylabel("Out-of-sample $R^2_{cv}$\n(signal-free maps: true value ≤ 0)")
             old.panel(ax, "a", x=-0.35)
         ax = axes[1, mi]
         w = 0.26
@@ -1250,14 +1252,11 @@ def supp8_null_simulation():
         ax.set_axisbelow(True)
         ax.set_xticks(range(4))
         ax.set_xticklabels(schemes)
-        ax.set_ylim(0, 0.82)
+        ax.set_ylim(0, 1.0)
         ax.set_xlabel("Cross-validation scheme")
         if mi == 0:
             ax.set_ylabel("False-positive rate")
             old.panel(ax, "b", x=-0.35)
-        if m == "rf":
-            ax.text(0.02, 0.97, "RF: shuffle p-values against a common\nnull of 300 shuffled maps (300 maps)",
-                    transform=ax.transAxes, fontsize=5.8, color=old.MUTED, va="top")
     handles, labels = axes[1, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, bbox_to_anchor=(0.5, -0.02), handlelength=1.2)
     fig.savefig(OUT_SUPP / "SuppFig11_prespecified_null_simulation.png")
@@ -1409,14 +1408,14 @@ def supp11_real_data():
         ax.grid(axis="x")
         ax.grid(axis="y", visible=False)
         ax.set_axisbelow(True)
-        ax.text(0.98, 0.02, f"FDR-significant:\nR + shuffle: {int((qR < 0.05).sum())}/12\n"
-                f"SH + sym. spin: {int((qS < 0.05).sum())}/12", transform=ax.transAxes, ha="right", va="bottom",
+        ax.text(0.02, 0.98, f"FDR-significant:\nR + shuffle: {int((qR < 0.05).sum())}/12\n"
+                f"SH + sym. spin: {int((qS < 0.05).sum())}/12", transform=ax.transAxes, ha="left", va="top",
                 fontsize=6.2, color=old.INK2, bbox=dict(boxstyle="round,pad=0.25", fc="white", ec=old.GRID, lw=0.6))
     axes[0].set_yticks(np.arange(len(order)))
     axes[0].set_yticklabels(order)
-    h = [Line2D([], [], marker="o", ls="none", color=old.BLUE, ms=5, label="Random CV (R); filled = q < 0.05, shuffle"),
+    h = [Line2D([], [], marker="o", ls="none", color=old.BLUE, ms=5, label="Random folds (R); filled = q < 0.05, shuffle"),
          Line2D([], [], marker="s", ls="none", color=old.ORANGE, ms=5,
-                label="Spatial + homologue CV (SH); filled = q < 0.05, symmetric spin")]
+                label="Bilateral spatial blocks (SH); filled = q < 0.05, symmetric spin")]
     fig.legend(handles=h, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.06), fontsize=6.5, columnspacing=1.5)
     fig.savefig(OUT_SUPP / "SuppFig14_prespecified_real_data.png")
     plt.close(fig)
@@ -1496,31 +1495,36 @@ def source_data():
 # Supplementary Data 1: Supplementary Tables 1-10 (one sheet per table), built from the result files
 # ======================================================================================================================
 LAB = {"shuffle": "shuffle", "spin_std": "conventional", "spin_enigma": "toolbox", "spin_fslr": "fs_LR",
-       "spin_aligned": "aligned", "spin_sym": "symmetric", "bs_indep": "BrainSMASH, independent",
-       "bs_shared": "BrainSMASH, shared seed", "bs_whole": "BrainSMASH, whole brain", "bs_sym": "BrainSMASH, symmetric",
+       "spin_aligned": "aligned", "spin_sym": "symmetric", "bs_indep": "variogram matching, independent",
+       "bs_shared": "variogram matching, shared seed", "bs_whole": "variogram matching, whole brain",
+       "bs_sym": "variogram matching, symmetric",
        "msr_indep": "MSR, independent", "msr_shared": "MSR, shared seed", "msr_sym": "MSR, symmetric",
        "knn": "kNN", "ridge": "ridge", "two_sided": "two-sided", "enigma_toolbox": "toolbox, P as implemented",
        "enigma_toolbox_doubled": "toolbox, P doubled", "multimodal": "28 annotations", "receptor_only": "19 receptors"}
+VARIANT_LAB = {"alpha 1e-2..1e4 (main)": "penalty 10⁻²–10⁴ (main)", "alpha 1e-3..1e6": "penalty 10⁻³–10⁶",
+               "k=3": "k = 3", "k=5 (main)": "k = 5 (main)", "k=10": "k = 10", "k=20": "k = 20"}
 TABLE9 = [  # verdicts under the pre-specified decision rules (Supplementary Notes 1 and 3)
-    ("H1a: null R²(R) > R²(SH)", "Supported", "Supported with group-matched tuning at λ = 50 and 77 mm"),
+    ("H1a: R²cv of signal-free maps under R > under SH", "Supported", "Supported with group-matched tuning at λ = 50 and 77 mm"),
     ("H1b: R–SH gap larger for flexible models", "Not supported (ridge gap larger, an artefact of inner-loop leakage)",
      "Supported for kNN versus ridge; random-forest gap 0.48 (pre-specified single partition)"),
     ("H2: homology component > proximity component (kNN, RF)", "Supported for kNN",
      "Supported for kNN and ridge on both decomposition paths (R → H → SH and R → Sw → SH)"),
-    ("H3a: shuffle FPR > 0.10 under R", "Supported (ridge 57%, kNN 74%, RF 98%)", "Supported (λ = 77 mm: 85–91%)"),
-    ("H3b: symmetric-spin FPR ≤ 0.075 in every scheme", "Not supported (kNN 8.9% under R, 8.7% under H)",
-     "Not supported (Supplementary Table 9a)"),
+    ("H3a: shuffle FPR > 0.10 under R", "Supported (ridge 57%, kNN 74%, random forests 98%)", "Supported (λ = 77 mm: 85–91%)"),
+    ("H3b: symmetric-spin FPR ≤ 0.075 in every scheme", "Not supported (kNN 9% under R and under H)",
+     "Not supported (Supplementary Table 10a)"),
     ("H4: conventional spin more liberal than symmetric spin under R", "Supported",
      "Supported; aligning the sphere frames removes most of the difference"),
     ("H5: fewer significant maps under (SH, symmetric spin) than (R, shuffle)", "Supported",
      "Supported (ridge 12 → 0; kNN 12 → 1)"),
-    ("H6a: generative nulls with independent hemispheres lose bilateral structure (median bilateral r of null maps "
-     "below 0.2)", "Supported (median bilateral r of null maps: BrainSMASH 0.00, Moran 0.00)",
+    ("H6a: generative nulls with independent hemispheres lose bilateral structure (median absolute bilateral r of the "
+     "null maps below 0.2 in each of the 12 ENIGMA maps)",
+     "Supported for variogram matching (12 of 12 maps; 0.14–0.20); not supported for Moran spectral randomization "
+     "(7 of 12 maps; up to 0.43). Median signed r 0.00 for both. Benchmark, hemispheres independent by construction: 0.14",
      "– (specified before the additional analysis)"),
     ("H6b: at ρ = 0.9 they are liberal for map-to-map correlations and more liberal than the conventional spin",
-     "Supported (13.8% and 16.3%; conventional spin 8.7%)", "–"),
+     "Supported (14% and 16%; conventional spin 9%)", "–"),
     ("H6c: their symmetric variants are within the 2.5–7.5% band or within 2 points of the symmetric spin",
-     "Supported (4.4% and 5.4%; symmetric spin 5.7%)", "–"),
+     "Supported (4% and 5%; symmetric spin 6%)", "–"),
     ("H6d: in cross-validation, independent variants are liberal under R and Sw, and symmetric variants have "
      "false-positive rates ≤ 7.5% under SH and DD-H",
      "Supported (independent: 48.5–82.0% under R and Sw; symmetric: 0.5–6.0% under SH and DD-H)", "–")]
@@ -1627,12 +1631,16 @@ def supp_tables():
     for v, g in b.groupby("variant", sort=False):
         rows.append({"Null": LAB[v], "Bilateral r, median over maps": g["bil_null_median"].median(),
                      "Bilateral r, minimum": g["bil_null_median"].min(), "Bilateral r, maximum": g["bil_null_median"].max(),
+                     "|Bilateral r| (H6a), median over maps": g["bil_null_median_abs"].median(),
+                     "|Bilateral r| (H6a), minimum": g["bil_null_median_abs"].min(),
+                     "|Bilateral r| (H6a), maximum": g["bil_null_median_abs"].max(),
                      "P < 0.05": c.loc[v, "n_p05"], "BH q < 0.05": c.loc[v, "n_q05"], "Holm < 0.05": c.loc[v, "n_holm05"]})
     rows = pd.DataFrame(rows).astype({"P < 0.05": "Int64", "BH q < 0.05": "Int64", "Holm < 0.05": "Int64"})
     T["S2e"] = ("Supplementary Table 2e. Generative null models on the 12 ENIGMA disorder maps: bilateral structure of "
-                "the null maps (1,000 surrogates per map; median of each map's null bilateral r, with its median and "
-                "range over maps) and number of significant disorder–annotation correlations (of 336; 10,000 "
-                "surrogates per map).", "Independent: each hemisphere generated separately with independent random "
+                "the null maps (1,000 null maps per disorder map; median of each map's null bilateral r, with its median and "
+                "range over maps; the statistic of hypothesis H6a, the median absolute bilateral r, with its median "
+                "and range over maps) and number of significant disorder–annotation correlations (of 336; 10,000 "
+                "null maps per disorder map).", "Independent: each hemisphere generated separately with independent random "
                 "numbers (neuromaps default); shared seed: the same random numbers for both hemispheres; whole brain: "
                 "Euclidean distances between parcel centroids; symmetric: generator applied to the homologous sum and "
                 "difference maps. MSR, Moran spectral randomization.", rows)
@@ -1646,9 +1654,9 @@ def supp_tables():
     d = d.sort_values(["cond", "null"], ascending=[False, True], key=lambda v: v.map(order.index) if v.name == "null"
                       else v)
     T["S2f"] = ("Supplementary Table 2f. False-positive rates of generative null models for map-to-map correlations "
-                "(28 annotations; λ = 77 mm; 500 draws per generative null).", "Maps: the first 500 maps of the main "
+                "(28 annotations; λ = 77 mm; 500 null maps per test for the generative null models).", "Maps: the first 500 maps of the main "
                 "simulation at ρ = 0.9 and the first 250 maps at ρ = 0; the spins are those of the main analysis "
-                "(1,000 draws) on the same maps. Map-level bootstrap confidence intervals; t-tests against 5%, "
+                "(1,000 null maps per test) on the same maps. Map-level bootstrap confidence intervals; t-tests against 5%, "
                 "Holm-corrected; differences from the symmetric spin (percentage points) with map-level bootstrap "
                 "confidence intervals.", pd.DataFrame({
                     "Condition": d["cond"].map(_cond), "Null": d["null"].map(LAB), "Maps": d["n_maps"],
@@ -1666,14 +1674,14 @@ def supp_tables():
     d = pd.read_csv(RES / "v3_stats_dd_ols.csv")
     T["S3b"] = ("Supplementary Table 3b. Re-implementation of the published distance-dependent analysis (ordinary least "
                 "squares on the 19 receptor maps, no tuning) on signal-free maps (λ = 77 mm, ρ = 0.9).",
-                "500 draws per null.", pd.DataFrame({
+                "500 null maps per test.", pd.DataFrame({
                     "Scheme": d["scheme"], "Maps": d["n_maps"], "Mean test r": d["mean_test_r"],
                     "CI low": d["mean_test_r_lo"], "CI high": d["mean_test_r_hi"], "FPR shuffle": d["fpr_shuffle"],
                     "FPR conventional": d["fpr_spin_std"], "FPR symmetric": d["fpr_spin_sym"]}))
 
     d = pd.read_csv(RES / "v3_stats_cv_wilcoxon.csv")
-    T["S3c"] = ("Supplementary Table 3c. Paired comparisons of null statistics between schemes (Wilcoxon signed-rank "
-                "tests).", "", pd.DataFrame({
+    T["S3c"] = ("Supplementary Table 3c. Paired comparisons between schemes of the cross-validated statistic of the "
+                "signal-free maps (Wilcoxon signed-rank tests).", "", pd.DataFrame({
                     "λ": d["cond"].map(_cond), "Model": d["model"].map(LAB), "Contrast": d["contrast"], "Maps": d["n"],
                     "Mean difference": d["mean_diff"], "Hodges–Lehmann": d["hl"], "HL low": d["hl_lo"],
                     "HL high": d["hl_hi"], "W": d["W"], "P": d["p"], "Rank-biserial r": d["rank_biserial"],
@@ -1681,13 +1689,13 @@ def supp_tables():
 
     d = pd.read_csv(RES / "v3_stats_cv_friedman_nemenyi.csv")
     T["S3d"] = ("Supplementary Table 3d. Friedman tests across the five partition schemes with Nemenyi post hoc "
-                "comparisons (null R²cv).", "", pd.DataFrame({
+                "comparisons (R²cv of the signal-free maps).", "", pd.DataFrame({
                     "λ": d["cond"].map(_cond), "Model": d["model"].map(LAB), "Scheme A": d["a"], "Scheme B": d["b"],
                     "Mean rank A": d["mean_rank_a"], "Mean rank B": d["mean_rank_b"], "Nemenyi P": d["p_nemenyi"],
                     "Friedman χ²": d["friedman_chi2"], "Friedman P": d["friedman_p"]}))
 
     e = pd.read_csv(RES / "v3_estimand.csv").groupby(["model", "s"]).median(numeric_only=True).reset_index()
-    T["S3e"] = ("Supplementary Table 3e. Benchmarks for cross-validated skill in the positive control (medians over "
+    T["S3e"] = ("Supplementary Table 3e. Benchmarks for cross-validated skill for the maps with signal (medians over "
                 "150 maps per signal share).", "Replicate R²: model fitted to the whole map, evaluated on an "
                 "independent replicate with the same signal and a new noise field. Ridge penalty of the whole-map fit "
                 "chosen by leave-one-pair-out error (pair-tuned; main benchmark), by plain leave-one-out error "
@@ -1700,7 +1708,7 @@ def supp_tables():
 
     d = pd.read_csv(RES / "v3_dd_ols_real.csv")
     T["S3f"] = ("Supplementary Table 3f. Re-implementation of the published distance-dependent analysis on the 12 "
-                "ENIGMA maps (ordinary least squares on the 19 receptor maps, no tuning; 2,000 draws per null).", "",
+                "ENIGMA maps (ordinary least squares on the 19 receptor maps, no tuning; 2,000 null maps per test).", "",
                 pd.DataFrame({"Map": d["map"], "Scheme": d["scheme"], "Mean test r": d["mean_test_r"],
                               "P shuffle": d["p_shuffle"], "P conventional": d["p_spin_std"],
                               "P symmetric": d["p_spin_sym"]}))
@@ -1726,7 +1734,7 @@ def supp_tables():
              "null": ["shuffle", "spin_std", "spin_sym", "bs_indep", "bs_sym", "msr_indep", "msr_sym"]}
     d = d.sort_values(["model", "scheme", "null"], key=lambda v: v.map(order[v.name].index))
     T["S4c"] = ("Supplementary Table 4c. Cross-validation false-positive rates with generative null models (first 200 "
-                "maps of the main simulation; λ = 77 mm, ρ = 0.9; 500 draws).", "Shuffle, conventional and symmetric "
+                "maps of the main simulation; λ = 77 mm, ρ = 0.9; 500 null maps per test).", "Shuffle, conventional and symmetric "
                 "spins: results of the main simulation on the same maps. Wilson 95% confidence intervals; exact "
                 "binomial tests against 5%, Holm-corrected.", pd.DataFrame({
                     "Model": d["model"].map(LAB), "Scheme": d["scheme"], "Null": d["null"].map(LAB), "Rejections": d["k"],
@@ -1760,16 +1768,16 @@ def supp_tables():
 
     d = pd.read_csv(RES / "v3_stats_confusion.csv")
     T["S6c"] = ("Supplementary Table 6c. Confusion matrices (positives: maps with signal; negatives: signal-free maps) "
-                "at the nominal (P < 0.05) and size-adjusted thresholds.", "Size-adjusted: z-statistic above the 95th "
+                "at the nominal (P < 0.05) threshold and at a matched error rate.", "Matched error rate: z-statistic above the 95th "
                 "percentile of the 500 signal-free maps, so that exactly 25 of them (5%) are false positives. PPV/NPV "
                 "at 10% and 50% prevalence of maps with signal; MCC for a balanced design.", pd.DataFrame({
                     "Model": d["model"].map(LAB), "Scheme": d["scheme"], "Null": d["null"].map(LAB), "s": d["s"],
                     "Threshold": d["threshold"].map({"nominal_0.05": "nominal (P < 0.05)",
-                                                     "size_adjusted": "size-adjusted"}),
+                                                     "size_adjusted": "matched error rate"}),
                     "Critical P": d["p_crit"], "Critical z": d["z_crit"], "TP": d["TP"], "FN": d["FN"], "FP": d["FP"],
                     "TN": d["TN"], "Sens.": d["sensitivity"], "Spec.": d["specificity"],
                     "Bal. acc.": d["balanced_accuracy"], "MCC": d["MCC_balanced"], "PPV 10%": d["PPV_prev10"],
-                    "NPV 10%": d["NPV_prev10"], "PPV 50%": d["PPV_prev50"]}))
+                    "NPV 10%": d["NPV_prev10"], "PPV 50%": d["PPV_prev50"], "NPV 50%": d["NPV_prev50"]}))
 
     rc = pd.read_csv(RES / "v3_real_cv.csv")
     rc = rc[rc["set"] == "multimodal"]
@@ -1779,15 +1787,16 @@ def supp_tables():
     part = d[d["scheme"].isin(["R", "H", "S", "SH", "Sw"])]
     T["S7a"] = ("Supplementary Table 7a. Out-of-fold performance of ridge and kNN on the 12 ENIGMA maps (28 "
                 "annotations), partition schemes.", "R and H: means over 10 random partitions. P values: symmetric "
-                "spin, 2,000 draws.", pd.DataFrame({
+                "spin, 2,000 null maps.", pd.DataFrame({
                     "Model": part["model"].map(LAB), "Scheme": part["scheme"], "Map": part["map"], "R²cv": part["r2"],
                     "Skill": part["skill"], "RMSE": part["rmse"], "MAE": part["mae"], "Pearson r": part["pearson_r"],
                     "Spearman ρ": part["spearman_rho"], "Calib. slope": part["calib_slope"],
+                    "Calib. intercept": part["calib_intercept"],
                     "P (sym)": part["p_spin_sym"], "q BH (sym)": part["q_spin_sym"],
                     "P Holm (sym)": part["holm_spin_sym"]}))
     dd = d[d["scheme"].isin(["DD", "DD-H"])]
     T["S7b"] = ("Supplementary Table 7b. Distance-dependent schemes on the 12 ENIGMA maps.", "P values: symmetric spin, "
-                "2,000 draws.", pd.DataFrame({
+                "2,000 null maps.", pd.DataFrame({
                     "Model": dd["model"].map(LAB), "Scheme": dd["scheme"], "Map": dd["map"],
                     "Mean test r": dd["mean_test_r"], "Mean test R²": dd["mean_test_r2"], "Mean skill": dd["skill"],
                     "P (sym)": dd["p_spin_sym"], "q BH (sym)": dd["q_spin_sym"]}))
@@ -1819,12 +1828,12 @@ def supp_tables():
                                                       n=("q_spin_sym", lambda q: int((q < 0.05).sum()))).reset_index()
     T["S8a"] = ("Supplementary Table 8a. Hyper-parameter sensitivity on the ENIGMA maps.", "Per-map values: sheet "
                 "S8a_full.", pd.DataFrame({
-                    "Model": g["model"].map(LAB), "Variant": g["variant"], "Scheme": g["scheme"],
-                    "Median statistic": g["med"], "Maps significant (BH, sym)": g["n"]}))
+                    "Model": g["model"].map(LAB), "Variant": g["variant"].map(lambda v: VARIANT_LAB.get(v, v)),
+                    "Scheme": g["scheme"], "Median statistic": g["med"], "Maps significant (BH, sym)": g["n"]}))
     T["S8a_full"] = ("Supplementary Table 8a (full). Hyper-parameter sensitivity on the ENIGMA maps, per map.",
                      "Statistic: R²cv (R, SH) or mean test-set r (DD-H); symmetric spin.", pd.DataFrame({
-                         "Model": d["model"].map(LAB), "Variant": d["variant"], "Scheme": d["scheme"], "Map": d["map"],
-                         "Statistic": d["stat"], "P (sym)": d["p_spin_sym"], "q BH (sym)": d["q_spin_sym"]}))
+                         "Model": d["model"].map(LAB), "Variant": d["variant"].map(lambda v: VARIANT_LAB.get(v, v)),
+                         "Scheme": d["scheme"], "Map": d["map"], "Statistic": d["stat"], "P (sym)": d["p_spin_sym"], "q BH (sym)": d["q_spin_sym"]}))
 
     d = pd.read_csv(RES / "v3_sens_measurement.csv")
     g = d.groupby(["model", "scheme", "map"], sort=True).agg(
@@ -1863,19 +1872,19 @@ def supp_tables():
         d = pd.read_csv(RES / "v3_stats_half_biv.csv")
         T["S11a"] = ("Supplementary Table 11a. False-positive rates of tests of map-to-map correlations with one value "
                      "per homologous pair (34 regions; the first 500 maps of the main simulation, λ = 77 mm, ρ = 0.9, "
-                     "against the 28 annotations; 1,000 draws).", half_note + " Map-level bootstrap confidence "
+                     "against the 28 annotations; 1,000 null maps per test).", half_note + " Map-level bootstrap confidence "
                      "intervals; t-tests against 5%, Holm-corrected.", pd.DataFrame({
                          "Version": d["how"].map(VER), "Null": d["null"], "Maps": d["n_maps"], "FPR": d["fpr"],
                          "CI low": d["lo"], "CI high": d["hi"], "Holm P vs 5%": d["p_holm"],
                          "Classification": d["bradley"]}))
         d = pd.read_csv(RES / "v3_stats_half_biv_real.csv")
         T["S11b"] = ("Supplementary Table 11b. Number of significant ENIGMA disorder–annotation correlations (of 336) "
-                     "with one value per homologous pair (10,000 draws).", half_note, pd.DataFrame({
+                     "with one value per homologous pair (10,000 null maps).", half_note, pd.DataFrame({
                          "Version": d["how"].map(VER), "Null": d["null"], "P < 0.05": d["n_p05"],
                          "BH q < 0.05": d["n_q05"], "Holm < 0.05": d["n_holm05"]}))
         d = pd.read_csv(RES / "v3_stats_half_cv_fpr.csv")
         T["S11c"] = ("Supplementary Table 11c. Cross-validation false-positive rates with one value per homologous pair "
-                     "(500 null maps of the main simulation at λ = 77 mm; 500 draws).", half_note + " Schemes: R (5 "
+                     "(the 500 signal-free maps of the main simulation at λ = 77 mm; 500 null maps per test).", half_note + " Schemes: R (5 "
                      "random partitions), S (10 spatial blocks) and DD (distance-dependent, within the hemisphere). "
                      "Wilson 95% confidence intervals; exact binomial tests against 5%, Holm-corrected within each "
                      "version.", pd.DataFrame({
@@ -1885,18 +1894,18 @@ def supp_tables():
                          "Holm P": d["p_holm"],
                          "Classification": d["bradley"]}))
         d = pd.read_csv(RES / "v3_stats_half_power.csv")
-        T["S11d"] = ("Supplementary Table 11d. Positive control with one value per homologous pair: the maps of the "
-                     "positive control (150 per signal share) and the 500 signal-free maps, tested with the spin.",
+        T["S11d"] = ("Supplementary Table 11d. Maps with signal, with one value per homologous pair: the maps with "
+                     "signal (150 per signal share) and the 500 signal-free maps, tested with the spin.",
                      half_note + " AUC of the z-statistic relative to each map's null (stratified bootstrap 95% "
-                     "confidence intervals); size-adjusted power: sensitivity at the 95th percentile of the z-statistics "
+                     "confidence intervals); power at a matched error rate: sensitivity at the 95th percentile of the z-statistics "
                      "of the signal-free maps.", pd.DataFrame({
                          "Version": d["how"].map(VER), "Model": d["model"].map(LAB), "Scheme": d["scheme"], "s": d["s"],
                          "AUC": d["auc"], "CI low": d["lo"], "CI high": d["hi"],
-                         "Power, size-adjusted": d["power_size_adjusted"], "Power, P < 0.05": d["power_nominal"],
+                         "Power, matched error rate": d["power_size_adjusted"], "Power, P < 0.05": d["power_nominal"],
                          "FPR, P < 0.05": d["fpr_nominal"], "Median skill": d["skill_median"]}))
         d = pd.read_csv(RES / "v3_stats_half_real.csv")
         T["S11e"] = ("Supplementary Table 11e. Number of ENIGMA maps significantly predicted (of 12) with one value per "
-                     "homologous pair (2,000 draws).", half_note + " R: 10 random partitions. Statistic: R²cv (R, S) "
+                     "homologous pair (2,000 null maps).", half_note + " R: 10 random partitions. Statistic: R²cv (R, S) "
                      "or mean test-set r (DD).", pd.DataFrame({
                          "Version": d["how"].map(VER), "Model": d["model"].map(LAB), "Scheme": d["scheme"],
                          "Null": d["null"], "Median statistic": d["median_stat"], "Maps P < 0.05": d["n_p05"],
@@ -1905,8 +1914,8 @@ def supp_tables():
     if (RES / "v3_stats_glasser_biv.csv").exists():
         d = pd.read_csv(RES / "v3_stats_glasser_biv.csv")
         T["S12a"] = ("Supplementary Table 12a. Tests of map-to-map correlations on the Glasser parcellation (360 "
-                     "regions, 180 homologous pairs; 500 simulated null maps, bilaterally coupled or not, against 28 "
-                     "simulated annotation maps, λ = 77 mm, ρ = 0.9; 1,000 draws).", "Map-level bootstrap confidence "
+                     "regions, 180 homologous pairs; 500 simulated signal-free maps, with or without bilateral coupling, "
+                     "against 28 simulated annotation maps, λ = 77 mm, ρ = 0.9; 1,000 null maps per test).", "Map-level bootstrap confidence "
                      "intervals; t-tests against "
                      "5%, Holm-corrected. Bilateral r of null maps: median over the 28 annotation maps of the median "
                      "bilateral correlation of their null versions (observed: median "
@@ -1918,7 +1927,7 @@ def supp_tables():
     if (RES / "v3_stats_glasser_cv_fpr.csv").exists():
         d = pd.read_csv(RES / "v3_stats_glasser_cv_fpr.csv")
         T["S12b"] = ("Supplementary Table 12b. Cross-validation false-positive rates on the Glasser parcellation (300 "
-                     "null maps predicted from 28 simulated annotation maps; 500 draws).", "Schemes: R and H (one random "
+                     "signal-free maps predicted from 28 simulated annotation maps; 500 null maps per test).", "Schemes: R and H (one random "
                      "10-fold partition each), S, SH and Sw (10 blocks). Mean statistic: R²cv of the signal-free maps; mean "
                      "null statistic: mean of their null distributions (equal if the null reproduces the dependence that "
                      "the scheme lets leak). Wilson 95% confidence intervals; exact binomial tests against 5%, "
@@ -1942,12 +1951,12 @@ def supp_tables():
     d = pd.read_csv(RES / "v3_stats_insample_power.csv")
     T["S13b"] = ("Supplementary Table 13b. In-sample test: power for maps with signal (150 maps per signal share).",
                  "Threshold: P < 0.05 (nominal) or the 95th percentile of the null-standardized statistic of the 500 "
-                 "signal-free maps (size-adjusted), as for the cross-validated statistics. The signal is built from "
+                 "signal-free maps (matched error rate), as for the cross-validated statistics. The signal is built from "
                  "three of the 28 annotations, so the model with 19 receptor maps does not always contain it.",
                  pd.DataFrame({
                      "Predictors": d["model"].map({"ols28": "28 annotations", "ols19": "19 receptors"}),
                      "Null": d["null"].map(LAB), "s": d["s"],
-                     "Threshold": d["threshold"].map({"nominal_0.05": "P < 0.05", "size_adjusted": "size-adjusted"}),
+                     "Threshold": d["threshold"].map({"nominal_0.05": "P < 0.05", "size_adjusted": "matched error rate"}),
                      "Detected": d["k"], "Maps": d["n"], "Power": d["power"], "CI low": d["lo"], "CI high": d["hi"]}))
     d = pd.read_csv(RES / "v3_insample_real.csv")
     ins = {"Map": d["map"], "Predictors": d["model"].map({"ols28": "28 annotations", "ols19": "19 receptors"}),
@@ -2003,11 +2012,18 @@ def supp_data():
                         ws.cell(row=5 + i, column=j).number_format = fmt
         ws = w.sheets["Contents"]
         ws.column_dimensions["B"].width = 120
-        ws.cell(row=len(T) + 4, column=1).value = "Symbols"
+        ws.cell(row=len(T) + 4, column=1).value = "Symbols and abbreviations"
         ws.cell(row=len(T) + 4, column=2).value = (
             "λ, correlation length; ρ, bilateral coupling; s, signal share. Schemes: R, random folds; S, spatial blocks; "
             "Sw, within-hemisphere blocks; DD, distance-dependent split; H, homologue-pair folds; SH, bilateral spatial "
-            "blocks; DD-H, homologue-aware distance-dependent split. Supplementary Tables 1-6 are cited in the article.")
+            "blocks; DD-H, homologue-aware distance-dependent split. AUC, area under the receiver operating characteristic "
+            "curve; Bal. acc., balanced accuracy; BH, Benjamini–Hochberg; CI, 95% confidence interval; FDR, false-discovery "
+            "rate; FPR, false-positive rate; kNN, k-nearest-neighbour regression; MAE, mean absolute error; MC SE, Monte "
+            "Carlo standard error; MCC, Matthews correlation coefficient; MSR, Moran spectral randomization; PPV and NPV, "
+            "positive and negative predictive value; R²cv, cross-validated coefficient of determination; RF, random "
+            "forests; RMSE, root-mean-square error; Sens. and Spec., sensitivity and specificity; sym, symmetric spin; "
+            "TP, FN, FP, TN, true positives, false negatives, false positives, true negatives. Supplementary Tables 1-6 "
+            "are cited in the text of the article and Supplementary Table 10a in the legend of Fig. 4.")
     print("wrote", f, len(T), "tables")
 
 

@@ -184,7 +184,9 @@ def gen_bilateral():
         for k, v in enumerate(gn.VARIANTS):
             b = gn.bilateral_r(gn.surrogates(y, v, 1000, 29300000 + 100 * j + 10 * k))
             rows.append({"map": m, "variant": v, "bil_obs": obs, "bil_null_median": float(np.median(b)),
-                         "bil_null_q05": float(np.quantile(b, 0.05)), "bil_null_q95": float(np.quantile(b, 0.95))})
+                         "bil_null_q05": float(np.quantile(b, 0.05)), "bil_null_q95": float(np.quantile(b, 0.95)),
+                         # statistic of hypothesis H6a as written in plan/prereg_generative_nulls.md
+                         "bil_null_median_abs": float(np.median(np.abs(b)))})
         print("bilateral", m, flush=True)
     pd.DataFrame(rows).to_csv(RES / "v3_gen_bilateral.csv", index=False)
 

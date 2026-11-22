@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hemisafe"
-version = "0.2.0"
+version = "0.2.1"
 description = "Homology-aware cross-validation and symmetry-preserving spatial nulls for parcellated brain maps"
 readme = "README.md"
 license = { text = "MIT" }

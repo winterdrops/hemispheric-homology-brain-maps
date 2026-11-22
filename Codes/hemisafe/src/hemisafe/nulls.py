@@ -34,7 +34,8 @@ def shuffle(n_regions, n_perm=1000, seed=None):
 
 
 def spin(sphere_coords, hemi, n_perm=1000, seed=None, homologue=None, align=False):
-    """Conventional parcel-level spin (Alexander-Bloch et al. 2018; Hungarian re-assignment as in Vasa et al. 2018).
+    """Conventional parcel-level spin (rotations of Alexander-Bloch et al. 2018; Hungarian re-assignment of parcel
+    centroids as in Markello & Misic 2021; Vasa et al. 2018 use a greedy rule).
 
     The left hemisphere is rotated at random and the right hemisphere receives the mirror-image rotation. This
     preserves bilateral structure only if the two hemispheres' sphere frames are mirror images (true for fs_LR, not
@@ -87,13 +88,16 @@ def _null_maps(y, perms):
 
 
 def symmetric_surrogates(y, homologue, hemi, generator, n_perm=1000, seed=None):
-    """Make any surrogate generator symmetry-preserving (for example BrainSMASH, Moran spectral randomization or
-    geometric eigenmodes).
+    """Apply a surrogate generator to the homologous sum and difference maps (for example BrainSMASH or Moran
+    spectral randomization; geometric eigenmodes were not evaluated in the accompanying article).
 
     Generators applied separately to each hemisphere with independent random numbers produce null maps without
     bilateral structure. Here the generator is applied to the homologous sum and difference maps,
     s = (y_L + y_R) / 2 and a = (y_L - y_R) / 2 (in left-hemisphere order), and the surrogates are recombined as
-    y_L* = s* + a* and y_R* = s* - a*, which preserves the bilateral covariance of ``y``.
+    y_L* = s* + a* and y_R* = s* - a*. Because cov(y_L*, y_R*) = var(s*) - var(a*), this preserves the bilateral
+    covariance of ``y`` exactly when the generator reproduces the variance of its input, as Moran spectral
+    randomization does; BrainSMASH with default parameters de-means its surrogates without rescaling them, so the
+    bilateral structure is kept only approximately. Check the result with ``check_bilateral``.
 
     ``generator(x, n_perm, seed)`` must return an ``(n_perm, len(x))`` array of surrogates of the left-hemisphere-
     ordered map ``x``, for example ``lambda x, n, s: brainsmash.mapgen.base.Base(x, D, seed=s)(n, 50)`` with ``D`` a

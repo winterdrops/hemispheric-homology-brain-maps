@@ -1,0 +1,23 @@
+{
+  "nearest_neighbour_is_homologue_standardized_annotations": 65,
+  "n_regions": 68,
+  "regions_per_block_min_max": {
+    "S": [
+      4,
+      10
+    ],
+    "SH": [
+      4,
+      10
+    ],
+    "Sw": [
+      5,
+      9
+    ]
+  },
+  "h6a_benchmark_independent_hemispheres": {
+    "n_maps": 1000,
+    "median_abs_r": 0.14449899027254617,
+    "median_r": -0.00037846605933284386
+  }
+}

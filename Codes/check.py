@@ -4,7 +4,9 @@ check.py - correctness and reproducibility checks.
   tests      unit tests of the analysis library (about 1 minute): split-based and fold-based models agree; the
              distance-dependent splits are correct; the ENIGMA Toolbox port reproduces the toolbox source exactly; the
              vectorised P values equal a brute-force loop; closed-form leave-one-group-out errors equal explicit
-             refits; sphere-frame misalignment; the 34-region reduction and the Glasser geometry; Monte Carlo ties
+             refits; out-of-fold ridge and kNN predictions equal scikit-learn refits; the hemisafe package
+             reproduces the tuned ridge predictions; sphere-frame misalignment; the 34-region reduction and the
+             Glasser geometry; Monte Carlo ties
   quick      fast reproducibility check (a few minutes): recomputes a subset of the archived results from scratch and
              compares them with the result files in results/ (seeds are fixed, so values must agree to numerical
              precision). Rewrites the ENIGMA map-correlation result files (s3_map_correlations.py real) in place.
@@ -156,6 +158,41 @@ def tests():
         mod = Ridge(alpha=a, fit_intercept=True).fit(Xtr_s[keep], ytr[keep])
         maxdiff = max(maxdiff, np.max(np.abs((ytr[G_] - mod.predict(Xtr_s[G_])) - e_closed)))
     check(f"closed-form leave-one-group-out errors == explicit refits (max diff {maxdiff:.1e})", maxdiff < 1e-10)
+
+    # vectorised out-of-fold predictions equal scikit-learn refits (every penalty of the grid; kNN with k = 5)
+    from sklearn.neighbors import KNeighborsRegressor
+    dr = dk = 0.0
+    for sch in ("R", "H", "S", "SH"):
+        f = hl.make_folds(sch, reg)
+        Pk = hl.knn_oof(Xv, Yv[:, :3], f)
+        for fo in np.unique(f):
+            te_, tr_ = f == fo, f != fo
+            Xtr_, Xte_ = hl._standardise(Xv[tr_], Xv[te_])
+            ref = KNeighborsRegressor(n_neighbors=hl.K_NEIGHBOURS).fit(Xtr_, Yv[tr_, :3]).predict(Xte_)
+            dk = max(dk, float(np.max(np.abs(Pk[te_] - ref))))
+        for a in hl.ALPHAS:
+            Pr = hl.ridge_oof(Xv, Yv[:, :3], f, alphas=[a])
+            for fo in np.unique(f):
+                te_, tr_ = f == fo, f != fo
+                Xtr_, Xte_ = hl._standardise(Xv[tr_], Xv[te_])
+                ref = Ridge(alpha=a, fit_intercept=True).fit(Xtr_, Yv[tr_, :3]).predict(Xte_)
+                dr = max(dr, float(np.max(np.abs(Pr[te_] - ref))))
+    check(f"ridge out-of-fold predictions == scikit-learn Ridge, whole grid (max diff {dr:.1e})", dr < 1e-8)
+    check(f"kNN out-of-fold predictions == scikit-learn KNeighborsRegressor (max diff {dk:.1e})", dk < 1e-10)
+
+    # the hemisafe package reproduces the article's tuned ridge predictions (matched inner folds)
+    sys.path.insert(0, str(CODE / "hemisafe" / "src"))
+    import hemisafe as hs
+    dh = 0.0
+    for sch in ("R", "H", "SH"):
+        f = hl.make_folds(sch, reg)
+        inner_ = hl.inner_groups(sch, reg, f)
+        ref = hl.ridge_oof(Xv, Yv[:, :2], f, inner=inner_)
+        for j in range(2):
+            got = hs.nested_cv_predict(Ridge(), Xv, Yv[:, j], hl.folds_to_splits(f), {"alpha": hl.ALPHAS},
+                                       inner_groups=inner_, standardize=True)
+            dh = max(dh, float(np.max(np.abs(got - ref[:, j]))))
+    check(f"hemisafe nested_cv_predict == analysis code, tuned ridge (max diff {dh:.1e})", dh < 1e-10)
 
     # one value per homologous pair; Glasser geometry (fine-parcellation simulations)
     r34, g34, f = hl.half_brain(reg, geo, "avg")

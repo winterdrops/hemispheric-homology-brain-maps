@@ -14,7 +14,7 @@ files can be reproduced from the public raw data.
 | Folder | Contents |
 |---|---|
 | `Codes/` | analysis code (steps 1-7), unit and reproducibility checks, the `hemisafe` package; see `Codes/README.md` |
-| `plan/` | pre-specified analysis plan (frozen 2026-09-28) and the plan of the generative-null analyses, with checksums |
+| `plan/` | pre-specified analysis plan dated 2026-09-28 (the archived file is an editorial version of 2026-10-12 in which only descriptive metadata were corrected; its header gives the SHA-256 digest of the original file) and the plan of the generative-null analyses, with checksums |
 | `data/raw/` | unmodified public inputs, their provenance, licences and checksums |
 | `data/derived/` | analysis-ready matrices written by step 1 |
 | `results/` | all result tables (CSV, JSON, NPZ) |
@@ -28,7 +28,8 @@ Python 3.11 with the pinned packages in `Codes/requirements.txt`:
 python -m venv .venv
 .venv/bin/pip install -r Codes/requirements.txt        # Windows: .venv\Scripts\pip install -r Codes\requirements.txt
 python Codes/check.py tests                            # unit tests (about 1 minute)
-python Codes/check.py quick                            # recompute a subset and compare it with results/ (a few minutes)
+python Codes/check.py quick                            # recompute a subset and compare it with results/ (a few minutes;
+                                                       # rewrites two ENIGMA correlation files in place: run on a copy)
 python Codes/run_all.py --workers 4                    # everything from the raw data (about 8 hours)
 ```
 

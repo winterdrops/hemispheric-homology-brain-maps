@@ -14,7 +14,7 @@ Pre-specified (analysis plan of 28 September 2026)
   summarize   hypothesis tests H1-H5 and summary tables
   baseline    R2_cv of the no-skill training-mean predictor under each scheme (exploratory)
   partition   B1 false-positive rates of scheme R under six random partitions (exploratory; archive-only figure figures/extra/Extra_partition_dose_response)
-First revision (disclosed deviations; Supplementary Note 1)
+First revision (disclosed deviations; Supplementary Note 2)
   rev_real    ENIGMA maps with inner tuning that mirrors the outer scheme, 10 random partitions for R and H, scheme Sw,
               the aligned spin, skill and Pearson r (1,000 draws)
   rev_sim [LAMBDA]   first 200 B1 maps with group-matched tuning (and 200 maps at LAMBDA mm; schemes R, SH, Sw)
@@ -253,7 +253,7 @@ def real_prespecified():
 
 
 # ======================================================================================================================
-# random forests (pre-specified; reduced for compute, see Supplementary Note 1)
+# random forests (pre-specified; reduced for compute, see Supplementary Note 2)
 # ======================================================================================================================
 def _r2_rf(y, s):
     return float(hl.r2_cv(y, hl.rf_oof(Xv, y, FOLDS[s], seed=0))[0])

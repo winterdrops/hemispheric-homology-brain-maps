@@ -1,6 +1,7 @@
 """
 homology_lib.py - shared machinery for the analyses of
-"Ignoring hemispheric homology inflates false positives in spatial null models and cross-validation of brain maps".
+"Ignoring hemispheric homology miscalibrates parcel-level null models and cross-validation of brain maps: a simulation
+study and reanalysis".
 
 Sections
   paths and constants ........ project folders, model settings, the selection of ENIGMA maps
